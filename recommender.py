@@ -47,7 +47,7 @@ class RecommendationBasedOn():
         return (self.__data.itemID_of[index] for index in sorted_item_indices)
 
     def __cold_start(self, target=None):
-        logging.warning('Unknown target user. '
+        logging.info('Unknown target user. '
                         'Defaulting to baseline recommendation.')
         return self.__data.baseline
 
