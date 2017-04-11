@@ -62,5 +62,6 @@ class RecommendationBasedOn():
     def __min_of(self, requested, available):
         if requested > available:
             logging.warning('Requested {0} recommendations, but only {1} '
-                            'available.'.format(requested, available))
+                            'available. Returning all {1}.'.format(requested,
+                                                                   available))
         return min(requested, available)

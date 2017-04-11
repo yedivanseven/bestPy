@@ -15,6 +15,19 @@ class UserItemMatrix(Transactions):
         return self.__number_of_users
 
     @property
+    def number_of_items(self):
+        if not hasattr(self, '_UserItemMatrix__number_of_items'):
+            self.__number_of_items = len(self.itemIndex_of)
+        return self.__number_of_items
+
+    @property
+    def min_matrix_shape(self):
+        if not hasattr(self, '_UserItemMatrix__min_matrix_shape'):
+            self.__min_matrix_shape = min(self.number_of_users,
+                                          self.number_of_items)
+        return self.__min_matrix_shape
+
+    @property
     def userID_of(self):
         if not hasattr(self, '_UserItemMatrix__userID_of'):
             self.__userID_of = {

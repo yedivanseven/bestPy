@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging
 from numpy import diag
 from scipy.sparse.linalg import svds
 
@@ -50,6 +51,7 @@ class SimpleSVD():
         return self.__U[target].dot(self.__SV)
 
     def __compute_USV_matrices(self):
+        self.__check()
         self.__U, s, V = svds(self.__matrix(), k=self.number_of_features)
         self.__SV = diag(s).dot(V)
 
@@ -61,6 +63,15 @@ class SimpleSVD():
     def __we_need_to_redo_the_SVD_with(self, number_of_features):
         return (hasattr(self, '_SimpleSVD__U')
                 & (self.__number_of_features != number_of_features))
+
+    def __check(self):
+        if self.number_of_features >= self.__data.min_matrix_shape:
+            logging.warning('Requested {0} latent features, but only {1} '
+                            'available. Resetting to {1}.'.format(
+                                self.number_of_features,
+                                self.__data.min_matrix_shape - 1
+                            ))
+            self.number_of_features = self.__data.min_matrix_shape - 1
 
     def __we_need_to_redo_the_SVD_because_we(self, binarize):
         return (hasattr(self, '_SimpleSVD__U') & (self.__binarize != binarize))
