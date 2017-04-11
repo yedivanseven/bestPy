@@ -35,11 +35,3 @@ class Transactions():
     @property
     def count_buys_of(self):
         return self.__count_buys_of
-
-if __name__ == '__main__':
-    from logger import write_log_to
-    write_log_to('./recolog.txt')
-    new = Transactions.from_csv('./data/head100.csv')
-    print(new.number_of_corrupted_entries)
-    print(new.number_of_transactions)
-    print(new.baseline[:5])

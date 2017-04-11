@@ -70,14 +70,3 @@ class UserItemMatrix(Transactions):
 
     def users_who_bought(self, items):
         return unique(self.matrix_by_col[:, items].indices)
-
-if __name__ == '__main__':
-    from logger import write_log_to
-    write_log_to('./recolog.txt')
-    new = UserItemMatrix.from_csv('./data/head100.csv')
-    print(new.number_of_users)
-    print(new.userID_of[2])
-    print(new.itemID_of[4])
-    print(new.matrix_by_row.todense())
-    print(new.users_who_bought([3,4]))
-    print([new.itemID_of[index] for index in new.baseline[:5]])

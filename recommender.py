@@ -64,21 +64,3 @@ class RecommendationBasedOn():
             logging.warning('Requested {0} recommendations, but only {1} '
                             'available.'.format(requested, available))
         return min(requested, available)
-
-
-if __name__ == '__main__':
-    from logger import write_log_to
-    from datastructures import UserItemMatrix
-    from algorithms import CollaborativeFiltering
-    write_log_to('./recolog.txt')
-    data = UserItemMatrix.from_csv('./data/head100.csv')
-    algo = CollaborativeFiltering()
-    recommendation = RecommendationBasedOn(data).using(algo).pruning_old
-    print('baseline ...')
-    top_five = recommendation._baseline(6)
-    for item in top_five:
-        print(item)
-    print('... and for user')
-    top_five = recommendation.for_one('11')
-    for item in top_five:
-        print(item)
