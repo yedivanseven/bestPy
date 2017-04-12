@@ -48,7 +48,7 @@ class RecommendationBasedOn():
 
     def __cold_start(self, target=None):
         logging.info('Unknown target user. '
-                        'Defaulting to baseline recommendation.')
+                     'Defaulting to baseline recommendation.')
         return self.__data.baseline
 
     def __calculated(self, target):

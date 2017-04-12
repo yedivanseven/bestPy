@@ -4,6 +4,7 @@
 import logging
 from collections import defaultdict
 
+
 def from_csv(file):
     number_of_transactions = 0
     number_of_corrupted_entries = 0

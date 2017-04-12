@@ -58,4 +58,4 @@ class CollaborativeFiltering():
 
     def __we_need_to_recompute_the_matrix_of(self, similarity):
         return (hasattr(self, '_CollaborativeFiltering__sim_mat')
-                & (self.__similarity != similarity))
+                & (similarity != self.__similarity))
