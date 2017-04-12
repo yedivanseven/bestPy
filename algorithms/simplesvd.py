@@ -71,10 +71,10 @@ class SimpleSVD():
         return (hasattr(self, '_SimpleSVD__U') & (binarize != self.binarize))
 
     def __set(self, number_of_factors):
-        if self.has_data:
-            self.__reset(number_of_factors)
-        else:
+        if not self.has_data:
             self.__number_of_factors = number_of_factors
+        else:
+            self.__reset(number_of_factors)
 
     def __reset(self, number_of_factors):
         if number_of_factors > self.max_number_of_factors:
