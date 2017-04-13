@@ -16,6 +16,10 @@ class Transactions():
     def from_csv(cls, file):
         return cls(*read.from_csv(file))
 
+    @classmethod
+    def from_postgreSQL(cls, database):
+        return cls(*read.from_postgreSQL(database))
+
     @property
     def number_of_transactions(self):
         return self.__number_of_transactions
