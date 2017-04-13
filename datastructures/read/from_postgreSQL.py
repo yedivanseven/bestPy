@@ -15,10 +15,12 @@ def from_postgreSQL(database):
     itemIndex_of = defaultdict(lambda: len(itemIndex_of))
     count_buys_of = defaultdict(int)
 
-    query = '''SELECT %(userid)s, %(articleid)s, COUNT(*) as count
-               FROM %(table)s
-               GROUP BY %(userid)s, %(articleid)s
-               LIMIT %(limit)s'''
+    query = '''WITH head AS (SELECT %(userid)s, %(articleid)s
+                             FROM %(table)s
+                             LIMIT %(limit)s)
+               SELECT %(userid)s, %(articleid)s, COUNT(*) as count
+               FROM head
+               GROUP BY %(userid)s, %(articleid)s'''
 
     try:
         connection = pg.connect(database.login)
@@ -37,9 +39,10 @@ def from_postgreSQL(database):
                     user, item, count = entry
                     count_buys_of[(userIndex_of[user],
                                    itemIndex_of[item])] = count
-                    number_of_transactions = cursor.rownumber
             finally:
                 connection.close()
+
+    number_of_transactions = sum(count_buys_of.values())
 
     return (number_of_transactions,
             number_of_corrupted_entries,
@@ -128,10 +131,10 @@ class PostgreSQLparams():
 
     @limit.setter
     def limit(self, limit):
-        if isinstance(limit, int):
-            self.__limit = limit
+        if limit.upper() == 'ALL':
+            self.__limit = AsIs(limit)
         else:
-            self.__limit = AsIs(str(limit))
+            self.__limit = limit
 
     @property
     def params(self):
