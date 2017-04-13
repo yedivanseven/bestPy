@@ -8,6 +8,7 @@ class CollaborativeFiltering():
     def __init__(self):
         self.__similarity = default
         self.__binarize = True
+        self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
     def similarity(self):
@@ -16,7 +17,7 @@ class CollaborativeFiltering():
     @similarity.setter
     def similarity(self, similarity):
         if self.__we_need_to_recompute_the_matrix_of(similarity):
-            del self._CollaborativeFiltering__sim_mat
+            self.__delete_sim_mat()
         self.__similarity = similarity
 
     @property
@@ -30,13 +31,13 @@ class CollaborativeFiltering():
     def operating_on(self, data):
         self.__data = data
         self.for_one = self.__for_one
-        if hasattr(self, '_CollaborativeFiltering__sim_mat'):
-            del self._CollaborativeFiltering__sim_mat
+        if self.__has('sim_mat'):
+            self.__delete_sim_mat()
         return self
 
     @property
     def has_data(self):
-        return hasattr(self, '_CollaborativeFiltering__data')
+        return self.__has('data')
 
     def __for_one(self, target):
         if self.__no_one_else_bought_items_bought_by(target):
@@ -48,14 +49,19 @@ class CollaborativeFiltering():
         return history_vector.dot(self.__similarity_matrix()).A[0]
 
     def __similarity_matrix(self):
-        if not hasattr(self, '_CollaborativeFiltering__sim_mat'):
+        if not self.__has('sim_mat'):
             self.__sim_mat = self.similarity(self.__data)
         return self.__sim_mat
+
+    def __delete_sim_mat(self):
+        delattr(self, self.__class_prefix + 'sim_mat')
 
     def __no_one_else_bought_items_bought_by(self, target):
         items_bought_by_target = self.__data.matrix_by_row[target].indices
         return self.__data.users_who_bought(items_bought_by_target).size == 1
 
     def __we_need_to_recompute_the_matrix_of(self, similarity):
-        return (hasattr(self, '_CollaborativeFiltering__sim_mat')
-                & (similarity != self.__similarity))
+        return (self.__has('sim_mat') & (similarity != self.__similarity))
+
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)

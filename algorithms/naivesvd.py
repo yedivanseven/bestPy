@@ -6,10 +6,11 @@ from numpy import diag
 from scipy.sparse.linalg import svds
 
 
-class SimpleSVD():
+class NaiveSVD():
     def __init__(self):
         self.__number_of_factors = 20
         self.__binarize = True
+        self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
     def number_of_factors(self):
@@ -18,8 +19,7 @@ class SimpleSVD():
     @number_of_factors.setter
     def number_of_factors(self, number_of_factors):
         if self.__we_need_to_redo_the_SVD_with(number_of_factors):
-            del self._SimpleSVD__U
-            del self._SimpleSVD__SV
+            self.__delete_USV_matrices()
         self.__set(number_of_factors)
 
     @property
@@ -29,28 +29,26 @@ class SimpleSVD():
     @binarize.setter
     def binarize(self, binarize):
         if self.__we_need_to_redo_the_SVD_because_we(binarize):
-            del self._SimpleSVD__U
-            del self._SimpleSVD__SV
+            self.__delete_USV_matrices()
         self.__binarize = binarize
 
     def operating_on(self, data):
         self.__data = data
-        SimpleSVD.max_number_of_factors = property(
+        NaiveSVD.max_number_of_factors = property(
             lambda self: self.__data.min_matrix_shape - 1
         )
         self.__reset(self.number_of_factors)
         self.for_one = self.__for_one
-        if hasattr(self, '_SimpleSVD__U'):
-            del self._SimpleSVD__U
-            del self._SimpleSVD__SV
+        if self.__has('U'):
+            self.__delete_USV_matrices()
         return self
 
     @property
     def has_data(self):
-        return hasattr(self, '_SimpleSVD__data')
+        return self.__has('data')
 
     def __for_one(self, target):
-        if not hasattr(self, '_SimpleSVD__U'):
+        if not self.__has('U'):
             self.__compute_USV_matrices()
         return self.__U[target].dot(self.__SV)
 
@@ -58,17 +56,20 @@ class SimpleSVD():
         self.__U, s, V = svds(self.__matrix(), k=self.number_of_factors)
         self.__SV = diag(s).dot(V)
 
+    def __delete_USV_matrices(self):
+        delattr(self, self.__class_prefix + 'U')
+        delattr(self, self.__class_prefix + 'SV')
+
     def __matrix(self):
         if self.__binarize:
             return self.__data.bool_matrix_by_row
         return self.__data.matrix_by_row
 
     def __we_need_to_redo_the_SVD_with(self, number_of_factors):
-        return (hasattr(self, '_SimpleSVD__U')
-                & (number_of_factors != self.number_of_factors))
+        return (self.__has('U') & (number_of_factors != self.number_of_factors))
 
     def __we_need_to_redo_the_SVD_because_we(self, binarize):
-        return (hasattr(self, '_SimpleSVD__U') & (binarize != self.binarize))
+        return (self.__has('U') & (binarize != self.binarize))
 
     def __set(self, number_of_factors):
         if not self.has_data:
@@ -86,3 +87,6 @@ class SimpleSVD():
             self.__number_of_factors = self.max_number_of_factors
         else:
             self.__number_of_factors = number_of_factors
+
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)
