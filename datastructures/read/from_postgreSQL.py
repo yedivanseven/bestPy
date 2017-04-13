@@ -8,6 +8,46 @@ from psycopg2.extensions import AsIs
 from psycopg2 import OperationalError, ProgrammingError
 
 
+def from_postgreSQL(database):
+    number_of_transactions = 0
+    number_of_corrupted_entries = 0
+    userIndex_of = defaultdict(lambda: len(userIndex_of))
+    itemIndex_of = defaultdict(lambda: len(itemIndex_of))
+    count_buys_of = defaultdict(int)
+
+    query = '''SELECT %(userid)s, %(articleid)s, COUNT(*) as count
+               FROM %(table)s
+               GROUP BY %(userid)s, %(articleid)s
+               LIMIT %(limit)s'''
+
+    try:
+        connection = pg.connect(database.login)
+    except OperationalError:
+        logging.error('Failed connecting to {}'.format(database.login_db_name))
+        raise OperationalError
+    else:
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute(query, database.params)
+            except ProgrammingError:
+                logging.error('Failed to execute SQL query. Check user input!')
+                raise ProgrammingError
+            else:
+                for entry in cursor:
+                    user, item, count = entry
+                    count_buys_of[(userIndex_of[user],
+                                   itemIndex_of[item])] = count
+                    number_of_transactions = cursor.rownumber
+            finally:
+                connection.close()
+
+    return (number_of_transactions,
+            number_of_corrupted_entries,
+            dict(userIndex_of),
+            dict(itemIndex_of),
+            dict(count_buys_of))
+
+
 class PostgreSQLparams():
     def __init__(self):
         self.__login_db_name = '<dbname>'
@@ -106,43 +146,3 @@ class PostgreSQLparams():
             return prefix + "='" + parameter + "'"
         logging.warning(prefix + ' must be a string!')
         return '<' + prefix + '>'
-
-
-def from_postgreSQL(database):
-    number_of_transactions = 0
-    number_of_corrupted_entries = 0
-    userIndex_of = defaultdict(lambda: len(userIndex_of))
-    itemIndex_of = defaultdict(lambda: len(itemIndex_of))
-    count_buys_of = defaultdict(int)
-
-    query = '''SELECT %(userid)s, %(articleid)s, COUNT(*) as count
-               FROM %(table)s
-               GROUP BY %(userid)s, %(articleid)s
-               LIMIT %(limit)s'''
-
-    try:
-        connection = pg.connect(database.login)
-    except OperationalError:
-        logging.error('Failed connecting to {}'.format(database.login_db_name))
-        raise OperationalError
-    else:
-        with connection.cursor() as cursor:
-            try:
-                cursor.execute(query, database.params)
-            except ProgrammingError:
-                logging.error('Failed to execute SQL query. Check user input!')
-                raise ProgrammingError
-            else:
-                for entry in cursor:
-                    user, item, count = entry
-                    count_buys_of[(userIndex_of[user],
-                                   itemIndex_of[item])] = count
-                    number_of_transactions = cursor.rownumber
-            finally:
-                connection.close()
-
-    return (number_of_transactions,
-            number_of_corrupted_entries,
-            dict(userIndex_of),
-            dict(itemIndex_of),
-            dict(count_buys_of))
