@@ -56,7 +56,7 @@ class RecommendationBasedOn():
         item_scores = self.__recommendation.for_one(target_index)
         if self.__only_new:
             already_bought = self.__data.matrix_by_row[target_index].indices
-            item_scores[already_bought] = -2
+            item_scores[already_bought] = float('-inf')
         return item_scores
 
     def __min_of(self, requested, available):
