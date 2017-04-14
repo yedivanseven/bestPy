@@ -15,25 +15,23 @@ def from_postgreSQL(database):
     itemIndex_of = defaultdict(lambda: len(itemIndex_of))
     count_buys_of = defaultdict(int)
 
-    query = '''WITH head AS (SELECT %(userid)s, %(articleid)s
-                             FROM %(table)s
-                             LIMIT %(limit)s)
-               SELECT %(userid)s, %(articleid)s, COUNT(*) as count
-               FROM head
+    query = '''SELECT %(userid)s, %(articleid)s, COUNT(*) as count
+               FROM (SELECT %(userid)s, %(articleid)s
+                     FROM %(table)s
+                     LIMIT %(limit)s) AS head
                GROUP BY %(userid)s, %(articleid)s'''
-
     try:
         connection = pg.connect(database.login)
     except OperationalError:
         logging.error('Failed connecting to {}'.format(database.login_db_name))
-        raise OperationalError
+        raise OperationalError('Connect to database failed. Check settings!')
     else:
         with connection.cursor() as cursor:
             try:
                 cursor.execute(query, database.params)
             except ProgrammingError:
                 logging.error('Failed to execute SQL query. Check user input!')
-                raise ProgrammingError
+                raise ProgrammingError('SQL query failed. Check parameters!')
             else:
                 for entry in cursor:
                     user, item, count = entry
@@ -43,7 +41,11 @@ def from_postgreSQL(database):
                 connection.close()
 
     number_of_transactions = sum(count_buys_of.values())
-
+    if number_of_transactions < database._requested_number():
+        logging.warning('Requested {} transactions from table {} but only {} '
+                        'present. Fetched all.'.format(database.limit,
+                                                       database.table,
+                                                       number_of_transactions))
     return (number_of_transactions,
             number_of_corrupted_entries,
             dict(userIndex_of),
@@ -97,7 +99,7 @@ class PostgreSQLparams():
     @property
     def login(self):
         prefix = '_login'
-        params = [getattr(self, a) for a in dir(self) if prefix in a]
+        params = [getattr(self, attr) for attr in dir(self) if prefix in attr]
         return ' '.join(params)
 
     @property
@@ -124,17 +126,26 @@ class PostgreSQLparams():
     def itemID(self, itemID):
         self.__itemID = AsIs(str(itemID))
 
-
     @property
     def limit(self):
         return self.__limit
 
     @limit.setter
     def limit(self, limit):
-        if limit.upper() == 'ALL':
-            self.__limit = AsIs(limit)
+        we_have_a_permitted = defaultdict(lambda: lambda x: False)
+        we_have_a_permitted.update(
+            {int: lambda i: True if i>= 0 else False,
+             str: lambda s: True if s.upper() == 'ALL' else False}
+        )
+        according_to = {int: lambda i: i,
+                        str: lambda s: AsIs(s)}
+        type_of = type(limit)
+
+        if we_have_a_permitted[type_of](limit):
+            self.__limit = according_to[type_of](limit)
         else:
-            self.__limit = limit
+            logging.error('Limit must be "all" or a positive integer!')
+            raise ValueError('Limit must be "all" or a positive integer!')
 
     @property
     def params(self):
@@ -149,3 +160,6 @@ class PostgreSQLparams():
             return prefix + "='" + parameter + "'"
         logging.warning(prefix + ' must be a string!')
         return '<' + prefix + '>'
+
+    def _requested_number(self):
+        return self.limit if isinstance(self.limit, int) else float('-inf')
