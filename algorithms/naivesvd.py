@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
+import logging as log
 from numpy import diag
 from scipy.sparse.linalg import svds
 
@@ -69,7 +69,7 @@ class NaiveSVD():
         return (self.__has('U') & (number_of_factors != self.number_of_factors))
 
     def __we_need_to_redo_the_SVD_because_we(self, binarize):
-        return (self.__has('U') & (binarize != self.binarize))
+        return (self.__has('U') and (binarize != self.binarize))
 
     def __set(self, number_of_factors):
         if not self.has_data:
@@ -79,11 +79,11 @@ class NaiveSVD():
 
     def __reset(self, number_of_factors):
         if number_of_factors > self.max_number_of_factors:
-            logging.warning('Requested {0} latent features, but only {1} '
-                            'available. Resetting to {1}.'.format(
-                                number_of_factors,
-                                self.max_number_of_factors
-                            ))
+            log.warning('Requested {0} latent features, but only {1} '
+                        'available. Resetting to {1}.'.format(
+                            number_of_factors,
+                            self.max_number_of_factors
+                        ))
             self.__number_of_factors = self.max_number_of_factors
         else:
             self.__number_of_factors = number_of_factors

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
+import logging as log
 from collections import defaultdict
 
 
@@ -17,8 +17,8 @@ def from_csv(file):
             try:
                 _, user, item = transaction.rstrip().split(sep=";")
             except ValueError:
-                logging.warning('Could not interpret transaction on line {0}. '
-                                'Skipping.'.format(number_of_transactions + 1))
+                log.warning('Could not interpret transaction on line {0}. '
+                            'Skipping.'.format(number_of_transactions + 1))
                 number_of_corrupted_entries += 1
             else:
                 number_of_transactions += 1

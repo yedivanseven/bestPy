@@ -78,7 +78,7 @@ class UserItemMatrix(Transactions):
     @property
     def baseline(self):
         if not self.__has('baseline'):
-            self.__baseline = self.matrix_by_col.getnnz(0)
+            self.__baseline = self.matrix_by_col.getnnz(0).astype(float)
         return self.__baseline
 
     def users_who_bought(self, items):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
+import logging as log
 from numpy import argpartition
 from .algorithms import default
 
@@ -47,8 +47,7 @@ class RecommendationBasedOn():
         return (self.__data.itemID_of[index] for index in sorted_item_indices)
 
     def __cold_start(self, target=None):
-        logging.info('Unknown target user. '
-                     'Defaulting to baseline recommendation.')
+        log.info('Unknown target user. Defaulting to baseline recommendation.')
         return self.__data.baseline
 
     def __calculated(self, target):
@@ -61,7 +60,6 @@ class RecommendationBasedOn():
 
     def __min_of(self, requested, available):
         if requested > available:
-            logging.warning('Requested {0} recommendations, but only {1} '
-                            'available. Returning all {1}.'.format(requested,
-                                                                   available))
+            log.warning('Requested {0} recommendations but only {1} available.'
+                        ' Returning all {1}.'.format(requested, available))
         return min(requested, available)

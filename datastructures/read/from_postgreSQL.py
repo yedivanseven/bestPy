@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
+import logging as log
 from collections import defaultdict
 import psycopg2 as pg
 from psycopg2.extensions import AsIs
@@ -23,14 +23,14 @@ def from_postgreSQL(database):
     try:
         connection = pg.connect(database.login)
     except OperationalError:
-        logging.error('Failed connecting to {}'.format(database.login_db_name))
+        log.error('Failed connecting to {}.'.format(database.login_db_name))
         raise OperationalError('Connect to database failed. Check settings!')
     else:
         with connection.cursor() as cursor:
             try:
-                cursor.execute(query, database.params)
+                cursor.execute(query, database._params)
             except ProgrammingError:
-                logging.error('Failed to execute SQL query. Check user input!')
+                log.error('Failed to execute SQL query. Check the parameters!')
                 raise ProgrammingError('SQL query failed. Check parameters!')
             else:
                 for entry in cursor:
@@ -41,16 +41,23 @@ def from_postgreSQL(database):
                 connection.close()
 
     number_of_transactions = sum(count_buys_of.values())
-    if number_of_transactions < database._requested_number():
-        logging.warning('Requested {} transactions from table {} but only {} '
-                        'present. Fetched all.'.format(database.limit,
-                                                       database.table,
-                                                       number_of_transactions))
+    compare(number_of_transactions, database)
+
     return (number_of_transactions,
             number_of_corrupted_entries,
             dict(userIndex_of),
             dict(itemIndex_of),
             dict(count_buys_of))
+
+
+def compare(available, database):
+    if available < database._requested():
+        log.warning('Requested {0} transactions from table {1} but only {2} '
+                    'available. Fetched all {2}.'.format(database.limit,
+                                                         database.table,
+                                                         available))
+        log.info('Resetting limit to the maximum of {}.'.format(available))
+        database.limit = available
 
 
 class PostgreSQLparams():
@@ -104,7 +111,7 @@ class PostgreSQLparams():
 
     @property
     def table(self):
-        return self.__table
+        return self.__table.adapted
 
     @table.setter
     def table(self, table):
@@ -112,7 +119,7 @@ class PostgreSQLparams():
 
     @property
     def userID(self):
-        return self.__userID
+        return self.__userID.adapted
 
     @userID.setter
     def userID(self, userID):
@@ -120,7 +127,7 @@ class PostgreSQLparams():
 
     @property
     def itemID(self):
-        return self.__itemID
+        return self.__itemID.adapted
 
     @itemID.setter
     def itemID(self, itemID):
@@ -128,7 +135,9 @@ class PostgreSQLparams():
 
     @property
     def limit(self):
-        return self.__limit
+        if isinstance(self.__limit, int):
+            return self.__limit
+        return self.__limit.adapted
 
     @limit.setter
     def limit(self, limit):
@@ -137,29 +146,28 @@ class PostgreSQLparams():
             {int: lambda i: True if i>= 0 else False,
              str: lambda s: True if s.upper() == 'ALL' else False}
         )
-        according_to = {int: lambda i: i,
-                        str: lambda s: AsIs(s)}
+        set_according_to = {int: lambda i: i,
+                            str: lambda s: AsIs(s)}
         type_of = type(limit)
 
         if we_have_a_permitted[type_of](limit):
-            self.__limit = according_to[type_of](limit)
+            self.__limit = set_according_to[type_of](limit)
         else:
-            logging.error('Limit must be "all" or a positive integer!')
+            log.error('Limit must be the string "all" or a positive integer!')
             raise ValueError('Limit must be "all" or a positive integer!')
 
     @property
-    def params(self):
-        params = {   'userid': self.userID,
-                  'articleid': self.itemID,
-                      'table': self.table,
-                      'limit': self.limit}
+    def _params(self):
+        params = {   'userid': self.__userID,
+                  'articleid': self.__itemID,
+                      'table': self.__table,
+                      'limit': self.__limit}
         return params
 
     def __prepend(self, parameter, prefix=''):
-        if isinstance(parameter, str):
-            return prefix + "='" + parameter + "'"
-        logging.warning(prefix + ' must be a string!')
-        return '<' + prefix + '>'
+        if not isinstance(parameter, str):
+            log.warning(prefix + ' should be a string. Trying nevertheless!')
+        return prefix + "='" + str(parameter) + "'"
 
-    def _requested_number(self):
+    def _requested(self):
         return self.limit if isinstance(self.limit, int) else float('-inf')

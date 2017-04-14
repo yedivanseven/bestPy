@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
+import logging as log
 
 
 def write_log_to(file, log_level=30):
@@ -10,7 +10,7 @@ def write_log_to(file, log_level=30):
                                     '%(module)-15s',
                                     '%(funcName)-15s',
                                     '%(message)s')
-    logging.basicConfig(filename=file,
-                        filemode='w',
-                        level=log_level,
-                        format=log_entry_format)
+    log.basicConfig(filename=file,
+                    filemode='w',
+                    level=log_level,
+                    format=log_entry_format)

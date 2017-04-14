@@ -61,7 +61,7 @@ class CollaborativeFiltering():
         return self.__data.users_who_bought(items_bought_by_target).size == 1
 
     def __we_need_to_recompute_the_matrix_of(self, similarity):
-        return (self.__has('sim_mat') & (similarity != self.__similarity))
+        return (self.__has('sim_mat') and (similarity != self.__similarity))
 
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
