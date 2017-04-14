@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging as log
 from .similarities import default
 
 
@@ -41,6 +42,7 @@ class CollaborativeFiltering():
 
     def __for_one(self, target):
         if self.__no_one_else_bought_items_bought_by(target):
+            log.info('Uncomparable user. Returning baseline recommendation.')
             return self.__data.baseline
 
         history_vector = self.__data.matrix_by_row[target]
