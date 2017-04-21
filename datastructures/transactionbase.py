@@ -5,8 +5,8 @@ from . import read
 
 
 class TransactionBase():
-    def __init__(self, n_buys, n_err, user_i, item_j, counts):
-        self.__number_of_transactions = n_buys
+    def __init__(self, n_rec, n_err, user_i, item_j, counts):
+        self.__number_of_transactions = n_rec
         self.__number_of_corrupted_records = n_err
         self.__userIndex_of = user_i
         self.__itemIndex_of = item_j

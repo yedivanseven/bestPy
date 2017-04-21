@@ -20,6 +20,7 @@ def from_postgreSQL(database):
                      FROM %(table)s
                      LIMIT %(limit)s) AS head
                GROUP BY %(userid)s, %(articleid)s'''
+
     try:
         connection = pg.connect(database.login)
     except OperationalError:
@@ -33,9 +34,13 @@ def from_postgreSQL(database):
             log.error('Failed to execute SQL query. Check your parameters!')
             raise ProgrammingError('SQL query failed. Check your parameters!')
         else:
-            for entry in cursor:
-                user, item, count = entry
-                count_buys_of[(userIndex_of[user], itemIndex_of[item])] = count
+            for record in cursor:
+                if None in record:
+                    number_of_corrupted_records += 1
+                else:
+                    user, item, count = record
+                    count_buys_of[(userIndex_of[user],
+                                   itemIndex_of[item])] = count
         finally:
             connection.close()
 
@@ -122,7 +127,7 @@ class PostgreSQLparams():
         return self.__timestamp.adapted
 
     @timestamp.setter
-    def userID(self, timestamp):
+    def timestamp(self, timestamp):
         self.__userID = AsIs(str(timestamp))
 
     @property
