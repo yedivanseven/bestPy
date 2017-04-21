@@ -1,41 +1,39 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from . import read
+from .transactionbase import TransactionBase
 
 
-class Transactions():
-    def __init__(self, n_buys, n_err, user_i, item_j, counts):
-        self.__number_of_transactions = n_buys
-        self.__number_of_corrupted_entries = n_err
-        self.__userIndex_of = user_i
-        self.__itemIndex_of = item_j
-        self.__count_buys_of = counts
-
-    @classmethod
-    def from_csv(cls, file):
-        return cls(*read.from_csv(file))
-
-    @classmethod
-    def from_postgreSQL(cls, database):
-        return cls(*read.from_postgreSQL(database))
+class Transactions(TransactionBase):
 
     @property
-    def number_of_transactions(self):
-        return self.__number_of_transactions
+    def number_of_users(self):
+        if not self.__has('number_of_users'):
+            self.__number_of_users = len(self.userIndex_of)
+        return self.__number_of_users
 
     @property
-    def number_of_corrupted_entries(self):
-        return self.__number_of_corrupted_entries
+    def number_of_items(self):
+        if not self.__has('number_of_items'):
+            self.__number_of_items = len(self.itemIndex_of)
+        return self.__number_of_items
 
     @property
-    def userIndex_of(self):
-        return self.__userIndex_of
+    def userID_of(self):
+        if not self.__has('userID_of'):
+            self.__userID_of = {index: user
+                                for user, index
+                                in self.userIndex_of.items()}
+        return self.__userID_of
 
     @property
-    def itemIndex_of(self):
-        return self.__itemIndex_of
+    def itemID_of(self):
+        if not self.__has('itemID_of'):
+            self.__itemID_of = {index: item
+                                for item, index
+                                in self.itemIndex_of.items()}
+        return self.__itemID_of
 
-    @property
-    def count_buys_of(self):
-        return self.__count_buys_of
+    def __has(self, attribute):
+        class_prefix = '_' + self.__class__.__name__ + '__'
+        return hasattr(self, class_prefix + attribute)

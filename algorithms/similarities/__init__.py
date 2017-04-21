@@ -8,4 +8,4 @@ from .russelrao import russelrao
 from .cosine import cosine
 from .cosine_binary import cosine_binary
 
-default = kulsinski
+default_similarity = kulsinski

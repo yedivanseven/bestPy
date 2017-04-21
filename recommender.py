@@ -3,7 +3,7 @@
 
 import logging as log
 from numpy import argpartition
-from .algorithms import default
+from .algorithms import default_algorithm
 
 RETURNING = True
 
@@ -12,7 +12,7 @@ class RecommendationBasedOn():
     def __init__(self, data):
         self.__data = data
         self.__only_new = False
-        self.__recommendation = default().operating_on(data)
+        self.__recommendation = default_algorithm().operating_on(data)
         self.__recommendation_for = {not RETURNING: self.__cold_start,
                                          RETURNING: self.__calculated}
 

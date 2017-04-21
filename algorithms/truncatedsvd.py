@@ -6,7 +6,7 @@ from numpy import diag
 from scipy.sparse.linalg import svds
 
 
-class NaiveSVD():
+class TruncatedSVD():
     def __init__(self):
         self.__number_of_factors = 20
         self.__binarize = True
@@ -34,7 +34,7 @@ class NaiveSVD():
 
     def operating_on(self, data):
         self.__data = data
-        NaiveSVD.max_number_of_factors = property(
+        TruncatedSVD.max_number_of_factors = property(
             lambda self: self.__data.min_matrix_shape - 1
         )
         self.__reset(self.number_of_factors)

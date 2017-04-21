@@ -10,7 +10,7 @@ from psycopg2 import OperationalError, ProgrammingError
 
 def from_postgreSQL(database):
     number_of_transactions = 0
-    number_of_corrupted_entries = 0
+    number_of_corrupted_records = 0
     userIndex_of = defaultdict(lambda: len(userIndex_of))
     itemIndex_of = defaultdict(lambda: len(itemIndex_of))
     count_buys_of = defaultdict(int)
@@ -25,26 +25,25 @@ def from_postgreSQL(database):
     except OperationalError:
         log.error('Failed connecting to {}.'.format(database.login_db_name))
         raise OperationalError('Connect to database failed. Check settings!')
-    else:
-        with connection.cursor() as cursor:
-            try:
-                cursor.execute(query, database._params)
-            except ProgrammingError:
-                log.error('Failed to execute SQL query. Check the parameters!')
-                raise ProgrammingError('SQL query failed. Check parameters!')
-            else:
-                for entry in cursor:
-                    user, item, count = entry
-                    count_buys_of[(userIndex_of[user],
-                                   itemIndex_of[item])] = count
-            finally:
-                connection.close()
+
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query, database._params)
+        except ProgrammingError:
+            log.error('Failed to execute SQL query. Check your parameters!')
+            raise ProgrammingError('SQL query failed. Check your parameters!')
+        else:
+            for entry in cursor:
+                user, item, count = entry
+                count_buys_of[(userIndex_of[user], itemIndex_of[item])] = count
+        finally:
+            connection.close()
 
     number_of_transactions = sum(count_buys_of.values())
     compare(number_of_transactions, database)
 
     return (number_of_transactions,
-            number_of_corrupted_entries,
+            number_of_corrupted_records,
             dict(userIndex_of),
             dict(itemIndex_of),
             dict(count_buys_of))
@@ -67,6 +66,7 @@ class PostgreSQLparams():
         self.__login_user = '<user>'
         self.__login_password = '<password>'
         self.__table = AsIs('<table>')
+        self.__timestamp = AsIs('<field with timestamp>')
         self.__userID = AsIs('<field with userID>')
         self.__itemID = AsIs('<field with itemID>')
         self.__limit = 100
@@ -118,6 +118,14 @@ class PostgreSQLparams():
         self.__table = AsIs(str(table))
 
     @property
+    def timestamp(self):
+        return self.__timestamp.adapted
+
+    @timestamp.setter
+    def userID(self, timestamp):
+        self.__userID = AsIs(str(timestamp))
+
+    @property
     def userID(self):
         return self.__userID.adapted
 
@@ -158,7 +166,8 @@ class PostgreSQLparams():
 
     @property
     def _params(self):
-        params = {   'userid': self.__userID,
+        params = {'timestamp': self.__timestamp,
+                     'userid': self.__userID,
                   'articleid': self.__itemID,
                       'table': self.__table,
                       'limit': self.__limit}

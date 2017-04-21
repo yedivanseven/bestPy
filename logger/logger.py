@@ -12,5 +12,5 @@ def write_log_to(file, log_level=30):
                                     '%(message)s')
     log.basicConfig(filename=file,
                     filemode='w',
-                    level=log_level,
+                    level=round(log_level, -1),
                     format=log_entry_format)

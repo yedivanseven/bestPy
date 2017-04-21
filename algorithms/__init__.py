@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from .collaborativefiltering import CollaborativeFiltering
-from .naivesvd import NaiveSVD
+from .truncatedsvd import TruncatedSVD
 
-default = CollaborativeFiltering
+default_algorithm = CollaborativeFiltering
