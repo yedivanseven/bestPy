@@ -5,6 +5,9 @@ from .transactionbase import TransactionBase
 
 
 class Transactions(TransactionBase):
+    def __init__(self, n_buys, n_err, user_i, item_j, counts):
+        super().__init__(n_buys, n_err, user_i, item_j, counts)
+        self.__class_prefix = '_Transactions__'
 
     @property
     def number_of_users(self):
@@ -35,5 +38,4 @@ class Transactions(TransactionBase):
         return self.__itemID_of
 
     def __has(self, attribute):
-        class_prefix = '_' + self.__class__.__name__ + '__'
-        return hasattr(self, class_prefix + attribute)
+        return hasattr(self, self.__class_prefix + attribute)

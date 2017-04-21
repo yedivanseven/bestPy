@@ -7,6 +7,9 @@ from .transactions import Transactions
 
 
 class UserItemMatrix(Transactions):
+    def __init__(self, n_buys, n_err, user_i, item_j, counts):
+        super().__init__(n_buys, n_err, user_i, item_j, counts)
+        self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
     def min_matrix_shape(self):
@@ -55,5 +58,4 @@ class UserItemMatrix(Transactions):
         return unique(self.matrix_by_col[:, items].indices)
 
     def __has(self, attribute):
-        class_prefix = '_' + self.__class__.__name__ + '__'
-        return hasattr(self, class_prefix + attribute)
+        return hasattr(self, self.__class_prefix + attribute)
