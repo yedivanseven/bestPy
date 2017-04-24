@@ -31,16 +31,16 @@ def from_postgreSQL(database):
             raise ProgrammingError('SQL query failed. Check your parameters!')
         else:
             for record in cursor:
-                if None in record:
-                    log.warning('Transaction record {0} is incomplete. '
-                                'Skipping.'.format(number_of_transactions + 1))
-                    number_of_corrupted_records += 1
-                else:
+                if all(record):
                     number_of_transactions += 1
                     timestamp, user, item = record
                     if timestamp > last_unique_items_of[user][item]:
                         last_unique_items_of[user][item] = timestamp
                     transactions.append((str(timestamp), user, item))
+                else:
+                    log.warning('Transaction record {0} is incomplete. '
+                                'Skipping.'.format(number_of_transactions + 1))
+                    number_of_corrupted_records += 1
         finally:
             connection.close()
 

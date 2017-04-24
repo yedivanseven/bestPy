@@ -35,14 +35,14 @@ def from_postgreSQL(database):
             raise ProgrammingError('SQL query failed. Check your parameters!')
         else:
             for record in cursor:
-                if None in record:
-                    log.warning('Incomplete record returned from database '
-                                'query. Skipping.')
-                    number_of_corrupted_records += 1
-                else:
+                if all(record):
                     user, item, count = record
                     count_buys_of[(userIndex_of[user],
                                    itemIndex_of[item])] = count
+                else:
+                    log.warning('Incomplete record returned from database '
+                                'query. Skipping.')
+                    number_of_corrupted_records += 1
         finally:
             connection.close()
 
