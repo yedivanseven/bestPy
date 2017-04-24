@@ -5,7 +5,7 @@ import logging as log
 from collections import defaultdict
 
 
-def from_csv(file, sep=';'):
+def from_csv(file, seperator=';'):
     number_of_transactions = 0
     number_of_corrupted_records = 0
     last_unique_items_of = defaultdict(lambda: defaultdict(int))
@@ -14,10 +14,10 @@ def from_csv(file, sep=';'):
     with open(file) as stream:
         for transaction in stream:
             try:
-                timestamp, user, item = transaction.rstrip().split(sep, 2)
+                timestamp, user, item = transaction.rstrip().split(seperator)
             except ValueError:
-                logging.warning('Could not interpret transaction on line {0}. '
-                                'Skipping.'.format(number_of_transactions + 1))
+                log.warning('Could not interpret transaction on line {0}. '
+                            'Skipping.'.format(number_of_transactions + 1))
                 number_of_corrupted_records += 1
             else:
                 number_of_transactions += 1

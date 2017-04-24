@@ -36,6 +36,8 @@ def from_postgreSQL(database):
         else:
             for record in cursor:
                 if None in record:
+                    log.warning('Incomplete record returned from database '
+                                'query. Skipping.')
                     number_of_corrupted_records += 1
                 else:
                     user, item, count = record
@@ -128,7 +130,7 @@ class PostgreSQLparams():
 
     @timestamp.setter
     def timestamp(self, timestamp):
-        self.__userID = AsIs(str(timestamp))
+        self.__timestamp = AsIs(str(timestamp))
 
     @property
     def userID(self):
