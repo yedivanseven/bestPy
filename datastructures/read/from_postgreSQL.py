@@ -21,6 +21,18 @@ def from_postgreSQL(database):
                      LIMIT %(limit)s) AS head
                GROUP BY %(userid)s, %(articleid)s'''
 
+    def process_valid_transaction(record):
+        user, item, count = record
+        count_buys_of[(userIndex_of[user], itemIndex_of[item])] = count
+        return 0
+
+    def log_corrupted_transaction(record):
+        log.warning('Incomplete record returned from database. Skipping.')
+        return 1
+
+    problem_with = {True : process_valid_transaction,
+                    False: log_corrupted_transaction}
+
     try:
         connection = pg.connect(database.login)
     except OperationalError:
@@ -35,14 +47,8 @@ def from_postgreSQL(database):
             raise ProgrammingError('SQL query failed. Check your parameters!')
         else:
             for record in cursor:
-                if all(record):
-                    user, item, count = record
-                    count_buys_of[(userIndex_of[user],
-                                   itemIndex_of[item])] = count
-                else:
-                    log.warning('Incomplete record returned from database '
-                                'query. Skipping.')
-                    number_of_corrupted_records += 1
+                complete = all(record)
+                number_of_corrupted_records += problem_with[complete](record)
         finally:
             connection.close()
 
