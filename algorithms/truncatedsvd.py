@@ -18,9 +18,9 @@ class TruncatedSVD():
 
     @number_of_factors.setter
     def number_of_factors(self, number_of_factors):
-        if self.__we_need_to_redo_the_SVD_with(number_of_factors):
-            self.__delete_USV_matrices()
         self.__set(number_of_factors)
+        if number_of_factors != self.number_of_factors:
+            self.__delete_USV_matrices()
 
     @property
     def binarize(self):
@@ -28,7 +28,7 @@ class TruncatedSVD():
 
     @binarize.setter
     def binarize(self, binarize):
-        if self.__we_need_to_redo_the_SVD_because_we(binarize):
+        if binarize != self.binarize:
             self.__delete_USV_matrices()
         self.__binarize = binarize
 
@@ -38,9 +38,8 @@ class TruncatedSVD():
             lambda self: self.__data.min_matrix_shape - 1
         )
         self.__reset(self.number_of_factors)
+        self.__delete_USV_matrices()
         self.for_one = self.__for_one
-        if self.__has('U'):
-            self.__delete_USV_matrices()
         return self
 
     @property
@@ -57,19 +56,15 @@ class TruncatedSVD():
         self.__SV = diag(s).dot(V)
 
     def __delete_USV_matrices(self):
-        delattr(self, self.__class_prefix + 'U')
-        delattr(self, self.__class_prefix + 'SV')
+        if self.__has('U'):
+            delattr(self, self.__class_prefix + 'U')
+        if self.__has('SV'):
+            delattr(self, self.__class_prefix + 'SV')
 
     def __matrix(self):
         if self.__binarize:
             return self.__data.bool_matrix_by_row
         return self.__data.matrix_by_row
-
-    def __we_need_to_redo_the_SVD_with(self, number_of_factors):
-        return (self.__has('U') & (number_of_factors != self.number_of_factors))
-
-    def __we_need_to_redo_the_SVD_because_we(self, binarize):
-        return (self.__has('U') and (binarize != self.binarize))
 
     def __set(self, number_of_factors):
         if not self.has_data:

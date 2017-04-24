@@ -17,7 +17,7 @@ class CollaborativeFiltering():
 
     @similarity.setter
     def similarity(self, similarity):
-        if self.__we_need_to_recompute_the_matrix_of(similarity):
+        if similarity != self.similarity:
             self.__delete_sim_mat()
         self.__similarity = similarity
 
@@ -31,9 +31,8 @@ class CollaborativeFiltering():
 
     def operating_on(self, data):
         self.__data = data
+        self.__delete_sim_mat()
         self.for_one = self.__for_one
-        if self.__has('sim_mat'):
-            self.__delete_sim_mat()
         return self
 
     @property
@@ -43,7 +42,7 @@ class CollaborativeFiltering():
     def __for_one(self, target):
         if self.__no_one_else_bought_items_bought_by(target):
             log.info('Uncomparable user. Returning baseline recommendation.')
-            return self.__data.baseline
+            return self.__data.baseline.copy()
 
         history_vector = self.__data.matrix_by_row[target]
         if self.binarize:
@@ -56,14 +55,12 @@ class CollaborativeFiltering():
         return self.__sim_mat
 
     def __delete_sim_mat(self):
-        delattr(self, self.__class_prefix + 'sim_mat')
+        if self.__has('sim_mat'):
+            delattr(self, self.__class_prefix + 'sim_mat')
+
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)
 
     def __no_one_else_bought_items_bought_by(self, target):
         items_bought_by_target = self.__data.matrix_by_row[target].indices
         return self.__data.users_who_bought(items_bought_by_target).size == 1
-
-    def __we_need_to_recompute_the_matrix_of(self, similarity):
-        return (self.__has('sim_mat') and (similarity != self.__similarity))
-
-    def __has(self, attribute):
-        return hasattr(self, self.__class_prefix + attribute)

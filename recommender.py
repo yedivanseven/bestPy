@@ -34,11 +34,6 @@ class RecommendationBasedOn():
     def is_pruned(self):
         return self.__only_new
 
-    def _baseline(self, max_number_of_items=5):
-        head = self.__min_of(max_number_of_items, len(self.__data.baseline))
-        sorted_item_indices = argpartition(self.__data.baseline, -head)[-head:]
-        return (self.__data.itemID_of[index] for index in sorted_item_indices)
-
     def for_one(self, target, max_number_of_items=5):
         type_of = target in self.__data.userIndex_of.keys()
         item_scores = self.__recommendation_for[type_of](target)
