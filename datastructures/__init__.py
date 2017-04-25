@@ -2,4 +2,4 @@
 
 from .useritemmatrix import UserItemMatrix
 from .traintest import TrainTest
-from .read import PostgreSQLparams
+from .postgreSQLparams import PostgreSQLparams

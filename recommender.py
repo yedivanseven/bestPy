@@ -4,6 +4,7 @@
 import logging as log
 from numpy import argpartition
 from .algorithms import default_algorithm
+from .algorithms import Baseline
 
 RETURNING = True
 
@@ -12,6 +13,7 @@ class RecommendationBasedOn():
     def __init__(self, data):
         self.__data = data
         self.__only_new = False
+        self.__baseline = Baseline().operating_on(data)
         self.__recommendation = default_algorithm().operating_on(data)
         self.__recommendation_for = {not RETURNING: self.__cold_start,
                                          RETURNING: self.__calculated}
@@ -34,6 +36,14 @@ class RecommendationBasedOn():
     def is_pruned(self):
         return self.__only_new
 
+    @property
+    def baseline(self):
+        return self.__baseline
+
+    @baseline.setter
+    def baseline(self, baseline):
+        self.__baseline = baseline.operating_on(self.__data)
+
     def for_one(self, target, max_number_of_items=5):
         type_of = target in self.__data.userIndex_of.keys()
         item_scores = self.__recommendation_for[type_of](target)
@@ -43,7 +53,7 @@ class RecommendationBasedOn():
 
     def __cold_start(self, target=None):
         log.info('Unknown target user. Defaulting to baseline recommendation.')
-        return self.__data.baseline
+        return self.baseline.for_one()
 
     def __calculated(self, target):
         target_index = self.__data.userIndex_of[target]

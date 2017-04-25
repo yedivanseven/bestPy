@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-class MostPopular():
+class Baseline():
     def __init__(self):
         self.__binarize = True
+        self.__depending_on_whether_we = {True : self.__count,
+                                          False: self.__sum}
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
@@ -27,16 +29,8 @@ class MostPopular():
     def has_data(self):
         return self.__has('data')
 
-    def __for_one(self, target):
-        target_agnostic = self.__target_agnostic()
-        target_specific = self.__data.matrix_by_row[target]
-        target_agnostic[target_specific.indices] = target_specific.data
-        return target_agnostic
-
-    def __target_agnostic(self):
-        if self.binarize:
-            return self.__count()
-        return self.__sum()
+    def __for_one(self, target=None):
+        return self.__depending_on_whether_we[self.binarize]()
 
     def __delete_precomputed(self):
         if self.__has('unique_buyers'):
@@ -49,12 +43,11 @@ class MostPopular():
 
     def __count(self):
         if not self.__has('unique_buyers'):
-            self.__unique_buyers = (self.__data.matrix_by_col.getnnz(0) /
-                                    len(self.__data._count_buys_of))
+            self.__unique_buyers = self.__data.matrix_by_col.getnnz(0)
+            self.__unique_buyers = self.__unique_buyers.astype(float)
         return self.__unique_buyers.copy()
 
     def __sum(self):
         if not self.__has('number_of_buys'):
-            self.__number_of_buys = (self.__data.matrix_by_col.sum(0).A1 /
-                                     self.__data.number_of_transactions)
+            self.__number_of_buys = self.__data.matrix_by_col.sum(0).A1
         return self.__number_of_buys.copy()

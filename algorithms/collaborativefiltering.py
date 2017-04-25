@@ -3,11 +3,12 @@
 
 import logging as log
 from .similarities import default_similarity
-
+from .baseline import Baseline
 
 class CollaborativeFiltering():
     def __init__(self):
         self.__similarity = default_similarity
+        self.__baseline = Baseline()
         self.__binarize = True
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
@@ -31,9 +32,20 @@ class CollaborativeFiltering():
 
     def operating_on(self, data):
         self.__data = data
+        self.__baseline = self.__baseline.operating_on(data)
         self.__delete_sim_mat()
         self.for_one = self.__for_one
         return self
+
+    @property
+    def baseline(self):
+        return self.__baseline
+
+    @baseline.setter
+    def baseline(self, baseline):
+        self.__baseline = baseline
+        if self.has_data:
+            self.__baseline = self.__baseline.operating_on(self.__data)
 
     @property
     def has_data(self):
@@ -42,7 +54,7 @@ class CollaborativeFiltering():
     def __for_one(self, target):
         if self.__no_one_else_bought_items_bought_by(target):
             log.info('Uncomparable user. Returning baseline recommendation.')
-            return self.__data.baseline.copy()
+            return self.baseline.for_one()
 
         history_vector = self.__data.matrix_by_row[target]
         if self.binarize:

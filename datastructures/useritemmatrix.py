@@ -48,12 +48,6 @@ class UserItemMatrix(Transactions):
             self.__bool_matrix_by_row.data[:] = 1.0
         return self.__bool_matrix_by_row
 
-    @property
-    def baseline(self):
-        if not self.__has('baseline'):
-            self.__baseline = self.matrix_by_col.getnnz(0).astype(float)
-        return self.__baseline
-
     def users_who_bought(self, items):
         return unique(self.matrix_by_col[:, items].indices)
 
