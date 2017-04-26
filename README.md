@@ -37,12 +37,12 @@ top_five = recommentation.for_one(customer)
 for article in top_five:
     print(article)
 ```
-```
-BlackSocks-M-1524
-RedJacket-L-985
-GreenJeans-M-568
-PolkaDotTie-4856
-OutdoorSandals-42
+```python
+'BlackSocks-M-1524'
+'RedJacket-L-985'
+'GreenJeans-M-568'
+'PolkaDotTie-4856'
+'OutdoorSandals-42'
 ```
 
 But there is, of course, much more. With recommendations from the chef.
