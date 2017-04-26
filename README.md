@@ -1,8 +1,6 @@
 # bestPy
 A lightning fast and extendable recommendation framework
 
-__________________________
-
 ### Installation
 Make a new directory to work in. Clone the repository into that directory or download and extract the tarball in that directory.
 
