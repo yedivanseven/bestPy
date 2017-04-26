@@ -121,5 +121,6 @@ class PostgreSQLparams():
             log.warning(prefix + ' should be a string. Trying nevertheless!')
         return prefix + "='" + str(parameter) + "'"
 
+    @property
     def _requested(self):
         return self.limit if isinstance(self.limit, int) else float('-inf')

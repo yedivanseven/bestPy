@@ -62,7 +62,7 @@ def from_postgreSQL(database):
 
 
 def compare(available, database):
-    if available < database._requested():
+    if available < database._requested:
         log.warning('Requested {0} transactions from table {1} but only {2} '
                     'available. Fetched all {2}.'.format(database.limit,
                                                          database.table,
