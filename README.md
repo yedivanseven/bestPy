@@ -1,13 +1,13 @@
-# **bestPy**
+# __bestPy__
 A lightning fast and extendable recommendation framework
 
-## Installation
+### Installation
 Make a new directory to work in. Clone the repository into that directory or download and extract the tarball in that directory.
 
-## Dependencies
+### Dependencies
 See the _environment.yml_ file. Since nothing particularly fancy is used, slightly older versions of the listed packages might work as well but certainly not `python 2.x`.
 
-## Getting Started
+### Getting Started
 In order to recommend articles from your store to your customers, you first need some data on the past. We will assume that you can produce some sort of _transaction list_ containing a timestamp, a unique user-ID and a unique article-ID for every transaction. Say we have such a list in a *.csv file (no headers).
 ```
 1331072795;customer-A2;BlueShirt-M-1749
