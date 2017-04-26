@@ -1,24 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from .baselines import Baseline
+
 
 class MostPopular():
     def __init__(self):
-        self.__binarize = True
+        self.__baseline = Baseline()
+        self.__baseline.binarize = True
+        self.__depending_on = {True : self.__unique_buys,
+                               False: self.__transactions}
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
     def binarize(self):
-        return self.__binarize
+        return self.__baseline.binarize
 
     @binarize.setter
     def binarize(self, binarize):
         if binarize != self.binarize:
             self.__delete_precomputed()
-        self.__binarize = binarize
+        self.__baseline.binarize = binarize
 
     def operating_on(self, data):
         self.__data = data
+        self.__baseline = self.__baseline.operating_on(data)
         self.__delete_precomputed()
         self.for_one = self.__for_one
         return self
@@ -28,33 +34,25 @@ class MostPopular():
         return self.__has('data')
 
     def __for_one(self, target):
-        target_agnostic = self.__target_agnostic()
+        target_agnostic = self.__precomputed()
         target_specific = self.__data.matrix_by_row[target]
         target_agnostic[target_specific.indices] = target_specific.data
         return target_agnostic
 
-    def __target_agnostic(self):
-        if self.binarize:
-            return self.__count()
-        return self.__sum()
-
     def __delete_precomputed(self):
-        if self.__has('unique_buyers'):
-            delattr(self, self.__class_prefix + 'unique_buyers')
-        if self.__has('number_of_buys'):
-            delattr(self, self.__class_prefix + 'number_of_buys')
+        if self.__has('scaled_baseline'):
+            delattr(self, self.__class_prefix + 'scaled_baseline')
+
+    def __precomputed(self):
+        if not self.__has('scaled_baseline'):
+            self.__scaled_baseline = self.__depending_on[self.binarize]()
+        return self.__scaled_baseline.copy()
 
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __count(self):
-        if not self.__has('unique_buyers'):
-            self.__unique_buyers = (self.__data.matrix_by_col.getnnz(0) /
-                                    len(self.__data._count_buys_of))
-        return self.__unique_buyers.copy()
+    def __unique_buys(self):
+        return self.__baseline.for_one() / len(self.__data._count_buys_of)
 
-    def __sum(self):
-        if not self.__has('number_of_buys'):
-            self.__number_of_buys = (self.__data.matrix_by_col.sum(0).A1 /
-                                     self.__data.number_of_transactions)
-        return self.__number_of_buys.copy()
+    def __transactions(self):
+        return self.__basline.for_one() / self.__data.number_of_transactions

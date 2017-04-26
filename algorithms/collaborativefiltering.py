@@ -3,7 +3,7 @@
 
 import logging as log
 from .similarities import default_similarity
-from .baseline import Baseline
+from .baselines import Baseline
 
 class CollaborativeFiltering():
     def __init__(self):
