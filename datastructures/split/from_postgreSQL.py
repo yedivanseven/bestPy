@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logging as log
+import datetime as dt
 from collections import defaultdict
 import psycopg2 as pg
 from psycopg2 import OperationalError, ProgrammingError
@@ -10,8 +11,9 @@ from psycopg2 import OperationalError, ProgrammingError
 def from_postgreSQL(database):
     number_of_transactions = 0
     number_of_corrupted_records = 0
-    last_unique_items_of = defaultdict(lambda: defaultdict(int))
     transactions = []
+    last_unique_items_of = defaultdict(lambda:
+                           defaultdict(lambda: dt.datetime(1, 1, 1)))
 
     query = '''SELECT %(timestamp)s, %(userid)s, %(articleid)s
                FROM %(table)s
@@ -19,9 +21,10 @@ def from_postgreSQL(database):
 
     def process_valid_transaction(record):
         timestamp, user, item = record
-        if timestamp > last_unique_items_of[user][item]:
-            last_unique_items_of[user][item] = timestamp
-        transactions.append((str(timestamp), user, item))
+        time = converted(timestamp)
+        if time > last_unique_items_of[user][item]:
+            last_unique_items_of[user][item] = time
+        transactions.append((time.isoformat(), user, item))
         return 1
 
     def log_corrupted_transaction(record):
@@ -57,3 +60,13 @@ def from_postgreSQL(database):
             number_of_corrupted_records,
             dict(last_unique_items_of),
             transactions)
+
+
+def converted(timestamp):
+    converted = {dt.datetime: lambda time: time,
+                         int: lambda time: dt.datetime.fromtimestamp(time)}
+    type_of = type(timestamp)
+    if type_of not in converted.keys():
+        log.error('Type of timestamp field is neither integer nor timestamp!')
+        raise TypeError('Timestamp field must be an integer or a timestamp!')
+    return converted[type_of](timestamp)

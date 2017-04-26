@@ -13,8 +13,8 @@ class TrainTestBase():
         self.__transactions = trans
 
     @classmethod
-    def from_csv(cls, file):
-        return cls(*split.from_csv(file))
+    def from_csv(cls, file, seperator=';', fmt=None):
+        return cls(*split.from_csv(file, seperator=seperator, fmt=fmt))
 
     @classmethod
     def from_postgreSQL(cls, database):

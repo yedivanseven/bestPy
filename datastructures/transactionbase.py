@@ -13,8 +13,8 @@ class TransactionBase():
         self.__count_buys_of = counts
 
     @classmethod
-    def from_csv(cls, file):
-        return cls(*read.from_csv(file))
+    def from_csv(cls, file, seperator=';'):
+        return cls(*read.from_csv(file, seperator=seperator))
 
     @classmethod
     def from_postgreSQL(cls, database):
