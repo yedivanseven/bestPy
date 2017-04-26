@@ -45,4 +45,4 @@ PolkaDotTie-4856
 OutdoorSandals-42
 ```
 
-But there is much more. Feel free to explore!
+But there is, of course, much more. Feel free to explore!
