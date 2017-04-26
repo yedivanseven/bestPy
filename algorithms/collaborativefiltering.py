@@ -55,7 +55,6 @@ class CollaborativeFiltering():
         if self.__no_one_else_bought_items_bought_by(target):
             log.info('Uncomparable user. Returning baseline recommendation.')
             return self.baseline.for_one()
-
         history_vector = self.__data.matrix_by_row[target]
         if self.binarize:
             history_vector.data[:] = 1.0
