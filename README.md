@@ -19,12 +19,11 @@ In order to recommend articles from your store to your customers, you first need
 ...
 ```
 
-Importing the data into you project yould be as simple as ...
+Importing the data into you project can be as simple as ...
 ```python
 from bestpy.datastructures import UserItemMatrix
 
 file = '/path/to/your/transaction/file.csv'
-
 data = UserItemMatrix.from_csv(file)
 ```
 
@@ -34,7 +33,6 @@ from bestpy import RecommendationBasedOn
 
 recommendation = RecommendationBasedOn(data)
 customer = 'customer-A2'
-
 top_five = recommentation.for_one(customer)
 for article in top_five:
     print(article)
