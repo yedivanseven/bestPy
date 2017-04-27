@@ -37,7 +37,7 @@ top_five = recommentation.for_one(customer)
 for article in top_five:
     print(article)
 ```
-```python
+```
 'BlackSocks-M-1524'
 'RedJacket-L-985'
 'GreenJeans-M-568'
