@@ -5,23 +5,8 @@ import unittest as ut
 import logging
 from ....datastructures.read import from_csv
 
-class TestUserItemMatrixFromCsvFile(ut.TestCase):
 
-    def setUp(self):
-        self.file = './bestPy/tests/data/data25.csv'
-        self.user_i_should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
-        self.item_j_should_be = {'AC016EL50CPHALID-1749': 0,
-                                 'CA189EL29AGOALID-170' : 1,
-                                 'LE629EL54ANHALID-345' : 2,
-                                 'OL756EL65HDYALID-4834': 3,
-                                 'OL756EL55HAMALID-4744': 4,
-                                 'AC016EL56BKHALID-943' : 5}
-        self.counts_should_be = {(0, 0): 1,
-                                 (1, 1): 1,
-                                 (1, 2): 1,
-                                 (2, 3): 1,
-                                 (3, 4): 9,
-                                 (3, 5): 8}
+class BaseTests():
 
     def test_LogsWarningsOnCorruptedRecords(self):
         with self.assertLogs(level=logging.WARNING) as log:
@@ -50,18 +35,42 @@ class TestUserItemMatrixFromCsvFile(ut.TestCase):
 
     def test_UserIndexDict(self):
         with self.assertLogs(level=logging.WARNING) as log:
+            user_i_should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
             _, _, user_i, _, _ = from_csv(self.file)
-            self.assertEqual(self.user_i_should_be, user_i)
+            self.assertEqual(user_i_should_be, user_i)
 
     def test_ItemIndexDict(self):
         with self.assertLogs(level=logging.WARNING) as log:
+            item_j_should_be = {'AC016EL50CPHALID-1749': 0,
+                                'CA189EL29AGOALID-170' : 1,
+                                'LE629EL54ANHALID-345' : 2,
+                                'OL756EL65HDYALID-4834': 3,
+                                'OL756EL55HAMALID-4744': 4,
+                                'AC016EL56BKHALID-943' : 5}
             _, _, _, item_j, _ = from_csv(self.file)
-            self.assertEqual(self.item_j_should_be, item_j)
+            self.assertEqual(item_j_should_be, item_j)
 
     def test_UserItemCountsDict(self):
         with self.assertLogs(level=logging.WARNING) as log:
+            counts_should_be = {(0, 0): 1,
+                                (1, 1): 1,
+                                (1, 2): 1,
+                                (2, 3): 1,
+                                (3, 4): 9,
+                                (3, 5): 8}
             _, _, _, _, counts = from_csv(self.file)
-            self.assertEqual(self.counts_should_be, counts)
+            self.assertEqual(counts_should_be, counts)
+
+
+class TestUserItemMatrixFromCsvFile(ut.TestCase, BaseTests):
+    def setUp(self):
+        self.file = './bestPy/tests/data/data25.csv'
+
+
+class TestUserItemMatrixFromCsvList(ut.TestCase, BaseTests):
+    def setUp(self):
+        self.file = open('./bestPy/tests/data/data25.csv')
+
 
 if __name__ == '__main__':
     ut.main()
