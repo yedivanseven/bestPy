@@ -63,5 +63,4 @@ class FileFrom(TextIOBase):
         self.__generator = generator
 
     def readline(self):
-        line = next(self.__generator)
-        return line
+        return next(self.__generator)
