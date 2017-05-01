@@ -10,7 +10,7 @@ class BaseTests():
 
     def test_LogsWarningsOnCorruptedRecords(self):
         with self.assertLogs(level=logging.WARNING) as log:
-            _ = from_csv(self.file)
+            _ = from_csv(self.file, self.separator)
             self.assertEqual(log.output,
                              ['WARNING:root:Could not interpret transaction on'
                               ' line 2. Skipping.',
@@ -25,18 +25,18 @@ class BaseTests():
 
     def test_TotalNumberOfRecords(self):
         with self.assertLogs(level=logging.WARNING) as log:
-            n_rec, _, _, _, _ = from_csv(self.file)
+            n_rec, _, _, _, _ = from_csv(self.file, self.separator)
             self.assertEqual(n_rec, 21)
 
     def test_NumberOfCorruptedRecords(self):
         with self.assertLogs(level=logging.WARNING) as log:
-            _, n_err, _, _, _ = from_csv(self.file)
+            _, n_err, _, _, _ = from_csv(self.file, self.separator)
             self.assertEqual(n_err, 5)
 
     def test_UserIndexDict(self):
         with self.assertLogs(level=logging.WARNING) as log:
             user_i_should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
-            _, _, user_i, _, _ = from_csv(self.file)
+            _, _, user_i, _, _ = from_csv(self.file, self.separator)
             self.assertEqual(user_i_should_be, user_i)
 
     def test_ItemIndexDict(self):
@@ -47,7 +47,7 @@ class BaseTests():
                                 'OL756EL65HDYALID-4834': 3,
                                 'OL756EL55HAMALID-4744': 4,
                                 'AC016EL56BKHALID-943' : 5}
-            _, _, _, item_j, _ = from_csv(self.file)
+            _, _, _, item_j, _ = from_csv(self.file, self.separator)
             self.assertEqual(item_j_should_be, item_j)
 
     def test_UserItemCountsDict(self):
@@ -58,18 +58,32 @@ class BaseTests():
                                 (2, 3): 1,
                                 (3, 4): 9,
                                 (3, 5): 8}
-            _, _, _, _, counts = from_csv(self.file)
+            _, _, _, _, counts = from_csv(self.file, self.separator)
             self.assertEqual(counts_should_be, counts)
 
 
-class TestUserItemMatrixFromCsvFile(ut.TestCase, BaseTests):
+class TestUserItemMatrixFromCsvSemicolonFile(ut.TestCase, BaseTests):
     def setUp(self):
-        self.file = './bestPy/tests/data/data25.csv'
+        self.file = './bestPy/tests/data/data25semicolon.csv'
+        self.separator = ';'
 
 
-class TestUserItemMatrixFromCsvList(ut.TestCase, BaseTests):
+class TestUserItemMatrixFromCsvCommaFile(ut.TestCase, BaseTests):
     def setUp(self):
-        self.file = open('./bestPy/tests/data/data25.csv')
+        self.file = './bestPy/tests/data/data25comma.csv'
+        self.separator = ','
+
+
+class TestUserItemMatrixFromCsvSemicolonStream(ut.TestCase, BaseTests):
+    def setUp(self):
+        self.file = open('./bestPy/tests/data/data25semicolon.csv')
+        self.separator = ';'
+
+
+class TestUserItemMatrixFromCsvCommaStream(ut.TestCase, BaseTests):
+    def setUp(self):
+        self.file = open('./bestPy/tests/data/data25comma.csv')
+        self.separator = ','
 
 
 if __name__ == '__main__':
