@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest as ut
+import datetime as dt
 import logging
 from ....datastructures.split import from_csv
 
@@ -9,34 +10,34 @@ from ....datastructures.split import from_csv
 class BaseTests():
 
     def test_LogsWarningsOnCorruptedRecords(self):
+        should_be = ['WARNING:root:Could not interpret transaction on'
+                     ' line 2. Skipping.',
+                     'WARNING:root:Transaction on line 3 contains'
+                     ' empty fields. Skipping.',
+                     'WARNING:root:Transaction on line 4 contains'
+                     ' empty fields. Skipping.',
+                     'WARNING:root:Could not interpret transaction on'
+                     ' line 8. Skipping.',
+                     'WARNING:root:Could not interpret transaction on'
+                     ' line 26. Skipping.']
         with self.assertLogs(level=logging.WARNING) as log:
-            _ = from_csv(self.file, self.separator)
-            self.assertEqual(log.output,
-                             ['WARNING:root:Could not interpret transaction on'
-                              ' line 2. Skipping.',
-                              'WARNING:root:Transaction on line 3 contains'
-                              ' empty fields. Skipping.',
-                              'WARNING:root:Transaction on line 4 contains'
-                              ' empty fields. Skipping.',
-                              'WARNING:root:Could not interpret transaction on'
-                               ' line 8. Skipping.',
-                              'WARNING:root:Could not interpret transaction on'
-                              ' line 26. Skipping.'])
+            _ = from_csv(self.file, self.separator, self.fmt)
+            self.assertEqual(log.output, should_be)
 
     def test_TotalNumberOfRecords(self):
         with self.assertLogs(level=logging.WARNING) as log:
-            n_rec, _, _, _ = from_csv(self.file, self.separator)
+            n_rec, _, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_rec, 21)
 
     def test_NumberOfCorruptedRecords(self):
         with self.assertLogs(level=logging.WARNING) as log:
-            _, n_err, _, _ = from_csv(self.file, self.separator)
+            _, n_err, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_err, 5)
 
     def test_LastUniqueUserList(self):
         should_be = ['4', '11', '10', '7']
         with self.assertLogs(level=logging.WARNING) as log:
-            _, _, unique, _ = from_csv(self.file, self.separator)
+            _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(list(unique.keys()), should_be)
 
     def test_LastUniqueItemList(self):
@@ -45,13 +46,22 @@ class BaseTests():
                      ['OL756EL65HDYALID-4834'],
                      ['OL756EL55HAMALID-4744', 'AC016EL56BKHALID-943']]
         with self.assertLogs(level=logging.WARNING) as log:
-            _, _, unique, _ = from_csv(self.file, self.separator)
+            _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         actually_is = [list(unique[user].keys()) for user in unique]
         self.assertEqual(actually_is, should_be)
 
     def test_LastUniqueTimes(self):
+        should_be = {'4' : [dt.datetime(2012, 3, 6, 23, 26, 35)],
+                     '11': [dt.datetime(2012, 3, 9, 16, 18, 33),
+                            dt.datetime(2012, 3, 9, 16, 18, 52)],
+                     '10': [dt.datetime(2012, 3, 9, 16, 19, 1)],
+                     '7' : [dt.datetime(2012, 3, 9, 16, 20, 14),
+                            dt.datetime(2012, 3, 9, 16, 20, 14)]}
         with self.assertLogs(level=logging.WARNING) as log:
-            _, _, unique, _ = from_csv(self.file, self.separator)
+            _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
+        actually_is = {user: list(item.values())
+                       for user, item in unique.items()}
+        self.assertEqual(actually_is, should_be)
 
     def test_TransactionList(self):
         should_be = [('2012-03-06T23:26:35', '4', 'AC016EL50CPHALID-1749'),
@@ -76,14 +86,22 @@ class BaseTests():
                      ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
                      ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943')]
         with self.assertLogs(level=logging.WARNING) as log:
-            _, _, _, transactions = from_csv(self.file, self.separator)
-        self.assertEqual(should_be, transactions)
+            _, _, _, transacts = from_csv(self.file, self.separator, self.fmt)
+        self.assertEqual(should_be, transacts)
 
 
-class TestUserItemMatrixFromCsvSemicolonFile(ut.TestCase, BaseTests):
+class TestTrainTestFromCsvSemicolonFile(ut.TestCase, BaseTests):
     def setUp(self):
         self.file = './bestPy/tests/data/data25semicolon.csv'
         self.separator = ';'
+        self.fmt = None
+
+
+class TestTrainTestFromCsvCommaFile(ut.TestCase, BaseTests):
+    def setUp(self):
+        self.file = './bestPy/tests/data/data25comma.csv'
+        self.separator = ','
+        self.fmt = None
 
 
 if __name__ == '__main__':
