@@ -6,7 +6,7 @@ import datetime as dt
 from collections import defaultdict
 
 
-def from_csv(file, seperator=';', fmt=None):
+def from_csv(file, separator=';', fmt=None):
     format_of = fmt
     number_of_transactions = 0
     number_of_corrupted_records = 0
@@ -39,7 +39,7 @@ def from_csv(file, seperator=';', fmt=None):
     with open(file) as stream:
         for transaction in stream:
             try:
-                timestamp, user, item = transaction.rstrip().split(seperator)
+                timestamp, user, item = transaction.rstrip().split(separator)
             except ValueError:
                 number_of_corrupted_records += 1
                 line = number_of_transactions + number_of_corrupted_records

@@ -5,7 +5,7 @@ import logging as log
 from collections import defaultdict
 
 
-def from_csv(file, seperator=';'):
+def from_csv(file, separator=';'):
     number_of_transactions = 0
     number_of_corrupted_records = 0
     userIndex_of = defaultdict(lambda: len(userIndex_of))
@@ -29,7 +29,7 @@ def from_csv(file, seperator=';'):
     with stream:
         for transaction in stream:
             try:
-                _, user, item = transaction.rstrip().split(seperator)
+                _, user, item = transaction.rstrip().split(separator)
             except ValueError:
                 number_of_corrupted_records += 1
                 line = number_of_transactions + number_of_corrupted_records
