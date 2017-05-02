@@ -22,8 +22,8 @@ def from_csv(file, seperator=';'):
                     'Skipping.'.format(line))
         return 0
 
-    check_for = {True : process_valid_transaction,
-                 False: log_corrupted_transaction}
+    process = {True : process_valid_transaction,
+               False: log_corrupted_transaction}
 
     stream = open(file) if isinstance(file, str) else file
     with stream:
@@ -36,8 +36,8 @@ def from_csv(file, seperator=';'):
                 log.warning('Could not interpret transaction on line {0}. '
                             'Skipping.'.format(line))
             else:
-                completeness = all((user, item))
-                success = check_for[completeness]()
+                complete_record = all((user, item))
+                success = process[complete_record]()
                 number_of_transactions += success
                 number_of_corrupted_records += 1 - success
 
