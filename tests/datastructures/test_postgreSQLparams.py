@@ -1,0 +1,213 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import unittest as ut
+import logging
+from psycopg2.extensions import AsIs
+from ...datastructures import PostgreSQLparams
+
+
+class TestPostGreSqlParams(ut.TestCase):
+
+    def setUp(self):
+        self.database = PostgreSQLparams()
+
+    def test_db_name_right(self):
+        self.database.login_db_name = 'foo'
+        self.assertEqual(self.database.login_db_name, "dbname='foo'")
+
+    def test_db_name_wrong(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.login_db_name = 12.3
+        self.assertEqual(self.database.login_db_name, "dbname='12.3'")
+
+    def test_db_name_warn(self):
+        should_be = ['WARNING:root:dbname should be a string.'
+                     ' Trying nevertheless!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.database.login_db_name = 12.3
+        self.assertEqual(log.output, should_be)
+
+    def test_host_right(self):
+        self.database.login_host = 'bar'
+        self.assertEqual(self.database.login_host, "host='bar'")
+
+    def test_host_wrong(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.login_host = 45.6
+        self.assertEqual(self.database.login_host, "host='45.6'")
+
+    def test_host_warn(self):
+        should_be = ['WARNING:root:host should be a string.'
+                     ' Trying nevertheless!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.database.login_host = 45.6
+        self.assertEqual(log.output, should_be)
+
+    def test_user_right(self):
+        self.database.login_user = 'john'
+        self.assertEqual(self.database.login_user, "user='john'")
+
+    def test_user_wrong(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.login_user = 78.9
+        self.assertEqual(self.database.login_user, "user='78.9'")
+
+    def test_user_warn(self):
+        should_be = ['WARNING:root:user should be a string.'
+                     ' Trying nevertheless!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.database.login_user = 78.9
+        self.assertEqual(log.output, should_be)
+
+    def test_password_right(self):
+        self.database.login_password = 'doe'
+        self.assertEqual(self.database.login_password, "password='doe'")
+
+    def test_password_wrong(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.login_password = 12.3
+        self.assertEqual(self.database.login_password, "password='12.3'")
+
+    def test_password_warn(self):
+        should_be = ['WARNING:root:password should be a string.'
+                     ' Trying nevertheless!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.database.login_password = 12.3
+        self.assertEqual(log.output, should_be)
+
+    def test_login_assembly(self):
+        self.database.login_db_name = 'foo'
+        self.database.login_host = 'bar'
+        self.database.login_user = 'john'
+        self.database.login_password = 'doe'
+        should_be = "dbname='foo' host='bar' password='doe' user='john'"
+        self.assertEqual(self.database.login, should_be)
+
+    def test_table_right(self):
+        self.database.table = 'foo'
+        self.assertEqual(self.database.table, 'foo')
+
+    def test_table_wrong(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.table = 12.3
+        self.assertEqual(self.database.table, '12.3')
+
+    def test_table_warn(self):
+        should_be = ['WARNING:root:table should be a string.'
+                     ' Trying nevertheless!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.database.table = 12.3
+        self.assertEqual(log.output, should_be)
+
+    def test_table_params(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.table = 12.3
+        self.assertEqual(self.database._params['table'].adapted, '12.3')
+
+    def test_timestamp_right(self):
+        self.database.timestamp = 'bar'
+        self.assertEqual(self.database.timestamp, 'bar')
+
+    def test_timestamp_wrong(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.timestamp = 45.6
+        self.assertEqual(self.database.timestamp, '45.6')
+
+    def test_timestamp_warn(self):
+        should_be = ['WARNING:root:timestamp should be a string.'
+                     ' Trying nevertheless!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.database.timestamp = 45.6
+        self.assertEqual(log.output, should_be)
+
+    def test_timestamp_params(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.timestamp = 45.6
+        self.assertEqual(self.database._params['timestamp'].adapted, '45.6')
+
+    def test_userID_right(self):
+        self.database.userID = 'john'
+        self.assertEqual(self.database.userID, 'john')
+
+    def test_userID_wrong(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.userID = 78.9
+        self.assertEqual(self.database.userID, '78.9')
+
+    def test_userID_warn(self):
+        should_be = ['WARNING:root:userID should be a string.'
+                     ' Trying nevertheless!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.database.userID = 78.9
+        self.assertEqual(log.output, should_be)
+
+    def test_userID_params(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.userID = 78.9
+        self.assertEqual(self.database._params['userid'].adapted, '78.9')
+
+    def test_itemID_right(self):
+        self.database.itemID = 'doe'
+        self.assertEqual(self.database.itemID, 'doe')
+
+    def test_itemID_wrong(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.itemID = 12.3
+        self.assertEqual(self.database.itemID, '12.3')
+
+    def test_itemID_warn(self):
+        should_be = ['WARNING:root:itemID should be a string.'
+                     ' Trying nevertheless!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.database.itemID = 12.3
+        self.assertEqual(log.output, should_be)
+
+    def test_itemID_params(self):
+        with self.assertLogs(level=logging.WARNING):
+            self.database.itemID = 12.3
+        self.assertEqual(self.database._params['articleid'].adapted, '12.3')
+
+    def test_limit_int(self):
+        self.database.limit = 200
+        self.assertEqual(self.database.limit, 200)
+
+    def test_limit_int_params(self):
+        self.database.limit = 200
+        self.assertEqual(self.database._params['limit'], 200)
+
+    def test_limit_all(self):
+        self.database.limit = 'All'
+        self.assertEqual(self.database.limit, 'All')
+
+    def test_limit_all_params(self):
+        self.database.limit = 'All'
+        self.assertEqual(self.database._params['limit'].adapted, 'All')
+
+    def test_limit_negative(self):
+        should_be = ['ERROR:root:Limit must be the string "all" or a'
+                     ' positive integer!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            with self.assertRaises(ValueError):
+                self.database.limit = -100
+        self.assertEqual(log.output, should_be)
+
+    def test_limit_float(self):
+        should_be = ['ERROR:root:Limit must be the string "all" or a'
+                     ' positive integer!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            with self.assertRaises(ValueError):
+                self.database.limit = 12.3
+        self.assertEqual(log.output, should_be)
+
+    def test_limit_not_all(self):
+        should_be = ['ERROR:root:Limit must be the string "all" or a'
+                     ' positive integer!']
+        with self.assertLogs(level=logging.WARNING) as log:
+            with self.assertRaises(ValueError):
+                self.database.limit = 'foo'
+        self.assertEqual(log.output, should_be)
+
+
+if __name__ == '__main__':
+    ut.main()

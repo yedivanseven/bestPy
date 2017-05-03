@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging as log
 from io import TextIOBase
 from . import split
 
@@ -63,4 +64,16 @@ class FileFrom(TextIOBase):
         self.__generator = generator
 
     def readline(self):
-        return next(self.__generator)
+        try:
+            line = next(self.__generator)
+        except TypeError:
+            log.error('Failed to read line from file-like object.'
+                      ' Was it created from an iterator?')
+            raise TypeError('Object was not created from an iterator!')
+        try:
+            assert(type(line) == str)
+        except AssertionError:
+            log.error('Line read from file-like object is not a string.'
+                      ' Was it created from a string iterator?')
+            raise TypeError('Line read from file-like object is not a string!')
+        return line

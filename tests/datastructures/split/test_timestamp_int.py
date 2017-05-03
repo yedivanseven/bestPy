@@ -35,12 +35,12 @@ class TestTrainTestFromCsvFileTimestampInt(ut.TestCase):
         self.assertEqual(log.output, should_be)
 
     def test_TotalNumberOfRecords(self):
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             n_rec, _, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_rec, 21)
 
     def test_NumberOfCorruptedRecords(self):
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, n_err, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_err, 4)
 
@@ -56,7 +56,7 @@ class TestTrainTestFromCsvFileTimestampInt(ut.TestCase):
                      '2012-03-09T16:20:14', '2012-03-09T16:20:14',
                      '2012-03-09T16:20:14', '2012-03-09T16:20:14',
                      '2012-03-09T16:20:14']
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, _, _, transacts = from_csv(self.file, self.separator, self.fmt)
         datetimes = [transact[0] for transact in transacts]
         self.assertEqual(datetimes, should_be)

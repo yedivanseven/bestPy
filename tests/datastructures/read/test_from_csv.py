@@ -24,18 +24,18 @@ class BaseTests():
             self.assertEqual(log.output, should_be)
 
     def test_TotalNumberOfRecords(self):
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             n_rec, _, _, _, _ = from_csv(self.file, self.separator)
         self.assertEqual(n_rec, 21)
 
     def test_NumberOfCorruptedRecords(self):
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, n_err, _, _, _ = from_csv(self.file, self.separator)
         self.assertEqual(n_err, 5)
 
     def test_UserIndexDict(self):
         user_i_should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, _, user_i, _, _ = from_csv(self.file, self.separator)
         self.assertEqual(user_i_should_be, user_i)
 
@@ -46,7 +46,7 @@ class BaseTests():
                             'OL756EL65HDYALID-4834': 3,
                             'OL756EL55HAMALID-4744': 4,
                             'AC016EL56BKHALID-943' : 5}
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, _, _, item_j, _ = from_csv(self.file, self.separator)
         self.assertEqual(item_j_should_be, item_j)
 
@@ -57,7 +57,7 @@ class BaseTests():
                             (2, 3): 1,
                             (3, 4): 9,
                             (3, 5): 8}
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, _, _, _, counts = from_csv(self.file, self.separator)
         self.assertEqual(counts_should_be, counts)
 

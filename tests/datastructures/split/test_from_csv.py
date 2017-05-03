@@ -25,18 +25,18 @@ class BaseTests():
             self.assertEqual(log.output, should_be)
 
     def test_TotalNumberOfRecords(self):
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             n_rec, _, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_rec, 21)
 
     def test_NumberOfCorruptedRecords(self):
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, n_err, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_err, 5)
 
     def test_LastUniqueUserList(self):
         should_be = ['4', '11', '10', '7']
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(list(unique.keys()), should_be)
 
@@ -45,7 +45,7 @@ class BaseTests():
                      ['CA189EL29AGOALID-170', 'LE629EL54ANHALID-345'],
                      ['OL756EL65HDYALID-4834'],
                      ['OL756EL55HAMALID-4744', 'AC016EL56BKHALID-943']]
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         actually_is = [list(unique[user].keys()) for user in unique]
         self.assertEqual(actually_is, should_be)
@@ -57,7 +57,7 @@ class BaseTests():
                      '10': [dt.datetime(2012, 3, 9, 16, 19, 1)],
                      '7' : [dt.datetime(2012, 3, 9, 16, 20, 14),
                             dt.datetime(2012, 3, 9, 16, 20, 14)]}
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         actually_is = {user: list(item.values())
                        for user, item in unique.items()}
@@ -85,7 +85,7 @@ class BaseTests():
                      ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
                      ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
                      ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943')]
-        with self.assertLogs(level=logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING):
             _, _, _, transacts = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(should_be, transacts)
 

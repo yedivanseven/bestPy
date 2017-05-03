@@ -60,7 +60,7 @@ class PostgreSQLparams():
 
     @table.setter
     def table(self, table):
-        self.__table = AsIs(str(table))
+        self.__table = AsIs(self.__convert(table, 'table'))
 
     @property
     def timestamp(self):
@@ -68,7 +68,7 @@ class PostgreSQLparams():
 
     @timestamp.setter
     def timestamp(self, timestamp):
-        self.__timestamp = AsIs(str(timestamp))
+        self.__timestamp = AsIs(self.__convert(timestamp, 'timestamp'))
 
     @property
     def userID(self):
@@ -76,7 +76,7 @@ class PostgreSQLparams():
 
     @userID.setter
     def userID(self, userID):
-        self.__userID = AsIs(str(userID))
+        self.__userID = AsIs(self.__convert(userID, 'userID'))
 
     @property
     def itemID(self):
@@ -84,7 +84,7 @@ class PostgreSQLparams():
 
     @itemID.setter
     def itemID(self, itemID):
-        self.__itemID = AsIs(str(itemID))
+        self.__itemID = AsIs(self.__convert(itemID, 'itemID'))
 
     @property
     def limit(self):
@@ -95,7 +95,7 @@ class PostgreSQLparams():
     @limit.setter
     def limit(self, limit):
         no = lambda x: False
-        permitted = {int: lambda i: True if i>= 0 else False,
+        permitted = {int: lambda i: True if i > 0 else False,
                      str: lambda s: True if s.upper() == 'ALL' else False}
         set_according_to = {int: lambda i: i,
                             str: lambda s: AsIs(s)}
@@ -116,10 +116,15 @@ class PostgreSQLparams():
                       'limit': self.__limit}
         return params
 
-    def __prepend(self, parameter, prefix=''):
+    def __prepend(self, parameter, prefix):
         if not isinstance(parameter, str):
             log.warning(prefix + ' should be a string. Trying nevertheless!')
         return prefix + "='" + str(parameter) + "'"
+
+    def __convert(self, parameter, prefix):
+        if not isinstance(parameter, str):
+            log.warning(prefix + ' should be a string. Trying nevertheless!')
+        return str(parameter)
 
     @property
     def _requested(self):
