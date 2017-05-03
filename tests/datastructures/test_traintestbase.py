@@ -5,7 +5,6 @@ import unittest as ut
 import logging
 from ...datastructures.traintestbase import TrainTestBase, TestDataFrom
 from ...datastructures.traintestbase import FileFrom
-from ...datastructures import TrainTest
 
 
 class TestTrainTestBase(ut.TestCase):
@@ -43,12 +42,12 @@ class TestTestDataFrom(ut.TestCase):
         self.test = TestDataFrom(self.data, self.hold_out, self.only_new)
 
     def test_data(self):
-        self.assertEqual(self.test.data, self.data)
+        self.assertDictEqual(self.test.data, self.data)
 
     def test_set_data(self):
         with self.assertRaises(AttributeError):
             self.test.data = 'foo'
-        self.assertEqual(self.test.data, self.data)
+        self.assertDictEqual(self.test.data, self.data)
 
     def test_hold_out(self):
         self.assertEqual(self.test.hold_out, self.hold_out)
@@ -63,15 +62,7 @@ class TestTestDataFrom(ut.TestCase):
 
     def test_set_only_new(self):
         with self.assertRaises(AttributeError):
-            self.test.only_new = 'bar'
-        self.assertEqual(self.test.only_new, self.only_new)
-
-    def test_only_new(self):
-        self.assertEqual(self.test.only_new, self.only_new)
-
-    def test_set_only_new(self):
-        with self.assertRaises(AttributeError):
-            self.test.only_new = 'bar'
+            self.test.only_new = 'baz'
         self.assertEqual(self.test.only_new, self.only_new)
 
     def test_number_of_cases(self):
@@ -79,7 +70,7 @@ class TestTestDataFrom(ut.TestCase):
 
     def test_set_number_of_cases(self):
         with self.assertRaises(AttributeError):
-            self.test.number_of_cases = 'baz'
+            self.test.number_of_cases = 'foz'
         self.assertEqual(self.test.number_of_cases, 2)
 
 
@@ -98,27 +89,29 @@ class TestFileFrom(ut.TestCase):
         with self.str_stream as file:
             for line in file:
                 actual.append(line)
-        self.assertEqual(should_be, actual)
+        self.assertListEqual(should_be, actual)
 
     def test_read_like_file_int_fails(self):
         should_be = ['ERROR:root:Line read from file-like object is not a'
                      ' string. Was it created from a string iterator?']
+        err_msg = 'Line read from file-like object is not a string!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(TypeError, msg=err_msg):
                 with self.int_stream as file:
                     for line in file:
                         _ = line
-        self.assertEquals(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_readline_like_file_fails(self):
         should_be = ['ERROR:root:Failed to read line from file-like object.'
                      ' Was it created from an iterator?']
+        err_msg = 'Object was not created from an iterator!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(TypeError, msg=err_msg):
                 with self.no_stream as file:
                     for line in file:
                         _ = line
-        self.assertEquals(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
 
 if __name__ == '__main__':

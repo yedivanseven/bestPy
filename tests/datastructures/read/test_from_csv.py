@@ -21,7 +21,7 @@ class BaseTests():
                      ' line 26. Skipping.']
         with self.assertLogs(level=logging.WARNING) as log:
             _ = from_csv(self.file, self.separator)
-            self.assertEqual(log.output, should_be)
+            self.assertListEqual(log.output, should_be)
 
     def test_TotalNumberOfRecords(self):
         with self.assertLogs(level=logging.WARNING):
@@ -37,7 +37,7 @@ class BaseTests():
         user_i_should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
         with self.assertLogs(level=logging.WARNING):
             _, _, user_i, _, _ = from_csv(self.file, self.separator)
-        self.assertEqual(user_i_should_be, user_i)
+        self.assertDictEqual(user_i_should_be, user_i)
 
     def test_ItemIndexDict(self):
         item_j_should_be = {'AC016EL50CPHALID-1749': 0,
@@ -48,7 +48,7 @@ class BaseTests():
                             'AC016EL56BKHALID-943' : 5}
         with self.assertLogs(level=logging.WARNING):
             _, _, _, item_j, _ = from_csv(self.file, self.separator)
-        self.assertEqual(item_j_should_be, item_j)
+        self.assertDictEqual(item_j_should_be, item_j)
 
     def test_UserItemCountsDict(self):
         counts_should_be = {(0, 0): 1,
@@ -59,7 +59,7 @@ class BaseTests():
                             (3, 5): 8}
         with self.assertLogs(level=logging.WARNING):
             _, _, _, _, counts = from_csv(self.file, self.separator)
-        self.assertEqual(counts_should_be, counts)
+        self.assertDictEqual(counts_should_be, counts)
 
 
 class TestUserItemMatrixFromCsvSemicolonFile(ut.TestCase, BaseTests):

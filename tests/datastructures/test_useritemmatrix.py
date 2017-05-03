@@ -31,7 +31,8 @@ class TestUserItemMatrix(ut.TestCase):
                      [0.0, 1.0, 1.0, 0.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 1.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 0.0, 9.0, 8.0]]
-        self.assertEqual(self.data.matrix_by_col.toarray().tolist(), should_be)
+        self.assertListEqual(self.data.matrix_by_col.toarray().tolist(),
+                             should_be)
 
     def test_set_matrix_by_col(self):
         should_be = [[1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -40,7 +41,8 @@ class TestUserItemMatrix(ut.TestCase):
                      [0.0, 0.0, 0.0, 0.0, 9.0, 8.0]]
         with self.assertRaises(AttributeError):
             self.data.matrix_by_col = 'foo'
-        self.assertEqual(self.data.matrix_by_col.toarray().tolist(), should_be)
+        self.assertListEqual(self.data.matrix_by_col.toarray().tolist(),
+                             should_be)
 
     def test_bool_matrix_by_col_type(self):
         self.assertIsInstance(self.data.bool_matrix_by_col,
@@ -51,8 +53,8 @@ class TestUserItemMatrix(ut.TestCase):
                      [0.0, 1.0, 1.0, 0.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 1.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 0.0, 1.0, 1.0]]
-        self.assertEqual(self.data.bool_matrix_by_col.toarray().tolist(),
-                         should_be)
+        self.assertListEqual(self.data.bool_matrix_by_col.toarray().tolist(),
+                             should_be)
 
     def test_set_bool_matrix_by_col(self):
         should_be = [[1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -61,8 +63,8 @@ class TestUserItemMatrix(ut.TestCase):
                      [0.0, 0.0, 0.0, 0.0, 1.0, 1.0]]
         with self.assertRaises(AttributeError):
             self.data.bool_matrix_by_col = 'bar'
-        self.assertEqual(self.data.bool_matrix_by_col.toarray().tolist(),
-                         should_be)
+        self.assertListEqual(self.data.bool_matrix_by_col.toarray().tolist(),
+                             should_be)
 
     def test_matrix_by_row_types(self):
         self.assertIsInstance(self.data.matrix_by_row,
@@ -73,7 +75,8 @@ class TestUserItemMatrix(ut.TestCase):
                      [0.0, 1.0, 1.0, 0.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 1.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 0.0, 9.0, 8.0]]
-        self.assertEqual(self.data.matrix_by_row.toarray().tolist(), should_be)
+        self.assertListEqual(self.data.matrix_by_row.toarray().tolist(),
+                             should_be)
 
     def test_set_matrix_by_row(self):
         should_be = [[1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -82,7 +85,8 @@ class TestUserItemMatrix(ut.TestCase):
                      [0.0, 0.0, 0.0, 0.0, 9.0, 8.0]]
         with self.assertRaises(AttributeError):
             self.data.matrix_by_col = 'baz'
-        self.assertEqual(self.data.matrix_by_row.toarray().tolist(), should_be)
+        self.assertListEqual(self.data.matrix_by_row.toarray().tolist(),
+                             should_be)
 
     def test_bool_matrix_by_row_type(self):
         self.assertIsInstance(self.data.bool_matrix_by_row,
@@ -93,8 +97,8 @@ class TestUserItemMatrix(ut.TestCase):
                      [0.0, 1.0, 1.0, 0.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 1.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 0.0, 1.0, 1.0]]
-        self.assertEqual(self.data.bool_matrix_by_row.toarray().tolist(),
-                         should_be)
+        self.assertListEqual(self.data.bool_matrix_by_row.toarray().tolist(),
+                             should_be)
 
     def test_set_bool_matrix_by_row(self):
         should_be = [[1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -103,13 +107,13 @@ class TestUserItemMatrix(ut.TestCase):
                      [0.0, 0.0, 0.0, 0.0, 1.0, 1.0]]
         with self.assertRaises(AttributeError):
             self.data.bool_matrix_by_row = 'foz'
-        self.assertEqual(self.data.bool_matrix_by_row.toarray().tolist(),
-                         should_be)
+        self.assertListEqual(self.data.bool_matrix_by_row.toarray().tolist(),
+                             should_be)
 
     def test_users_who_bought(self):
         should_be = [[0], [1], [1], [2], [3], [3]]
-        actually = [self.data.users_who_bought(i).tolist() for i in range(6)]
-        self.assertEqual(should_be, actually)
+        actual = [self.data.users_who_bought(i).tolist() for i in range(6)]
+        self.assertListEqual(should_be, actual)
 
 
 if __name__ == '__main__':

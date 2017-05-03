@@ -31,13 +31,13 @@ class TestTransactionBase(ut.TestCase):
 
     def test_userIndex_of(self):
         should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
-        self.assertEqual(self.data.userIndex_of, should_be)
+        self.assertDictEqual(self.data.userIndex_of, should_be)
 
     def test_set_userIndex_of(self):
         should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
         with self.assertRaises(AttributeError):
             self.data.userIndex_of = 'foo'
-        self.assertEqual(self.data.userIndex_of, should_be)
+        self.assertDictEqual(self.data.userIndex_of, should_be)
 
     def test_itemIndexof(self):
         should_be = {'AC016EL50CPHALID-1749': 0,
@@ -46,7 +46,7 @@ class TestTransactionBase(ut.TestCase):
                      'OL756EL65HDYALID-4834': 3,
                      'OL756EL55HAMALID-4744': 4,
                      'AC016EL56BKHALID-943' : 5}
-        self.assertEqual(self.data.itemIndex_of, should_be)
+        self.assertDictEqual(self.data.itemIndex_of, should_be)
 
     def test_set_intemIndex_of(self):
         should_be = {'AC016EL50CPHALID-1749': 0,
@@ -57,7 +57,7 @@ class TestTransactionBase(ut.TestCase):
                      'AC016EL56BKHALID-943' : 5}
         with self.assertRaises(AttributeError):
             self.data.itemIndex_of = 'bar'
-        self.assertEqual(self.data.itemIndex_of, should_be)
+        self.assertDictEqual(self.data.itemIndex_of, should_be)
 
     def test_count_buys_of(self):
         should_be = {(0, 0): 1,
@@ -66,7 +66,7 @@ class TestTransactionBase(ut.TestCase):
                      (2, 3): 1,
                      (3, 4): 9,
                      (3, 5): 8}
-        self.assertEqual(self.data._count_buys_of, should_be)
+        self.assertDictEqual(self.data._count_buys_of, should_be)
 
     def test_set_count_buys_of(self):
         should_be = {(0, 0): 1,
@@ -77,7 +77,7 @@ class TestTransactionBase(ut.TestCase):
                      (3, 5): 8}
         with self.assertRaises(AttributeError):
             self.data._count_buys_of = 'baz'
-        self.assertEqual(self.data._count_buys_of, should_be)
+        self.assertDictEqual(self.data._count_buys_of, should_be)
 
 
 if __name__ == '__main__':

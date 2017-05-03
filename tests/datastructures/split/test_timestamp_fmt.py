@@ -33,7 +33,7 @@ class TestTrainTestFromCsvFileTimestampFmt(ut.TestCase):
                      ' line 17. Skipping.']
         with self.assertLogs(level=logging.WARNING) as log:
             _, _, _, _ = from_csv(self.file, self.separator, self.fmt)
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_TotalNumberOfRecords(self):
         with self.assertLogs(level=logging.WARNING):
@@ -60,7 +60,7 @@ class TestTrainTestFromCsvFileTimestampFmt(ut.TestCase):
         with self.assertLogs(level=logging.WARNING):
             _, _, _, transacts = from_csv(self.file, self.separator, self.fmt)
         datetimes = [transact[0] for transact in transacts]
-        self.assertEqual(datetimes, should_be)
+        self.assertListEqual(datetimes, should_be)
 
 
 if __name__ == '__main__':

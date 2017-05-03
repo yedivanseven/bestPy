@@ -22,7 +22,7 @@ class BaseTests():
                      ' line 26. Skipping.']
         with self.assertLogs(level=logging.WARNING) as log:
             _ = from_csv(self.file, self.separator, self.fmt)
-            self.assertEqual(log.output, should_be)
+            self.assertListEqual(log.output, should_be)
 
     def test_TotalNumberOfRecords(self):
         with self.assertLogs(level=logging.WARNING):
@@ -38,7 +38,7 @@ class BaseTests():
         should_be = ['4', '11', '10', '7']
         with self.assertLogs(level=logging.WARNING):
             _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
-        self.assertEqual(list(unique.keys()), should_be)
+        self.assertListEqual(list(unique.keys()), should_be)
 
     def test_LastUniqueItemList(self):
         should_be = [['AC016EL50CPHALID-1749'],
@@ -48,7 +48,7 @@ class BaseTests():
         with self.assertLogs(level=logging.WARNING):
             _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         actually_is = [list(unique[user].keys()) for user in unique]
-        self.assertEqual(actually_is, should_be)
+        self.assertListEqual(actually_is, should_be)
 
     def test_LastUniqueTimes(self):
         should_be = {'4' : [dt.datetime(2012, 3, 6, 23, 26, 35)],
@@ -61,7 +61,7 @@ class BaseTests():
             _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         actually_is = {user: list(item.values())
                        for user, item in unique.items()}
-        self.assertEqual(actually_is, should_be)
+        self.assertDictEqual(actually_is, should_be)
 
     def test_TransactionList(self):
         should_be = [('2012-03-06T23:26:35', '4', 'AC016EL50CPHALID-1749'),
@@ -87,7 +87,7 @@ class BaseTests():
                      ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943')]
         with self.assertLogs(level=logging.WARNING):
             _, _, _, transacts = from_csv(self.file, self.separator, self.fmt)
-        self.assertEqual(should_be, transacts)
+        self.assertListEqual(should_be, transacts)
 
 
 class TestTrainTestFromCsvSemicolonFile(ut.TestCase, BaseTests):

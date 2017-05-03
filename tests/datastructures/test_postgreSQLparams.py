@@ -26,7 +26,7 @@ class TestPostGreSqlParams(ut.TestCase):
                      ' Trying nevertheless!']
         with self.assertLogs(level=logging.WARNING) as log:
             self.database.login_db_name = 12.3
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_host_right(self):
         self.database.login_host = 'bar'
@@ -42,7 +42,7 @@ class TestPostGreSqlParams(ut.TestCase):
                      ' Trying nevertheless!']
         with self.assertLogs(level=logging.WARNING) as log:
             self.database.login_host = 45.6
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_user_right(self):
         self.database.login_user = 'john'
@@ -58,7 +58,7 @@ class TestPostGreSqlParams(ut.TestCase):
                      ' Trying nevertheless!']
         with self.assertLogs(level=logging.WARNING) as log:
             self.database.login_user = 78.9
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_password_right(self):
         self.database.login_password = 'doe'
@@ -74,7 +74,7 @@ class TestPostGreSqlParams(ut.TestCase):
                      ' Trying nevertheless!']
         with self.assertLogs(level=logging.WARNING) as log:
             self.database.login_password = 12.3
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_login_assembly(self):
         self.database.login_db_name = 'foo'
@@ -98,7 +98,7 @@ class TestPostGreSqlParams(ut.TestCase):
                      ' Trying nevertheless!']
         with self.assertLogs(level=logging.WARNING) as log:
             self.database.table = 12.3
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_table_params(self):
         with self.assertLogs(level=logging.WARNING):
@@ -119,7 +119,7 @@ class TestPostGreSqlParams(ut.TestCase):
                      ' Trying nevertheless!']
         with self.assertLogs(level=logging.WARNING) as log:
             self.database.timestamp = 45.6
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_timestamp_params(self):
         with self.assertLogs(level=logging.WARNING):
@@ -140,7 +140,7 @@ class TestPostGreSqlParams(ut.TestCase):
                      ' Trying nevertheless!']
         with self.assertLogs(level=logging.WARNING) as log:
             self.database.userID = 78.9
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_userID_params(self):
         with self.assertLogs(level=logging.WARNING):
@@ -161,7 +161,7 @@ class TestPostGreSqlParams(ut.TestCase):
                      ' Trying nevertheless!']
         with self.assertLogs(level=logging.WARNING) as log:
             self.database.itemID = 12.3
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_itemID_params(self):
         with self.assertLogs(level=logging.WARNING):
@@ -187,26 +187,41 @@ class TestPostGreSqlParams(ut.TestCase):
     def test_limit_negative(self):
         should_be = ['ERROR:root:Limit must be the string "all" or a'
                      ' positive integer!']
+        err_msg = 'Limit must be "all" or a positive integer!'
         with self.assertLogs(level=logging.WARNING) as log:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(ValueError, msg=err_msg):
                 self.database.limit = -100
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_limit_float(self):
         should_be = ['ERROR:root:Limit must be the string "all" or a'
                      ' positive integer!']
+        err_msg = 'Limit must be "all" or a positive integer!'
         with self.assertLogs(level=logging.WARNING) as log:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(ValueError, msg=err_msg):
                 self.database.limit = 12.3
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
 
     def test_limit_not_all(self):
         should_be = ['ERROR:root:Limit must be the string "all" or a'
                      ' positive integer!']
+        err_msg = 'Limit must be "all" or a positive integer!'
         with self.assertLogs(level=logging.WARNING) as log:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(ValueError, msg=err_msg):
                 self.database.limit = 'foo'
-        self.assertEqual(log.output, should_be)
+        self.assertListEqual(log.output, should_be)
+
+    def test_requested_int(self):
+        self.database.limit = 123
+        self.assertEqual(self.database._requested, 123)
+
+    def test_requested_all(self):
+        self.database.limit = 'all'
+        self.assertEqual(self.database._requested, float('-inf'))
+
+    def test_set_requested(self):
+        with self.assertRaises(AttributeError):
+            self.database._requested = 'foo'
 
 
 if __name__ == '__main__':
