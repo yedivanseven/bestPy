@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import unittest as ut
-import datetime as dt
 import logging
 from ....datastructures.split import from_csv
 
@@ -51,12 +50,10 @@ class BaseTests():
         self.assertListEqual(actually_is, should_be)
 
     def test_LastUniqueTimes(self):
-        should_be = {'4' : [dt.datetime(2012, 3, 6, 23, 26, 35)],
-                     '11': [dt.datetime(2012, 3, 9, 16, 18, 33),
-                            dt.datetime(2012, 3, 9, 16, 18, 52)],
-                     '10': [dt.datetime(2012, 3, 9, 16, 19, 1)],
-                     '7' : [dt.datetime(2012, 3, 9, 16, 20, 14),
-                            dt.datetime(2012, 3, 9, 16, 20, 14)]}
+        should_be = {'4' : ['2012-03-06T23:26:35'],
+                     '11': ['2012-03-09T16:18:33', '2012-03-09T16:18:52'],
+                     '10': ['2012-03-09T16:19:01'],
+                     '7' : ['2012-03-09T16:20:14', '2012-03-09T16:20:14']}
         with self.assertLogs(level=logging.WARNING):
             _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         actually_is = {user: list(item.values())

@@ -29,7 +29,7 @@ class TrainTest(TrainTestBase):
             train = (';'.join((timestamp, user, item))
                      for timestamp, user, item in self.__transactions
                      if user in keep.keys()
-                     and (timestamp, item) not in last_unique[user])
+                     and (item, timestamp) not in last_unique[user])
         self.__test = TestDataFrom(test, hold_out, only_new)
         TrainTest.test = property(lambda self: self.__test)
         self.__train = UserItemMatrix.from_csv(FileFrom(train))
@@ -38,5 +38,5 @@ class TrainTest(TrainTestBase):
     def __last(self, unique):
         return sorted(unique.items(), key=itemgetter(1), reverse=True)
 
-    def __items_from(self, last):
-        return set(tuple(zip(*last))[0])
+    def __items_from(self, last_transactions):
+        return set(tuple(zip(*last_transactions))[0])

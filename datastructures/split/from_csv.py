@@ -53,7 +53,7 @@ def from_csv(file, separator=';', fmt=None):
 
     return (number_of_transactions,
             number_of_corrupted_records,
-            dict(last_unique_items_of),
+            finalized(last_unique_items_of),
             transactions)
 
 
@@ -82,3 +82,10 @@ def depending_on(fmt=None):
         return converted
 
     return fromstring if fmt else fromstamp
+
+
+def finalized(last_unique):
+    finalized = {user: {item: time.isoformat()
+                        for item, time in article.items()}
+                for user, article in last_unique.items()}
+    return finalized
