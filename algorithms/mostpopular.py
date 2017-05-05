@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging as log
+from ..datastructures import UserItemMatrix
 from .baselines import Baseline
 
 
 class MostPopular():
     def __init__(self):
         self.__baseline = Baseline()
-        self.__baseline.binarize = True
         self.__depending_on = {True : self.__unique_buys,
                                False: self.__transactions}
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
@@ -18,11 +19,18 @@ class MostPopular():
 
     @binarize.setter
     def binarize(self, binarize):
+        if not isinstance(binarize, bool):
+            log.error('Attempt to set "binarize" to non-boolean type.')
+            raise TypeError('Attribute "binarize" must be True or False!')
         if binarize != self.binarize:
             self.__delete_precomputed()
         self.__baseline.binarize = binarize
 
     def operating_on(self, data):
+        if not isinstance(data, UserItemMatrix):
+            log.error('Attempt to set incompatible data type.'
+                      ' Must be <UserItemMatrix>')
+            raise TypeError('Data must be of type <UserItemMatrix>!')
         self.__data = data
         self.__baseline = self.__baseline.operating_on(data)
         self.__delete_precomputed()
@@ -55,4 +63,4 @@ class MostPopular():
         return self.__baseline.for_one() / len(self.__data._count_buys_of)
 
     def __transactions(self):
-        return self.__basline.for_one() / self.__data.number_of_transactions
+        return self.__baseline.for_one() / self.__data.number_of_transactions

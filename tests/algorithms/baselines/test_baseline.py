@@ -37,6 +37,17 @@ class TestBaseline(ut.TestCase):
         self.baseline = self.baseline.operating_on(self.data)
         self.assertTrue(self.baseline.has_data)
 
+    def test_cannot_set_attribute_has_data_without_data(self):
+        with self.assertRaises(AttributeError):
+            self.baseline.has_data = 'foz'
+        self.assertFalse(self.baseline.has_data)
+
+    def test_cannot_set_attribute_has_data_with_data(self):
+        self.baseline = self.baseline.operating_on(self.data)
+        with self.assertRaises(AttributeError):
+            self.baseline.has_data = 'john'
+        self.assertTrue(self.baseline.has_data)
+
     def test_data_type(self):
         log_msg = ['ERROR:root:Attempt to set incompatible data type.'
                   ' Must be <UserItemMatrix>']
@@ -74,6 +85,13 @@ class TestBaseline(ut.TestCase):
         self.baseline = self.baseline.operating_on(self.data)
         actually_is = self.baseline.for_one().tolist()
         self.assertListEqual(should_be, actually_is)
+
+    def test_recommendation_for_target(self):
+        target = 123
+        self.baseline = self.baseline.operating_on(self.data)
+        with_target = self.baseline.for_one(target).tolist()
+        without_target = self.baseline.for_one().tolist()
+        self.assertListEqual(with_target, without_target)
 
     def test_binarized_recommendation_does_not_change(self):
         self.baseline.binarize = True
