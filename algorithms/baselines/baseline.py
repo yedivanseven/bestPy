@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging as log
+from ...datastructures import UserItemMatrix
 
 class Baseline():
     def __init__(self):
@@ -15,11 +17,18 @@ class Baseline():
 
     @binarize.setter
     def binarize(self, binarize):
+        if not isinstance(binarize, bool):
+            log.error('Attempt to set "binarize" to non-boolean type.')
+            raise TypeError('Attribute "binarize" must be True or False!')
         if binarize != self.binarize:
             self.__delete_precomputed()
         self.__binarize = binarize
 
     def operating_on(self, data):
+        if not isinstance(data, UserItemMatrix):
+            log.error('Attempt to set incompatible data type.'
+                      ' Must be <UserItemMatrix>')
+            raise TypeError('Data must be of type <UserItemMatrix>!')
         self.__data = data
         self.__delete_precomputed()
         self.for_one = self.__for_one

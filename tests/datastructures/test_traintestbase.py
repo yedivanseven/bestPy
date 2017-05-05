@@ -92,26 +92,26 @@ class TestFileFrom(ut.TestCase):
         self.assertListEqual(should_be, actual)
 
     def test_read_like_file_int_fails(self):
-        should_be = ['ERROR:root:Line read from file-like object is not a'
-                     ' string. Was it created from a string iterator?']
+        log_msg = ['ERROR:root:Line read from file-like object is not a'
+                   ' string. Was it created from a string iterator?']
         err_msg = 'Line read from file-like object is not a string!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg):
                 with self.int_stream as file:
                     for line in file:
                         _ = line
-        self.assertListEqual(log.output, should_be)
+        self.assertListEqual(log.output, log_msg)
 
     def test_readline_like_file_fails(self):
-        should_be = ['ERROR:root:Failed to read line from file-like object.'
-                     ' Was it created from an iterator?']
+        log_msg = ['ERROR:root:Failed to read line from file-like object.'
+                   ' Was it created from an iterator?']
         err_msg = 'Object was not created from an iterator!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg):
                 with self.no_stream as file:
                     for line in file:
                         _ = line
-        self.assertListEqual(log.output, should_be)
+        self.assertListEqual(log.output, log_msg)
 
 
 if __name__ == '__main__':

@@ -14,25 +14,25 @@ class TestTrainTestFromCsvFileTimestampInt(ut.TestCase):
         self.fmt = None
 
     def test_LogsWarningsOnCorruptedTimestamps(self):
-        should_be = ['WARNING:root:Failed to convert UNIX epoch timestamp'
-                     ' to integer.',
-                     'WARNING:root:Could not interpret timestamp on'
-                     ' line 2. Skipping.',
-                     'WARNING:root:Failed to convert UNIX epoch timestamp'
-                     ' to integer.',
-                     'WARNING:root:Could not interpret timestamp on'
-                     ' line 5. Skipping.',
-                     'WARNING:root:Integer is not a valid UNIX epoch'
-                     ' timestamp.',
-                     'WARNING:root:Could not interpret timestamp on'
-                     ' line 11. Skipping.',
-                     'WARNING:root:Integer is not a valid UNIX epoch'
-                     ' timestamp.',
-                     'WARNING:root:Could not interpret timestamp on'
-                     ' line 17. Skipping.']
+        log_msg = ['WARNING:root:Failed to convert UNIX epoch timestamp'
+                   ' to integer.',
+                   'WARNING:root:Could not interpret timestamp on'
+                   ' line 2. Skipping.',
+                   'WARNING:root:Failed to convert UNIX epoch timestamp'
+                   ' to integer.',
+                   'WARNING:root:Could not interpret timestamp on'
+                   ' line 5. Skipping.',
+                   'WARNING:root:Integer is not a valid UNIX epoch'
+                   ' timestamp.',
+                   'WARNING:root:Could not interpret timestamp on'
+                   ' line 11. Skipping.',
+                   'WARNING:root:Integer is not a valid UNIX epoch'
+                   ' timestamp.',
+                   'WARNING:root:Could not interpret timestamp on'
+                   ' line 17. Skipping.']
         with self.assertLogs(level=logging.WARNING) as log:
             _, _, _, _ = from_csv(self.file, self.separator, self.fmt)
-        self.assertListEqual(log.output, should_be)
+        self.assertListEqual(log.output, log_msg)
 
     def test_TotalNumberOfRecords(self):
         with self.assertLogs(level=logging.WARNING):

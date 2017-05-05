@@ -9,19 +9,19 @@ from ....datastructures.split import from_csv
 class BaseTests():
 
     def test_LogsWarningsOnCorruptedRecords(self):
-        should_be = ['WARNING:root:Could not interpret transaction on'
-                     ' line 2. Skipping.',
-                     'WARNING:root:Transaction on line 3 contains'
-                     ' empty fields. Skipping.',
-                     'WARNING:root:Transaction on line 4 contains'
-                     ' empty fields. Skipping.',
-                     'WARNING:root:Could not interpret transaction on'
-                     ' line 8. Skipping.',
-                     'WARNING:root:Could not interpret transaction on'
-                     ' line 26. Skipping.']
+        log_msg = ['WARNING:root:Could not interpret transaction on'
+                   ' line 2. Skipping.',
+                   'WARNING:root:Transaction on line 3 contains'
+                   ' empty fields. Skipping.',
+                   'WARNING:root:Transaction on line 4 contains'
+                   ' empty fields. Skipping.',
+                   'WARNING:root:Could not interpret transaction on'
+                   ' line 8. Skipping.',
+                   'WARNING:root:Could not interpret transaction on'
+                   ' line 26. Skipping.']
         with self.assertLogs(level=logging.WARNING) as log:
             _ = from_csv(self.file, self.separator, self.fmt)
-            self.assertListEqual(log.output, should_be)
+            self.assertListEqual(log.output, log_msg)
 
     def test_TotalNumberOfRecords(self):
         with self.assertLogs(level=logging.WARNING):

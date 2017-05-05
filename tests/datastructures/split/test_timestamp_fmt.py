@@ -15,25 +15,25 @@ class TestTrainTestFromCsvFileTimestampFmt(ut.TestCase):
         self.fmt = '%Y-%m-%d %H:%M:%S'
 
     def test_LogsWarningsOnCorruptedTimestamps(self):
-        should_be = ['WARNING:root:Failed to read timestamp. Check that it'
-                     ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
-                     'WARNING:root:Could not interpret timestamp on'
-                     ' line 2. Skipping.',
-                     'WARNING:root:Failed to read timestamp. Check that it'
-                     ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
-                     'WARNING:root:Could not interpret timestamp on'
-                     ' line 5. Skipping.',
-                     'WARNING:root:Failed to read timestamp. Check that it'
-                     ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
-                     'WARNING:root:Could not interpret timestamp on'
-                     ' line 11. Skipping.',
-                     'WARNING:root:Failed to read timestamp. Check that it'
-                     ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
-                     'WARNING:root:Could not interpret timestamp on'
-                     ' line 17. Skipping.']
+        log_msg = ['WARNING:root:Failed to read timestamp. Check that it'
+                   ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
+                   'WARNING:root:Could not interpret timestamp on'
+                   ' line 2. Skipping.',
+                   'WARNING:root:Failed to read timestamp. Check that it'
+                   ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
+                   'WARNING:root:Could not interpret timestamp on'
+                   ' line 5. Skipping.',
+                   'WARNING:root:Failed to read timestamp. Check that it'
+                   ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
+                   'WARNING:root:Could not interpret timestamp on'
+                   ' line 11. Skipping.',
+                   'WARNING:root:Failed to read timestamp. Check that it'
+                   ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
+                   'WARNING:root:Could not interpret timestamp on'
+                   ' line 17. Skipping.']
         with self.assertLogs(level=logging.WARNING) as log:
             _, _, _, _ = from_csv(self.file, self.separator, self.fmt)
-        self.assertListEqual(log.output, should_be)
+        self.assertListEqual(log.output, log_msg)
 
     def test_TotalNumberOfRecords(self):
         with self.assertLogs(level=logging.WARNING):
