@@ -3,12 +3,12 @@
 
 import logging as log
 from .similarities import default_similarity
-from .baselines import Baseline
+from .baselines import default_baseline
 
 class CollaborativeFiltering():
     def __init__(self):
         self.__similarity = default_similarity
-        self.__baseline = Baseline()
+        self.__baseline = default_baseline()
         self.__binarize = True
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 

@@ -3,6 +3,6 @@
 from .collaborativefiltering import CollaborativeFiltering
 from .truncatedsvd import TruncatedSVD
 from .mostpopular import MostPopular
-from .baselines import Baseline
+from .baselines import Baseline, default_baseline
 
 default_algorithm = CollaborativeFiltering

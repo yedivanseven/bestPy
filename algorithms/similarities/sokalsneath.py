@@ -4,7 +4,7 @@
 from numpy import repeat
 
 
-def sokolsneath(data):
+def sokalsneath(data):
     similarity_matrix = data.bool_matrix_by_col.T.dot(data.bool_matrix_by_col)
     diagonal = similarity_matrix.diagonal()
     cols = repeat(diagonal, similarity_matrix.getnnz(axis=0))

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging as log
+
 
 class Benchmark():
     def __init__(self, recommender):
@@ -8,10 +10,14 @@ class Benchmark():
 
     def against(self, test):
         self.__test = test
-        if test.only_new:
+        if test.only_new and not self.__recommendation.only_new:
             self.__recommendation = self.__recommendation.pruning_old
-        else:
+            log.info('Resetting recommender to "pruning_old" because of'
+                     ' test-data preference.')
+        elif not test.only_new and self.__recommendation.only_new:
             self.__recommendation = self.__recommendation.keeping_old
+            log.info('Resetting recommender to "keeping_old" because of'
+                     ' test-data preference.')
         Benchmark.score = property(lambda self: self.__score())
         return self
 

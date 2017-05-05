@@ -4,7 +4,7 @@
 import logging as log
 from numpy import argpartition
 from .algorithms import default_algorithm
-from .algorithms import Baseline
+from .algorithms import default_baseline
 
 RETURNING = True
 
@@ -13,7 +13,7 @@ class RecommendationBasedOn():
     def __init__(self, data):
         self.__data = data
         self.__only_new = False
-        self.__baseline = Baseline().operating_on(data)
+        self.__baseline = default_baseline().operating_on(data)
         self.__recommendation = default_algorithm().operating_on(data)
         self.__recommendation_for = {not RETURNING: self.__cold_start,
                                          RETURNING: self.__calculated}
@@ -33,7 +33,7 @@ class RecommendationBasedOn():
         return self
 
     @property
-    def is_pruned(self):
+    def only_new(self):
         return self.__only_new
 
     @property
