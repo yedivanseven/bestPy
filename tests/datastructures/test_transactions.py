@@ -29,6 +29,14 @@ class TestTransactions(ut.TestCase):
             self.data.number_of_items = 45
         self.assertEqual(self.data.number_of_items, 6)
 
+    def test_number_of_userItem_pairs(self):
+        self.assertEqual(self.data.number_of_userItem_pairs, 6)
+
+    def test_set_number_of_userItem_paris(self):
+        with self.assertRaises(AttributeError):
+            self.data.number_of_userItem_pairs = 67
+        self.assertEqual(self.data.number_of_userItem_pairs, 6)
+
     def test_userID_of(self):
         should_be = {0: '4', 1: '11', 2: '10', 3: '7'}
         self.assertDictEqual(self.data.userID_of, should_be)

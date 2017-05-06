@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging
 import unittest as ut
 from ...datastructures.traintestbase import TestDataFrom
 from ...datastructures import TrainTest, UserItemMatrix
@@ -20,6 +21,35 @@ class TestTrainTest(ut.TestCase):
     def test_no_attribute_test_before_split(self):
         with self.assertRaises(AttributeError):
             _ = self.data.test
+
+    def test_split_only_new_not_boolean(self):
+        log_msg = ['ERROR:root:Attempt to set "only_new" to non-boolean type.']
+        err_msg = 'Flag "only_new" can only be True or False!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(TypeError, msg=err_msg):
+                self.data.split(2, only_new='foo')
+        self.assertEqual(log.output, log_msg)
+
+    def test_split_hold_out_not_integer(self):
+        log_msg = ['ERROR:root:Attempt to set "hold_out" to non-integer type.']
+        err_msg = 'Parameter "hold_out" must be an integer!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(TypeError, msg=err_msg):
+                self.data.split('bar')
+        self.assertEqual(log.output, log_msg)
+
+    def test_split_hold_smaller_than_one(self):
+        log_msg = ['WARNING:root:Attempt to set hold_out < 1. Resetting to 1.']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.data.split(-3)
+        self.assertEqual(log.output, log_msg)
+
+    def test_split_hold_out_greater_than_maximum(self):
+        log_msg = ['WARNING:root:Hold_out > meaningful maximum of 2.'
+                   ' Resetting to 2.']
+        with self.assertLogs(level=logging.WARNING) as log:
+            self.data.split(7)
+        self.assertEqual(log.output, log_msg)
 
     def test_has_atrribute_train_after_split(self):
         self.data.split(2)

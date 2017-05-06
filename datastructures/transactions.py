@@ -22,6 +22,12 @@ class Transactions(TransactionBase):
         return self.__number_of_items
 
     @property
+    def number_of_userItem_pairs(self):
+        if not self.__has('number_of_userItem_pairs'):
+            self.__number_of_userItem_pairs = len(self._count_buys_of)
+        return self.__number_of_userItem_pairs
+
+    @property
     def userID_of(self):
         if not self.__has('userID_of'):
             self.__userID_of = {index: user

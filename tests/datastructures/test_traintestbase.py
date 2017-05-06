@@ -31,6 +31,14 @@ class TestTrainTestBase(ut.TestCase):
             self.data.number_of_corrupted_records = 456
         self.assertEqual(self.data.number_of_corrupted_records, 4)
 
+    def test_max_hold_out(self):
+        self.assertEqual(self.data.max_hold_out, 2)
+
+    def test_set_max_hold_out(self):
+        with self.assertRaises(AttributeError):
+            self.data.max_hold_out = 789
+        self.assertEqual(self.data.max_hold_out, 2)
+
 
 class TestTestDataFrom(ut.TestCase):
 

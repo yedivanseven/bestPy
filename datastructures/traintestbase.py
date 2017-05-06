@@ -12,6 +12,7 @@ class TrainTestBase():
         self.__number_of_corrupted_records = n_err
         self.__unique = unique
         self.__transactions = trans
+        self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @classmethod
     def from_csv(cls, file, separator=';', fmt=None):
@@ -28,6 +29,15 @@ class TrainTestBase():
     @property
     def number_of_corrupted_records(self):
         return self.__number_of_corrupted_records
+
+    @property
+    def max_hold_out(self):
+        if not self.__has('max_hold_out'):
+            self.__max_hold_out =  max(len(d) for d in self.__unique.values())
+        return self.__max_hold_out
+
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)
 
 
 class TestDataFrom():

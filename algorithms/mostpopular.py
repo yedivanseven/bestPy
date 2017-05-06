@@ -60,7 +60,7 @@ class MostPopular():
         return hasattr(self, self.__class_prefix + attribute)
 
     def __unique_buys(self):
-        return self.__baseline.for_one() / len(self.__data._count_buys_of)
+        return self.__baseline.for_one() / self.__data.number_of_userItem_pairs
 
     def __transactions(self):
         return self.__baseline.for_one() / self.__data.number_of_transactions
