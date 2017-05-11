@@ -9,8 +9,6 @@ from .baselines import Baseline
 class MostPopular():
     def __init__(self):
         self.__baseline = Baseline()
-        self.__depending_on = {True : self.__unique_buys,
-                               False: self.__transactions}
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
@@ -47,20 +45,22 @@ class MostPopular():
         target_agnostic[target_specific.indices] = target_specific.data
         return target_agnostic
 
-    def __delete_precomputed(self):
-        if self.__has('scaled_baseline'):
-            delattr(self, self.__class_prefix + 'scaled_baseline')
-
     def __precomputed(self):
         if not self.__has('scaled_baseline'):
-            self.__scaled_baseline = self.__depending_on[self.binarize]()
+            depending_on_whether_we = {True : self.__unique_buys,
+                                       False: self.__transactions}
+            self.__scaled_baseline = depending_on_whether_we[self.binarize]()
         return self.__scaled_baseline.copy()
-
-    def __has(self, attribute):
-        return hasattr(self, self.__class_prefix + attribute)
 
     def __unique_buys(self):
         return self.__baseline.for_one() / self.__data.number_of_userItem_pairs
 
     def __transactions(self):
         return self.__baseline.for_one() / self.__data.number_of_transactions
+
+    def __delete_precomputed(self):
+        if self.__has('scaled_baseline'):
+            delattr(self, self.__class_prefix + 'scaled_baseline')
+
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)

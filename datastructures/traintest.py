@@ -19,10 +19,10 @@ class TrainTest(TrainTestBase):
         keep = {user: items
                 for user, items in self.__unique.items()
                 if len(items) >= hold_out}
-        last_unique = {user: self.__last(unique)[:hold_out]
-                       for user, unique in keep.items()}
+        last_unique_of = {user: self.__last(unique)[:hold_out]
+                          for user, unique in keep.items()}
         test = {user: self.__items_from(last_transactions)
-                for user, last_transactions in last_unique.items()}
+                for user, last_transactions in last_unique_of.items()}
         if only_new:
             train = (';'.join((timestamp, user, item))
                      for timestamp, user, item in self.__transactions
@@ -32,7 +32,7 @@ class TrainTest(TrainTestBase):
             train = (';'.join((timestamp, user, item))
                      for timestamp, user, item in self.__transactions
                      if user in keep.keys()
-                     and (item, timestamp) not in last_unique[user])
+                     and (item, timestamp) not in last_unique_of[user])
         self.__test = TestDataFrom(test, hold_out, only_new)
         TrainTest.test = property(lambda self: self.__test)
         self.__train = UserItemMatrix.from_csv(FileFrom(train))

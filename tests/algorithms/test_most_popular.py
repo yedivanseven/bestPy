@@ -117,3 +117,43 @@ class TestMostPopular(ut.TestCase):
         recommendation += 1
         after = self.algorithm.for_one(target).tolist()
         self.assertListEqual(before, after)
+
+    def test_binarized_data_does_not_change(self):
+        target = 1
+        before_col = self.data.matrix_by_col.copy().todense().tolist()
+        before_row = self.data.matrix_by_row.copy().todense().tolist()
+        before_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
+        before_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        self.algorithm.binarize = True
+        self.algorithm = self.algorithm.operating_on(self.data)
+        recommendation = self.algorithm.for_one(target)
+        after_col = self.data.matrix_by_col.copy().todense().tolist()
+        after_row = self.data.matrix_by_row.copy().todense().tolist()
+        after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
+        after_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        self.assertListEqual(before_col, after_col)
+        self.assertListEqual(before_row, after_row)
+        self.assertListEqual(before_boolcol, after_boolcol)
+        self.assertListEqual(before_boolrow, after_boolrow)
+
+    def test_non_binarized_data_does_not_change(self):
+        target = 2
+        before_col = self.data.matrix_by_col.copy().todense().tolist()
+        before_row = self.data.matrix_by_row.copy().todense().tolist()
+        before_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
+        before_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        self.algorithm.binarize = False
+        self.algorithm = self.algorithm.operating_on(self.data)
+        recommendation = self.algorithm.for_one(target)
+        after_col = self.data.matrix_by_col.copy().todense().tolist()
+        after_row = self.data.matrix_by_row.copy().todense().tolist()
+        after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
+        after_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        self.assertListEqual(before_col, after_col)
+        self.assertListEqual(before_row, after_row)
+        self.assertListEqual(before_boolcol, after_boolcol)
+        self.assertListEqual(before_boolrow, after_boolrow)
+
+
+if __name__ == '__main__':
+    ut.main()

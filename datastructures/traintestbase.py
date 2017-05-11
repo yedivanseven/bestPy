@@ -33,7 +33,7 @@ class TrainTestBase():
     @property
     def max_hold_out(self):
         if not self.__has('max_hold_out'):
-            self.__max_hold_out =  max(len(d) for d in self.__unique.values())
+            self.__max_hold_out =  max(len(u) for u in self.__unique.values())
         return self.__max_hold_out
 
     def __has(self, attribute):

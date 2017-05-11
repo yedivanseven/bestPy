@@ -38,14 +38,14 @@ class Baseline():
     def has_data(self):
         return self.__has('data')
 
-    def __for_one(self, target=None):
+    def __for_one(self, target=None):    
         return self.__depending_on_whether_we[self.binarize]()
 
     def __count(self):
-        if not self.__has('unique_buyers'):
-            self.__unique_buyers = self.__data.matrix_by_col.getnnz(0)
-            self.__unique_buyers = self.__unique_buyers.astype(float)
-        return self.__unique_buyers.copy()
+        if not self.__has('number_of_buyers'):
+            self.__number_of_buyers = self.__data.matrix_by_col.getnnz(0)
+            self.__number_of_buyers = self.__number_of_buyers.astype(float)
+        return self.__number_of_buyers.copy()
 
     def __sum(self):
         if not self.__has('number_of_buys'):
@@ -53,8 +53,8 @@ class Baseline():
         return self.__number_of_buys.copy()
 
     def __delete_precomputed(self):
-        if self.__has('unique_buyers'):
-            delattr(self, self.__class_prefix + 'unique_buyers')
+        if self.__has('number_of_buyers'):
+            delattr(self, self.__class_prefix + 'number_of_buyers')
         if self.__has('number_of_buys'):
             delattr(self, self.__class_prefix + 'number_of_buys')
 
