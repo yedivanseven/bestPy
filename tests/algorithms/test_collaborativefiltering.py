@@ -30,6 +30,15 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.algorithm.binarize = False
         self.assertFalse(self.algorithm.binarize)
 
+    def test_has_attribute_operating_on(self):
+        self.assertTrue(hasattr(self.algorithm, 'operating_on'))
+
+    def test_attribute_operating_on_is_callable(self):
+        self.assertTrue(callable(self.algorithm.operating_on))
+
+    def test_has_attribute_has_data(self):
+        self.assertTrue(hasattr(self.algorithm, 'has_data'))
+
     def test_has_data_false(self):
         self.assertFalse(self.algorithm.has_data)
 
@@ -288,6 +297,34 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.algorithm.similarity = sokalsneath
         actually_is = self.algorithm.for_one(target).tolist()
         self.assertListEqual(should_be, actually_is)
+
+    def test_logs_uncomparable_user_and_returns_default_baseline(self):
+        target = 6
+        file = './bestPy/tests/data/data50.csv'
+        data = UserItemMatrix.from_csv(file)
+        log_msg = ['INFO:root:Uncomparable user with ID 13. Returning baseline'
+                   ' recommendation.']
+        self.algorithm = self.algorithm.operating_on(data)
+        should_be = default_baseline().operating_on(data).for_one().tolist()
+        with self.assertLogs(level=logging.INFO) as log:
+            actually_is = self.algorithm.for_one(target).tolist()
+        self.assertEqual(log.output, log_msg)
+        self.assertListEqual(should_be, actually_is)
+
+    def test_logs_uncomparable_user_and_returns_explicit_baseline(self):
+        target = 6
+        file = './bestPy/tests/data/data50.csv'
+        data = UserItemMatrix.from_csv(file)
+        log_msg = ['INFO:root:Uncomparable user with ID 13. Returning baseline'
+                   ' recommendation.']
+        self.algorithm = self.algorithm.operating_on(data)
+        self.algorithm.baseline = Baseline()
+        should_be = Baseline().operating_on(data).for_one().tolist()
+        with self.assertLogs(level=logging.INFO) as log:
+            actually_is = self.algorithm.for_one(target).tolist()
+        self.assertEqual(log.output, log_msg)
+        self.assertListEqual(should_be, actually_is)
+
 
 if __name__ == '__main__':
     ut.main()

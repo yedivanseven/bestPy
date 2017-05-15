@@ -30,6 +30,15 @@ class TestBaseline(ut.TestCase):
         self.baseline.binarize = False
         self.assertFalse(self.baseline.binarize)
 
+    def test_has_attribute_operating_on(self):
+        self.assertTrue(hasattr(self.baseline, 'operating_on'))
+
+    def test_attribute_operating_on_is_callable(self):
+        self.assertTrue(callable(self.baseline.operating_on))
+
+    def test_has_attribute_has_data(self):
+        self.assertTrue(hasattr(self.baseline, 'has_data'))
+
     def test_has_data_false(self):
         self.assertFalse(self.baseline.has_data)
 
