@@ -9,3 +9,10 @@ from .cosine import cosine
 from .cosine_binary import cosine_binary
 
 default_similarity = kulsinski
+all_similarities = (dice,
+                    jaccard,
+                    kulsinski,
+                    sokalsneath,
+                    russellrao,
+                    cosine,
+                    cosine_binary)

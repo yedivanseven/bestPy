@@ -8,7 +8,7 @@ from ....datastructures.split import from_csv
 
 class BaseTests():
 
-    def test_LogsWarningsOnCorruptedRecords(self):
+    def test_logs_warnings_on_corrupted_records(self):
         log_msg = ['WARNING:root:Could not interpret transaction on'
                    ' line 2. Skipping.',
                    'WARNING:root:Transaction on line 3 contains'
@@ -23,23 +23,23 @@ class BaseTests():
             _ = from_csv(self.file, self.separator, self.fmt)
             self.assertListEqual(log.output, log_msg)
 
-    def test_TotalNumberOfRecords(self):
+    def test_total_number_of_records(self):
         with self.assertLogs(level=logging.WARNING):
             n_rec, _, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_rec, 21)
 
-    def test_NumberOfCorruptedRecords(self):
+    def test_number_of_corrupted_records(self):
         with self.assertLogs(level=logging.WARNING):
             _, n_err, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_err, 5)
 
-    def test_LastUniqueUserList(self):
+    def test_last_unique_user_list(self):
         should_be = ['4', '11', '10', '7']
         with self.assertLogs(level=logging.WARNING):
             _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertListEqual(list(unique.keys()), should_be)
 
-    def test_LastUniqueItemList(self):
+    def test_last_unique_item_list(self):
         should_be = [['AC016EL50CPHALID-1749'],
                      ['CA189EL29AGOALID-170', 'LE629EL54ANHALID-345'],
                      ['OL756EL65HDYALID-4834'],
@@ -49,7 +49,7 @@ class BaseTests():
         actually_is = [list(unique[user].keys()) for user in unique]
         self.assertListEqual(actually_is, should_be)
 
-    def test_LastUniqueTimes(self):
+    def test_last_unique_times(self):
         should_be = {'4' : ['2012-03-06T23:26:35'],
                      '11': ['2012-03-09T16:18:33', '2012-03-09T16:18:52'],
                      '10': ['2012-03-09T16:19:01'],
@@ -60,7 +60,7 @@ class BaseTests():
                        for user, item in unique.items()}
         self.assertDictEqual(actually_is, should_be)
 
-    def test_TransactionList(self):
+    def test_transaction_list(self):
         should_be = [('2012-03-06T23:26:35', '4', 'AC016EL50CPHALID-1749'),
                      ('2012-03-09T16:18:33', '11', 'CA189EL29AGOALID-170'),
                      ('2012-03-09T16:18:52', '11', 'LE629EL54ANHALID-345'),

@@ -14,7 +14,7 @@ class TestTrainTestFromCsvFileTimestampFmt(ut.TestCase):
         self.separator = ';'
         self.fmt = '%Y-%m-%d %H:%M:%S'
 
-    def test_LogsWarningsOnCorruptedTimestamps(self):
+    def test_logs_warnings_on_corrupted_timestamps(self):
         log_msg = ['WARNING:root:Failed to read timestamp. Check that it'
                    ' adheres to the given format "%Y-%m-%d %H:%M:%S".',
                    'WARNING:root:Could not interpret timestamp on'
@@ -35,17 +35,17 @@ class TestTrainTestFromCsvFileTimestampFmt(ut.TestCase):
             _, _, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertListEqual(log.output, log_msg)
 
-    def test_TotalNumberOfRecords(self):
+    def test_total_number_of_records(self):
         with self.assertLogs(level=logging.WARNING):
             n_rec, _, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_rec, 21)
 
-    def test_NumberOfCorruptedRecords(self):
+    def test_number_of_corrupted_records(self):
         with self.assertLogs(level=logging.WARNING):
             _, n_err, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_err, 4)
 
-    def test_Datetimes(self):
+    def test_datetimes(self):
         should_be = ['2012-03-06T23:26:35', '2012-03-09T16:18:02',
                      '2012-03-09T16:18:02', '2012-03-09T16:18:52',
                      '2012-03-09T16:19:01', '2012-03-09T16:20:14',
