@@ -102,7 +102,7 @@ class CollaborativeFiltering():
             log.error('Attempt to set baseline object lacking mandatory'
                       ' "has_data" attribute.')
             raise AttributeError('Baseline lacks "has_data" attribute!')
-        if basline.has_data:
+        if baseline.has_data:
             if not hasattr(baseline, 'for_one'):
                 log.error('Attempt to set baseline object lacking mandatory'
                           ' "for_one" method.')
