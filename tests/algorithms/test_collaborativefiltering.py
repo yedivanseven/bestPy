@@ -188,7 +188,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertEqual(log.output, log_msg)
 
     def test_binarized_recommendation_does_not_change(self):
-        target = 3
+        target = 5
         self.algorithm.binarize = True
         self.algorithm = self.algorithm.operating_on(self.data)
         before = self.algorithm.for_one(target).copy().tolist()
@@ -198,7 +198,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertListEqual(before, after)
 
     def test_non_binarized_recommendation_does_not_change(self):
-        target = 3
+        target = 5
         self.algorithm.binarize = False
         self.algorithm = self.algorithm.operating_on(self.data)
         before = self.algorithm.for_one(target).copy().tolist()
@@ -208,7 +208,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertListEqual(before, after)
 
     def test_binarized_data_does_not_change(self):
-        target = 3
+        target = 5
         before_col = self.data.matrix_by_col.copy().todense().tolist()
         before_row = self.data.matrix_by_row.copy().todense().tolist()
         before_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
@@ -226,7 +226,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertListEqual(before_boolrow, after_boolrow)
 
     def test_non_binarized_data_does_not_change(self):
-        target = 3
+        target = 5
         before_col = self.data.matrix_by_col.copy().todense().tolist()
         before_row = self.data.matrix_by_row.copy().todense().tolist()
         before_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
@@ -243,12 +243,51 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertListEqual(before_boolcol, after_boolcol)
         self.assertListEqual(before_boolrow, after_boolrow)
 
-    def test_recommendation_binarized(self):
+    def test_default_recommendation_non_binarized(self):
+        target = 5
         self.algorithm = self.algorithm.operating_on(self.data)
-        for target in range(12):
-            recommendation = self.algorithm.for_one(target)
+        self.algorithm.binarize = False
+        history_vector = self.data.matrix_by_row[target]
+        similarity_matrix = default_similarity(self.data)
+        should_be = history_vector.dot(similarity_matrix).A[0].tolist()
+        actually_is = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(should_be, actually_is)
 
+    def test_default_recommendation_binarized(self):
+        target = 5
+        self.algorithm = self.algorithm.operating_on(self.data)
+        self.algorithm.binarize = True
+        history_vector = self.data.matrix_by_row[target]
+        history_vector.data[:] = 1.0
+        similarity_matrix = default_similarity(self.data)
+        should_be = history_vector.dot(similarity_matrix).A[0].tolist()
+        actually_is = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(should_be, actually_is)
 
+    def test_explicit_recommendation_non_binarized(self):
+        target = 5
+        should_be = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9.0, 24.333333333333336,
+                     24.333333333333336, 0.0, 0.0, 0.3333333333333333, 0.0,
+                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 24.333333333333336,
+                     24.333333333333336, 24.333333333333336,
+                     24.333333333333336]
+        self.algorithm = self.algorithm.operating_on(self.data)
+        self.algorithm.binarize = False
+        self.algorithm.similarity = sokalsneath
+        actually_is = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(should_be, actually_is)
+
+    def test_explicit_recommendation_binarized(self):
+        target = 5
+        should_be = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 6.333333333333333,
+                     6.333333333333333, 0.0, 0.0, 0.3333333333333333, 0.0,
+                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6.333333333333333,
+                     6.333333333333333, 6.333333333333333, 6.333333333333333]
+        self.algorithm = self.algorithm.operating_on(self.data)
+        self.algorithm.binarize = True
+        self.algorithm.similarity = sokalsneath
+        actually_is = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(should_be, actually_is)
 
 if __name__ == '__main__':
     ut.main()
