@@ -3,6 +3,7 @@ channels:
 - anaconda-fusion
 - defaults
 dependencies:
+- libgfortran=3.0.0=1
 - libpq=9.5.4=0
 - mkl=2017.0.1=0
 - numpy=1.12.1=py36_0
@@ -18,5 +19,5 @@ dependencies:
 - wheel=0.29.0=py36_0
 - xz=5.2.2=1
 - zlib=1.2.8=3
-prefix: /Users/georg/anaconda/envs/bestPy
+prefix: /home/georg/anaconda3/envs/bestPy
 
