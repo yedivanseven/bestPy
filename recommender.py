@@ -5,13 +5,14 @@ import logging as log
 from numpy import argpartition
 from .algorithms import default_algorithm
 from .algorithms import default_baseline
+from .datastructures import UserItemMatrix
 
 RETURNING = True
 
 
 class RecommendationBasedOn():
     def __init__(self, data):
-        self.__data = data
+        self.__data = self.__type_checked(data)
         self.__only_new = False
         self.__baseline = default_baseline().operating_on(data)
         self.__recommendation = default_algorithm().operating_on(data)
@@ -19,6 +20,7 @@ class RecommendationBasedOn():
                                          RETURNING: self.__calculated}
 
     def using(self, algorithm):
+        self.__check_attributes_of(algorithm)
         self.__recommendation = algorithm.operating_on(self.__data)
         return self
 
@@ -42,6 +44,7 @@ class RecommendationBasedOn():
 
     @baseline.setter
     def baseline(self, baseline):
+        self.__check_attributes_of(baseline)
         self.__baseline = baseline.operating_on(self.__data)
 
     def for_one(self, target, max_number_of_items=5):
@@ -68,3 +71,28 @@ class RecommendationBasedOn():
             log.warning('Requested {0} recommendations but only {1} available.'
                         ' Returning all {1}.'.format(requested, available))
         return min(requested, available)
+
+    def __type_checked(self, data):
+        if not isinstance(data, UserItemMatrix):
+            log.error('Attempt to instantiate with incompatible data type.'
+                      ' Must be <UserItemMatrix>')
+            raise TypeError('Data must be of type <UserItemMatrix>!')
+        return data
+
+    def __check_attributes_of(self, algorithm):
+        if not hasattr(algorithm, 'operating_on'):
+            log.error('Attempt to set object lacking mandatory'
+                      ' "operating_on()" method.')
+            raise AttributeError('Object lacks "operating_on()" method!')
+        if not callable(algorithm.operating_on):
+            log.error('The "operating_on()" method of this object'
+                      ' is not callable.')
+            raise TypeError('Operating_on() method of object not callable!')
+        if not hasattr(algorithm, 'for_one'):
+            log.error('Attempt to set object lacking mandatory'
+                      ' "for_one()" method.')
+            raise AttributeError('Object lacks "for_one()" method!')
+        if not callable(algorithm.for_one):
+            log.error('The "for_one()" method of this object'
+                      ' is not callable.')
+            raise TypeError('For_one() method of object not callable!')
