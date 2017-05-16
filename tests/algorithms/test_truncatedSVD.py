@@ -3,6 +3,7 @@
 
 import logging
 import unittest as ut
+from numpy import array, allclose
 from ...algorithms import TruncatedSVD
 from ...datastructures import UserItemMatrix
 
@@ -13,6 +14,9 @@ class TestCollaborativeFiltering(ut.TestCase):
         file = './bestPy/tests/data/data50.csv'
         self.data = UserItemMatrix.from_csv(file)
         self.algorithm = TruncatedSVD()
+
+    def test_has_attribute_binarize(self):
+        self.assertTrue(hasattr(self.algorithm, 'binarize'))
 
     def test_binarize_type(self):
         log_msg = ['ERROR:root:Attempt to set "binarize" to non-boolean type.']
@@ -142,6 +146,100 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.algorithm.number_of_factors = 9
         self.algorithm = self.algorithm.operating_on(self.data)
         self.assertTrue(hasattr(self.algorithm, 'for_one'))
+
+    def test_binarized_recommendation_does_not_change(self):
+        target = 5
+        self.algorithm.binarize = True
+        self.algorithm.number_of_factors = 4
+        self.algorithm = self.algorithm.operating_on(self.data)
+        before = self.algorithm.for_one(target).copy().tolist()
+        recommendation = self.algorithm.for_one(target)
+        recommendation += 1
+        after = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(before, after)
+
+    def test_non_binarized_recommendation_does_not_change(self):
+        target = 5
+        self.algorithm.binarize = False
+        self.algorithm.number_of_factors = 4
+        self.algorithm = self.algorithm.operating_on(self.data)
+        before = self.algorithm.for_one(target).copy().tolist()
+        recommendation = self.algorithm.for_one(target)
+        recommendation += 1
+        after = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(before, after)
+
+    def test_binarized_data_does_not_change(self):
+        target = 5
+        before_col = self.data.matrix_by_col.copy().todense().tolist()
+        before_row = self.data.matrix_by_row.copy().todense().tolist()
+        before_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
+        before_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        self.algorithm.binarize = True
+        self.algorithm.number_of_factors = 4
+        self.algorithm = self.algorithm.operating_on(self.data)
+        recommendation = self.algorithm.for_one(target)
+        recommendation += 1
+        after_col = self.data.matrix_by_col.copy().todense().tolist()
+        after_row = self.data.matrix_by_row.copy().todense().tolist()
+        after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
+        after_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        self.assertListEqual(before_col, after_col)
+        self.assertListEqual(before_row, after_row)
+        self.assertListEqual(before_boolcol, after_boolcol)
+        self.assertListEqual(before_boolrow, after_boolrow)
+
+    def test_non_binarized_data_does_not_change(self):
+        target = 5
+        before_col = self.data.matrix_by_col.copy().todense().tolist()
+        before_row = self.data.matrix_by_row.copy().todense().tolist()
+        before_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
+        before_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        self.algorithm.binarize = False
+        self.algorithm.number_of_factors = 4
+        self.algorithm = self.algorithm.operating_on(self.data)
+        recommendation = self.algorithm.for_one(target)
+        recommendation += 1
+        after_col = self.data.matrix_by_col.copy().todense().tolist()
+        after_row = self.data.matrix_by_row.copy().todense().tolist()
+        after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
+        after_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        self.assertListEqual(before_col, after_col)
+        self.assertListEqual(before_row, after_row)
+        self.assertListEqual(before_boolcol, after_boolcol)
+        self.assertListEqual(before_boolrow, after_boolrow)
+
+    def test_recommendation_non_binarized(self):
+        target = 1
+        should_be = array([-3.71779941e-17,  1.12137650e-01,  9.01851352e-01,
+                            4.63025802e-01,  3.39422048e-01,  1.69711024e-01,
+                           -1.45263575e-17, -2.84841847e-17, -2.84841847e-17,
+                           -9.29449854e-17,  2.32362463e-17, -1.16779390e-17,
+                            1.69711024e-01,  4.64724927e-17, -9.29449854e-17,
+                            1.12137650e-01,  1.12137650e-01,  4.64724927e-17,
+                            4.64724927e-17, -2.84841847e-18, -2.84841847e-18,
+                           -2.84841847e-18, -2.84841847e-18])
+        self.algorithm.binarize = False
+        self.algorithm.number_of_factors = 2
+        self.algorithm = self.algorithm.operating_on(self.data)
+        actually_is = self.algorithm.for_one(target)
+        self.assertTrue(allclose(should_be, actually_is))
+
+    def test_recommendation_binarized(self):
+        target = 1
+        should_be = array([ 9.32360549e-18,  1.12841097e-01,  7.13607215e-01,
+                            5.24231676e-01,  3.91473337e-01,  1.95736668e-01,
+                            2.78329185e-16,  2.38779085e-16,  2.38779085e-16,
+                           -9.32360549e-18, -4.66180274e-18,  3.95500995e-17,
+                            1.95736668e-01,  3.03017178e-17,  6.13589243e-33,
+                            1.12841097e-01,  1.12841097e-01,  3.03017178e-17,
+                            3.03017178e-17,  2.38779085e-16,  2.38779085e-16,
+                            2.38779085e-16,  2.38779085e-16])
+        self.algorithm.binarize = True
+        self.algorithm.number_of_factors = 2
+        self.algorithm = self.algorithm.operating_on(self.data)
+        actually_is = self.algorithm.for_one(target)
+        self.assertTrue(allclose(should_be, actually_is))
 
 
 if __name__ == '__main__':

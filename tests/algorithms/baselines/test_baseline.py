@@ -14,6 +14,9 @@ class TestBaseline(ut.TestCase):
         self.data = UserItemMatrix.from_csv(file)
         self.baseline = Baseline()
 
+    def test_has_attribute_binarize(self):
+        self.assertTrue(hasattr(self.baseline, 'binarize'))
+
     def test_binarize_type(self):
         log_msg = ['ERROR:root:Attempt to set "binarize" to non-boolean type.']
         err_msg = 'Attribute "binarize" must be True or False!'
@@ -128,6 +131,7 @@ class TestBaseline(ut.TestCase):
         self.baseline.binarize = True
         self.baseline = self.baseline.operating_on(self.data)
         recommendation = self.baseline.for_one()
+        recommendation += 1
         after_col = self.data.matrix_by_col.copy().todense().tolist()
         after_row = self.data.matrix_by_row.copy().todense().tolist()
         after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
@@ -145,6 +149,7 @@ class TestBaseline(ut.TestCase):
         self.baseline.binarize = False
         self.baseline = self.baseline.operating_on(self.data)
         recommendation = self.baseline.for_one()
+        recommendation += 1
         after_col = self.data.matrix_by_col.copy().todense().tolist()
         after_row = self.data.matrix_by_row.copy().todense().tolist()
         after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()

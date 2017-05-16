@@ -14,6 +14,9 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.data = UserItemMatrix.from_csv(file)
         self.algorithm = CollaborativeFiltering()
 
+    def test_has_attribute_binarize(self):
+        self.assertTrue(hasattr(self.algorithm, 'binarize'))
+
     def test_binarize_type(self):
         log_msg = ['ERROR:root:Attempt to set "binarize" to non-boolean type.']
         err_msg = 'Attribute "binarize" must be True or False!'
@@ -225,6 +228,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.algorithm.binarize = True
         self.algorithm = self.algorithm.operating_on(self.data)
         recommendation = self.algorithm.for_one(target)
+        recommendation += 1
         after_col = self.data.matrix_by_col.copy().todense().tolist()
         after_row = self.data.matrix_by_row.copy().todense().tolist()
         after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
@@ -243,6 +247,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.algorithm.binarize = False
         self.algorithm = self.algorithm.operating_on(self.data)
         recommendation = self.algorithm.for_one(target)
+        recommendation += 1
         after_col = self.data.matrix_by_col.copy().todense().tolist()
         after_row = self.data.matrix_by_row.copy().todense().tolist()
         after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
