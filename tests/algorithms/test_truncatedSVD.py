@@ -241,6 +241,13 @@ class TestCollaborativeFiltering(ut.TestCase):
         actually_is = self.algorithm.for_one(target)
         self.assertTrue(allclose(should_be, actually_is))
 
+    def test_length_of_recommendation_equals_number_of_items(self):
+        target = 5
+        should_be = self.data.number_of_items
+        self.algorithm = self.algorithm.operating_on(self.data)
+        actually_is = len(self.algorithm.for_one(target))
+        self.assertEqual(should_be, actually_is)
+        
 
 if __name__ == '__main__':
     ut.main()

@@ -159,6 +159,13 @@ class TestBaseline(ut.TestCase):
         self.assertListEqual(before_boolcol, after_boolcol)
         self.assertListEqual(before_boolrow, after_boolrow)
 
+    def test_length_of_recommendation_equals_number_of_items(self):
+        target = 5
+        should_be = self.data.number_of_items
+        self.baseline = self.baseline.operating_on(self.data)
+        actually_is = len(self.baseline.for_one(target))
+        self.assertEqual(should_be, actually_is)
+
 
 if __name__ == '__main__':
     ut.main()
