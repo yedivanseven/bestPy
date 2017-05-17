@@ -83,16 +83,19 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertTrue(hasattr(self.algorithm, 'for_one'))
 
     def test_has_default_baseline(self):
-        self.assertIsInstance(self.algorithm.baseline, default_baseline)
+        should_be = default_baseline().__class__.__name__
+        self.assertEqual(self.algorithm.baseline, should_be)
 
     def test_set_baseline_without_data(self):
-        self.algorithm.baseline = Baseline()
-        self.assertIsInstance(self.algorithm.baseline, Baseline)
+        should_be = CollaborativeFiltering().__class__.__name__
+        self.algorithm.baseline = CollaborativeFiltering()
+        self.assertEqual(self.algorithm.baseline, should_be)
 
     def test_set_baseline_with_data(self):
-        self.algorithm.baseline = Baseline()
+        should_be = CollaborativeFiltering().__class__.__name__
         self.algorithm = self.algorithm.operating_on(self.data)
-        self.assertTrue(hasattr(self.algorithm.baseline, 'for_one'))
+        self.algorithm.baseline = CollaborativeFiltering()
+        self.assertEqual(self.algorithm.baseline, should_be)
 
     def test_baseline_no_operating_on_method(self):
         class MockUp():
@@ -328,6 +331,32 @@ class TestCollaborativeFiltering(ut.TestCase):
         with self.assertLogs(level=logging.INFO) as log:
             actually_is = self.algorithm.for_one(target).tolist()
         self.assertEqual(log.output, log_msg)
+        self.assertListEqual(should_be, actually_is)
+
+    def test_data_is_passed_on_to_baseline_before(self):
+        target = 6
+        should_be = Baseline().operating_on(self.data).for_one().tolist()
+        file = './bestPy/tests/data/data25semicolon.csv'
+        with self.assertLogs(level=logging.WARNING):
+            data = UserItemMatrix.from_csv(file)
+        baseline = Baseline().operating_on(data)
+        self.algorithm.baseline = baseline
+        self.algorithm = self.algorithm.operating_on(self.data)
+        with self.assertLogs(level=logging.INFO):
+            actually_is = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(should_be, actually_is)
+
+    def test_data_is_passed_on_to_baseline_after(self):
+        target = 6
+        should_be = Baseline().operating_on(self.data).for_one().tolist()
+        file = './bestPy/tests/data/data25semicolon.csv'
+        with self.assertLogs(level=logging.WARNING):
+            data = UserItemMatrix.from_csv(file)
+        baseline = Baseline().operating_on(data)
+        self.algorithm = self.algorithm.operating_on(self.data)
+        self.algorithm.baseline = baseline
+        with self.assertLogs(level=logging.INFO):
+            actually_is = self.algorithm.for_one(target).tolist()
         self.assertListEqual(should_be, actually_is)
 
     def test_length_of_recommendation_equals_number_of_items(self):

@@ -43,7 +43,7 @@ class CollaborativeFiltering():
 
     @property
     def baseline(self):
-        return self.__baseline
+        return self.__baseline.__class__.__name__
 
     @baseline.setter
     def baseline(self, baseline):
@@ -60,7 +60,7 @@ class CollaborativeFiltering():
         if self.__no_one_else_bought_items_bought_by(target):
             log.info('Uncomparable user with ID {}. Returning baseline'
                      ' recommendation.'.format(self.__data.userID_of[target]))
-            return self.baseline.for_one()
+            return self.__baseline.for_one()
         history_vector = self.__data.matrix_by_row[target]
         if self.binarize:
             history_vector.data[:] = 1.0
