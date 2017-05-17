@@ -53,7 +53,7 @@ class RecommendationBasedOn():
         self.__check_data_attributes_of(baseline)
 
     def for_one(self, target, max_number_of_items=5):
-        head = self.__type_and_range_checked(max_number_of_items)
+        head = self.__integer_type_and_range_checked(max_number_of_items)
         type_of = target in self.__data.userIndex_of.keys()
         item_scores = self.__recommendation_for[type_of](target)
         sorted_item_indices = argpartition(item_scores, -head)[-head:]
@@ -106,7 +106,7 @@ class RecommendationBasedOn():
                       ' is not callable.')
             raise TypeError('"for_one()" method of object not callable!')
 
-    def __type_and_range_checked(self, requested):
+    def __integer_type_and_range_checked(self, requested):
         if not isinstance(requested, int):
             log.error('Requested number of recommendations is not an integer.')
             raise TypeError('Requested number of recommendations must be'
