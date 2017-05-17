@@ -100,6 +100,17 @@ class TestTrainTestFromCsvCommaFile(ut.TestCase, BaseTests):
         self.separator = ','
         self.fmt = None
 
+class TestTrainTestFromCsvFileSeparator(ut.TestCase):
+
+    def test_wrong_type_of_separator(self):
+        log_msg = ['ERROR:root:Attempt to set separator argument to'
+                   ' non-string type.']
+        err_msg = 'Separator argument must be a string!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(TypeError):
+                _ = from_csv('file', 12.3, 'fmt')
+        self.assertEqual(log.output, log_msg)
+
 
 if __name__ == '__main__':
     ut.main()

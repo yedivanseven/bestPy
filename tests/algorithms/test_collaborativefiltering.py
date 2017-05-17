@@ -185,11 +185,12 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertEqual(log.output, log_msg)
 
     def test_has_default_similarity(self):
-        self.assertTrue(self.algorithm.similarity is default_similarity)
+        should_be = default_similarity.__name__
+        self.assertEqual(self.algorithm.similarity, should_be)
 
     def test_set_permitted_similarity(self):
         self.algorithm.similarity = sokalsneath
-        self.assertTrue(self.algorithm.similarity is sokalsneath)
+        self.assertEqual(self.algorithm.similarity, 'sokalsneath')
 
     def test_set_forbidden_similarity(self):
         def dice(data):

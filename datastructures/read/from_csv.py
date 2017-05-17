@@ -5,6 +5,7 @@ from collections import defaultdict
 
 
 def from_csv(file, separator=';'):
+    check_string_type_of(separator)
     number_of_transactions = 0
     number_of_corrupted_records = 0
     userIndex_of = defaultdict(lambda: len(userIndex_of))
@@ -45,3 +46,9 @@ def from_csv(file, separator=';'):
             dict(userIndex_of),
             dict(itemIndex_of),
             dict(count_buys_of))
+
+
+def check_string_type_of(separator):
+    if not isinstance(separator, str):
+        log.error('Attempt to set separator argument to non-string type.')
+        raise TypeError('Separator argument must be a string!')

@@ -18,7 +18,7 @@ class TruncatedSVD():
 
     @number_of_factors.setter
     def number_of_factors(self, number_of_factors):
-        self.__check_type_and_range_of(number_of_factors)
+        self.__check_integer_type_and_range_of(number_of_factors)
         previous_number_of_factors = self.number_of_factors
         self.__set(number_of_factors)
         if self.number_of_factors != previous_number_of_factors:
@@ -30,7 +30,7 @@ class TruncatedSVD():
 
     @binarize.setter
     def binarize(self, binarize):
-        binarize = self.__bool_type_checked(binarize)
+        self.__check_bool_type_of(binarize)
         if binarize != self.binarize:
             self.__delete_USV_matrices()
         self.__binarize = binarize
@@ -86,7 +86,7 @@ class TruncatedSVD():
         else:
             self.__number_of_factors = number_of_factors
 
-    def __check_type_and_range_of(self, number_of_factors):
+    def __check_integer_type_and_range_of(self, number_of_factors):
         error_message = '"number_of_factors" must be a positive integer!'
         if not isinstance(number_of_factors, int):
             log.error('Attempt to set number_of_factors to non-integer type.')
@@ -95,11 +95,10 @@ class TruncatedSVD():
             log.error('Attempt to set number_of_factors to value < 1.')
             raise ValueError(error_message)
 
-    def __bool_type_checked(self, binarize):
+    def __check_bool_type_of(self, binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
             raise TypeError('Attribute "binarize" must be True or False!')
-        return binarize
 
     def __type_checked(self, data):
         if not isinstance(data, UserItemMatrix):

@@ -6,8 +6,8 @@ from ...datastructures import UserItemMatrix
 class Baseline():
     def __init__(self):
         self.__binarize = True
-        self.__depending_on_whether_we = {True : self.__count,
-                                          False: self.__sum}
+        self.__depending_on_whether_we = {True : self.__count_unique_buyers,
+                                          False: self.__sum_over_all_buys}
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
@@ -16,7 +16,7 @@ class Baseline():
 
     @binarize.setter
     def binarize(self, binarize):
-        self.__check_type_of(binarize)
+        self.__check_bool_type_of(binarize)
         if binarize != self.binarize:
             self.__delete_precomputed()
         self.__binarize = binarize
@@ -34,13 +34,12 @@ class Baseline():
     def __for_one(self, target=None):
         return self.__depending_on_whether_we[self.binarize]()
 
-    def __count(self):
+    def __count_unique_buyers(self):
         if not self.__has('number_of_buyers'):
-            self.__number_of_buyers = self.__data.matrix_by_col.getnnz(0)
-            self.__number_of_buyers = self.__number_of_buyers.astype(float)
+            self.__number_of_buyers = self.__data.bool_matrix_by_col.sum(0).A1
         return self.__number_of_buyers.copy()
 
-    def __sum(self):
+    def __sum_over_all_buys(self):
         if not self.__has('number_of_buys'):
             self.__number_of_buys = self.__data.matrix_by_col.sum(0).A1
         return self.__number_of_buys.copy()
@@ -51,7 +50,7 @@ class Baseline():
         if self.__has('number_of_buys'):
             delattr(self, self.__class_prefix + 'number_of_buys')
 
-    def __check_type_of(self, binarize):
+    def __check_bool_type_of(self, binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
             raise TypeError('Attribute "binarize" must be True or False!')

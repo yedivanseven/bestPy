@@ -15,12 +15,12 @@ class CollaborativeFiltering():
 
     @property
     def similarity(self):
-        return self.__similarity
+        return self.__similarity.__name__
 
     @similarity.setter
     def similarity(self, similarity):
         similarity = self.__permitted(similarity)
-        if similarity != self.similarity:
+        if similarity != self.__similarity:
             self.__delete_sim_mat()
         self.__similarity = similarity
 
@@ -67,7 +67,7 @@ class CollaborativeFiltering():
 
     def __similarity_matrix(self):
         if not self.__has('sim_mat'):
-            self.__sim_mat = self.similarity(self.__data)
+            self.__sim_mat = self.__similarity(self.__data)
         return self.__sim_mat
 
     def __delete_sim_mat(self):

@@ -22,7 +22,7 @@ class TestUserItemMatrix(ut.TestCase):
             self.data.min_matrix_shape = 123
         self.assertEqual(self.data.min_matrix_shape, 4)
 
-    def test_matrix_by_col_types(self):
+    def test_matrix_by_col_type(self):
         self.assertIsInstance(self.data.matrix_by_col,
                               scipy.sparse.csc.csc_matrix)
 

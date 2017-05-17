@@ -3,8 +3,7 @@
 import logging as log
 import datetime as dt
 from collections import defaultdict
-import psycopg2 as pg
-from psycopg2 import OperationalError, ProgrammingError
+from psycopg2 import connect, OperationalError, ProgrammingError
 
 
 def from_postgreSQL(database):
@@ -35,7 +34,7 @@ def from_postgreSQL(database):
                False: log_corrupted_transaction}
 
     try:
-        connection = pg.connect(database.login)
+        connection = connect(database.login)
     except OperationalError:
         log.error('Failed connecting to {}.'.format(database.login_db_name))
         raise OperationalError('Connect to database failed. Check settings!')
@@ -57,7 +56,7 @@ def from_postgreSQL(database):
 
     return (number_of_transactions,
             number_of_corrupted_records,
-            dict(last_unique_items_of),
+            finalized(last_unique_items_of),
             transactions)
 
 
@@ -69,3 +68,10 @@ def converted(timestamp):
         log.error('Type of timestamp field is neither integer nor timestamp!')
         raise TypeError('Timestamp field must be an integer or a timestamp!')
     return converted[type_of](timestamp)
+
+
+def finalized(last_unique):
+    finalized = {user: {item: time.isoformat()
+                        for item, time in article.items()}
+                for user, article in last_unique.items()}
+    return finalized

@@ -2,7 +2,8 @@
 
 import logging as log
 from operator import itemgetter
-from .traintestbase import TrainTestBase, TestDataFrom, FileFrom
+from .help import TestDataFrom, FileFrom
+from .traintestbase import TrainTestBase
 from .useritemmatrix import UserItemMatrix
 
 
@@ -14,7 +15,7 @@ class TrainTest(TrainTestBase):
 
     def split(self, hold_out=5, only_new=True):
         self.__check_boolean_type_of(only_new)
-        hold_out = self.__checked_for_type_and_range_of(hold_out)
+        hold_out = self.__checked_for_integer_type_and_range_of(hold_out)
         keep = {user: items
                 for user, items in self.__unique.items()
                 if len(items) >= hold_out}
@@ -42,7 +43,7 @@ class TrainTest(TrainTestBase):
             log.error('Attempt to set "only_new" to non-boolean type.')
             raise TypeError('Flag "only_new" can only be True or False!')
 
-    def __checked_for_type_and_range_of(self, hold_out):
+    def __checked_for_integer_type_and_range_of(self, hold_out):
         if not isinstance(hold_out, int):
             log.error('Attempt to set "hold_out" to non-integer type.')
             raise TypeError('Parameter "hold_out" must be an integer!')

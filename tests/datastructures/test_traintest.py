@@ -3,7 +3,7 @@
 
 import logging
 import unittest as ut
-from ...datastructures.traintestbase import TestDataFrom
+from ...datastructures.help import TestDataFrom
 from ...datastructures import TrainTest, UserItemMatrix
 
 

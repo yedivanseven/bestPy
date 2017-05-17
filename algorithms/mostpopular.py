@@ -16,7 +16,7 @@ class MostPopular():
 
     @binarize.setter
     def binarize(self, binarize):
-        self.__check_type_of(binarize)
+        self.__check_bool_type_of(binarize)
         if binarize != self.binarize:
             self.__delete_precomputed()
         self.__baseline.binarize = binarize
@@ -55,7 +55,7 @@ class MostPopular():
         if self.__has('scaled_baseline'):
             delattr(self, self.__class_prefix + 'scaled_baseline')
 
-    def __check_type_of(self, binarize):
+    def __check_bool_type_of(self, binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
             raise TypeError('Attribute "binarize" must be True or False!')

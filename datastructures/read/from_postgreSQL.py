@@ -2,8 +2,7 @@
 
 import logging as log
 from collections import defaultdict
-import psycopg2 as pg
-from psycopg2 import OperationalError, ProgrammingError
+from psycopg2 import connect, OperationalError, ProgrammingError
 
 
 def from_postgreSQL(database):
@@ -32,7 +31,7 @@ def from_postgreSQL(database):
                      False: log_corrupted_transaction}
 
     try:
-        connection = pg.connect(database.login)
+        connection = connect(database.login)
     except OperationalError:
         log.error('Failed connecting to {}.'.format(database.login_db_name))
         raise OperationalError('Connect to database failed. Check settings!')

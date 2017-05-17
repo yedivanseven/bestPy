@@ -2,7 +2,7 @@
 
 import logging as log
 from . import RecommendationBasedOn
-from .datastructures.traintestbase import TestDataFrom
+from .datastructures.help import TestDataFrom
 
 
 class Benchmark():

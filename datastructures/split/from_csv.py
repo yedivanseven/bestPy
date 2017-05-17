@@ -6,6 +6,7 @@ from collections import defaultdict
 
 
 def from_csv(file, separator=';', fmt=None):
+    check_string_type_of(separator)
     format_of = fmt
     number_of_transactions = 0
     number_of_corrupted_records = 0
@@ -54,6 +55,12 @@ def from_csv(file, separator=';', fmt=None):
             number_of_corrupted_records,
             finalized(last_unique_items_of),
             transactions)
+
+
+def check_string_type_of(separator):
+    if not isinstance(separator, str):
+        log.error('Attempt to set separator argument to non-string type.')
+        raise TypeError('Separator argument must be a string!')
 
 
 def depending_on(fmt=None):
