@@ -62,7 +62,7 @@ class TestBaseline(ut.TestCase):
 
     def test_data_type(self):
         log_msg = ['ERROR:root:Attempt to set incompatible data type.'
-                  ' Must be <UserItemMatrix>']
+                  ' Must be <UserItemMatrix>.']
         err_msg = 'Data must be of type <UserItemMatrix>!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg):

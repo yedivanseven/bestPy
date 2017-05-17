@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import logging as log
@@ -60,7 +59,7 @@ class Baseline():
     def __type_checked(self, data):
         if not isinstance(data, UserItemMatrix):
             log.error('Attempt to set incompatible data type.'
-                      ' Must be <UserItemMatrix>')
+                      ' Must be <UserItemMatrix>.')
             raise TypeError('Data must be of type <UserItemMatrix>!')
         return data
 

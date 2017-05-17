@@ -13,7 +13,7 @@ class TestRecommenderInitialization(ut.TestCase):
     def test_logs_and_raises_error_with_wrong_data_type(self):
         data = 12.3
         log_msg = ['ERROR:root:Attempt to instantiate with incompatible data'
-                  ' type. Must be <UserItemMatrix>']
+                  ' type. Must be <UserItemMatrix>.']
         err_msg = 'Data must be of type <UserItemMatrix>!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg):

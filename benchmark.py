@@ -1,15 +1,16 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import logging as log
+from . import RecommendationBasedOn
+from .datastructures.traintestbase import TestDataFrom
 
 
 class Benchmark():
     def __init__(self, recommender):
-        self.__recommendation = recommender
+        self.__recommendation = self.__validated(recommender)
 
     def against(self, test):
-        self.__test = test
+        self.__test = self.__type_checked(test)
         if test.only_new and not self.__recommendation.only_new:
             self.__recommendation = self.__recommendation.pruning_old
             log.info('Resetting recommender to "pruning_old" because of'
@@ -26,3 +27,18 @@ class Benchmark():
                             self.__test.hold_out)).intersection(items))
                     for user, items in self.__test.data.items())
         return total / self.__test.number_of_cases
+
+    def __validated(self, recommender):
+        if not isinstance(recommender, RecommendationBasedOn):
+            log.error('Attempt to instantiate with incompatible recommender.'
+                      ' Must be of type <RecommendationBasedOn>.')
+            raise TypeError('Recommender must be of type'
+                            ' <RecommendationBasedOn>!')
+        return recommender
+
+    def __type_checked(self, data):
+        if not isinstance(data, TestDataFrom):
+            log.error('Attempt to set incompatible type of test data.'
+                      ' Must be <TestDataFrom>.')
+            raise TypeError('Test data must be of type <TestDataFrom>!')
+        return data
