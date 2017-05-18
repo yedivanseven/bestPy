@@ -11,12 +11,12 @@ class Index():
         return self.__index_of
 
     @property
-    def ID_of(self):
-        if not self.__has('ID_of'):
-            self.__ID_of = {value: key
+    def id_of(self):
+        if not self.__has('id_of'):
+            self.__id_of = {value: key
                             for key, value
                             in self.__index_of.items()}
-        return self.__ID_of
+        return self.__id_of
 
     @property
     def count(self):
