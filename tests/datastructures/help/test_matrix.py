@@ -97,7 +97,7 @@ class TestIndex(ut.TestCase):
         with self.assertRaises(AttributeError):
             self.matrix.min_shape = {'bar': 34}
 
-    def test_type_of_attribute_mmin_shape(self):
+    def test_type_of_attribute_min_shape(self):
         self.assertIsInstance(self.matrix.min_shape, int)
 
     def test_correct_values_in_attribute_min_shape(self):
