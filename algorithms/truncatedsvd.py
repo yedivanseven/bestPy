@@ -38,7 +38,7 @@ class TruncatedSVD():
     def operating_on(self, data):
         self.__data = self.__type_checked(data)
         TruncatedSVD.max_number_of_factors = property(
-            lambda self: self.__data.min_matrix_shape - 1
+            lambda self: self.__data.matrix.min_shape - 1
         )
         self.__reset(self.number_of_factors)
         self.__delete_USV_matrices()
@@ -66,8 +66,8 @@ class TruncatedSVD():
 
     def __matrix(self):
         if self.__binarize:
-            return self.__data.bool_matrix_by_row
-        return self.__data.matrix_by_row
+            return self.__data.matrix.bool_by_row
+        return self.__data.matrix.by_row
 
     def __set(self, number_of_factors):
         if not self.has_data:

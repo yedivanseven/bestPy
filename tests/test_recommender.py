@@ -295,7 +295,7 @@ class TestRecommender(ut.TestCase):
             data = UserItemMatrix.from_csv(file)
         baseline = default_baseline().operating_on(data)
         self.recommender.baseline = baseline
-        should_be = self.data.number_of_items
+        should_be = self.data.item.count
         actually_is = len(list(self.recommender.for_one(1, 23)))
         self.assertEqual(should_be, actually_is)
 
@@ -383,7 +383,7 @@ class TestRecommender(ut.TestCase):
             data = UserItemMatrix.from_csv(file)
         algorithm = default_algorithm().operating_on(data)
         recommender = self.recommender.using(algorithm)
-        should_be = self.data.number_of_items
+        should_be = self.data.item.count
         actually_is = len(list(recommender.for_one(1, 23)))
         self.assertEqual(should_be, actually_is)
 

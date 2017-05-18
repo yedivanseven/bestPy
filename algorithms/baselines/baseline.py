@@ -3,6 +3,7 @@
 import logging as log
 from ...datastructures import UserItemMatrix
 
+
 class Baseline():
     def __init__(self):
         self.__binarize = True
@@ -36,12 +37,12 @@ class Baseline():
 
     def __count_unique_buyers(self):
         if not self.__has('number_of_buyers'):
-            self.__number_of_buyers = self.__data.bool_matrix_by_col.sum(0).A1
+            self.__number_of_buyers = self.__data.matrix.bool_by_col.sum(0).A1
         return self.__number_of_buyers.copy()
 
     def __sum_over_all_buys(self):
         if not self.__has('number_of_buys'):
-            self.__number_of_buys = self.__data.matrix_by_col.sum(0).A1
+            self.__number_of_buys = self.__data.matrix.by_col.sum(0).A1
         return self.__number_of_buys.copy()
 
     def __delete_precomputed(self):

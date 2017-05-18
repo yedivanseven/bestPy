@@ -58,9 +58,9 @@ class CollaborativeFiltering():
     def __for_one(self, target):
         if self.__no_one_else_bought_items_bought_by(target):
             log.info('Uncomparable user with ID {}. Returning baseline'
-                     ' recommendation.'.format(self.__data.userID_of[target]))
+                     ' recommendation.'.format(self.__data.user.id_of[target]))
             return self.__baseline.for_one()
-        history_vector = self.__data.matrix_by_row[target]
+        history_vector = self.__data.matrix.by_row[target]
         if self.binarize:
             history_vector.data[:] = 1.0
         return history_vector.dot(self.__similarity_matrix()).A[0]
@@ -75,7 +75,7 @@ class CollaborativeFiltering():
             delattr(self, self.__class_prefix + 'sim_mat')
 
     def __no_one_else_bought_items_bought_by(self, target):
-        items_bought_by_target = self.__data.matrix_by_row[target].indices
+        items_bought_by_target = self.__data.matrix.by_row[target].indices
         return self.__data.users_who_bought(items_bought_by_target).size == 1
 
     def __permitted(self, similarity):

@@ -132,18 +132,18 @@ class TestMostPopular(ut.TestCase):
 
     def test_binarized_data_does_not_change(self):
         target = 1
-        before_col = self.data.matrix_by_col.copy().todense().tolist()
-        before_row = self.data.matrix_by_row.copy().todense().tolist()
-        before_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
-        before_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        before_col = self.data.matrix.by_col.copy().todense().tolist()
+        before_row = self.data.matrix.by_row.copy().todense().tolist()
+        before_boolcol = self.data.matrix.bool_by_col.copy().todense().tolist()
+        before_boolrow = self.data.matrix.bool_by_row.copy().todense().tolist()
         self.algorithm.binarize = True
         self.algorithm = self.algorithm.operating_on(self.data)
         recommendation = self.algorithm.for_one(target)
         recommendation += 1
-        after_col = self.data.matrix_by_col.copy().todense().tolist()
-        after_row = self.data.matrix_by_row.copy().todense().tolist()
-        after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
-        after_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        after_col = self.data.matrix.by_col.copy().todense().tolist()
+        after_row = self.data.matrix.by_row.copy().todense().tolist()
+        after_boolcol = self.data.matrix.bool_by_col.copy().todense().tolist()
+        after_boolrow = self.data.matrix.bool_by_row.copy().todense().tolist()
         self.assertListEqual(before_col, after_col)
         self.assertListEqual(before_row, after_row)
         self.assertListEqual(before_boolcol, after_boolcol)
@@ -151,18 +151,18 @@ class TestMostPopular(ut.TestCase):
 
     def test_non_binarized_data_does_not_change(self):
         target = 2
-        before_col = self.data.matrix_by_col.copy().todense().tolist()
-        before_row = self.data.matrix_by_row.copy().todense().tolist()
-        before_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
-        before_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        before_col = self.data.matrix.by_col.copy().todense().tolist()
+        before_row = self.data.matrix.by_row.copy().todense().tolist()
+        before_boolcol = self.data.matrix.bool_by_col.copy().todense().tolist()
+        before_boolrow = self.data.matrix.bool_by_row.copy().todense().tolist()
         self.algorithm.binarize = False
         self.algorithm = self.algorithm.operating_on(self.data)
         recommendation = self.algorithm.for_one(target)
         recommendation += 1
-        after_col = self.data.matrix_by_col.copy().todense().tolist()
-        after_row = self.data.matrix_by_row.copy().todense().tolist()
-        after_boolcol = self.data.bool_matrix_by_col.copy().todense().tolist()
-        after_boolrow = self.data.bool_matrix_by_row.copy().todense().tolist()
+        after_col = self.data.matrix.by_col.copy().todense().tolist()
+        after_row = self.data.matrix.by_row.copy().todense().tolist()
+        after_boolcol = self.data.matrix.bool_by_col.copy().todense().tolist()
+        after_boolrow = self.data.matrix.bool_by_row.copy().todense().tolist()
         self.assertListEqual(before_col, after_col)
         self.assertListEqual(before_row, after_row)
         self.assertListEqual(before_boolcol, after_boolcol)
@@ -170,7 +170,7 @@ class TestMostPopular(ut.TestCase):
 
     def test_length_of_recommendation_equals_number_of_items(self):
         target = 5
-        should_be = self.data.number_of_items
+        should_be = self.data.item.count
         self.algorithm = self.algorithm.operating_on(self.data)
         actually_is = len(self.algorithm.for_one(target))
         self.assertEqual(should_be, actually_is)

@@ -34,7 +34,7 @@ class MostPopular():
 
     def __for_one(self, target):
         target_agnostic = self.__precomputed()
-        target_specific = self.__data.matrix_by_row[target]
+        target_specific = self.__data.matrix.by_row[target]
         target_agnostic[target_specific.indices] = target_specific.data
         return target_agnostic
 
