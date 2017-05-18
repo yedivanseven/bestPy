@@ -4,9 +4,11 @@ import logging as log
 import datetime as dt
 from collections import defaultdict
 from psycopg2 import connect, OperationalError, ProgrammingError
+from ..postgreSQLparams import PostgreSQLparams
 
 
 def from_postgreSQL(database):
+    check_type_of(database)
     number_of_transactions = 0
     number_of_corrupted_records = 0
     transactions = []
@@ -58,6 +60,14 @@ def from_postgreSQL(database):
             number_of_corrupted_records,
             finalized(last_unique_items_of),
             transactions)
+
+
+def check_type_of(database):
+    if not isinstance(database, PostgreSQLparams):
+        log.error('Attempt to set database parameter object of incompatible'
+                  ' type. Must be <PostgreSQLparams>.')
+        raise TypeError('Database parameter object must be of'
+                        ' type <PostgreSQLparams>!')
 
 
 def converted(timestamp):

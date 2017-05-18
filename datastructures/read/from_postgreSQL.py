@@ -3,9 +3,11 @@
 import logging as log
 from collections import defaultdict
 from psycopg2 import connect, OperationalError, ProgrammingError
+from ..postgreSQLparams import PostgreSQLparams
 
 
 def from_postgreSQL(database):
+    check_type_of(database)
     number_of_transactions = 0
     number_of_corrupted_records = 0
     userIndex_of = defaultdict(lambda: len(userIndex_of))
@@ -57,6 +59,14 @@ def from_postgreSQL(database):
             dict(userIndex_of),
             dict(itemIndex_of),
             dict(count_buys_of))
+
+
+def check_type_of(database):
+    if not isinstance(database, PostgreSQLparams):
+        log.error('Attempt to set database parameter object of incompatible'
+                  ' type. Must be <PostgreSQLparams>.')
+        raise TypeError('Database parameter object must be of'
+                        ' type <PostgreSQLparams>!')
 
 
 def compare(available, database):
