@@ -33,7 +33,7 @@ from bestpy import RecommendationBasedOn
 
 recommendation = RecommendationBasedOn(data)
 customer = 'customer-A2'
-top_five = recommentation.for_one(customer)
+top_five = recommendation.for_one(customer)
 for article in top_five:
     print(article)
 ```
