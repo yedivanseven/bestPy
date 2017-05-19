@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging as log
-from ...datastructures import UserItemMatrix
+from ...datastructures import Transactions
 
 
 class Baseline():
@@ -57,10 +57,10 @@ class Baseline():
             raise TypeError('Attribute "binarize" must be True or False!')
 
     def __type_checked(self, data):
-        if not isinstance(data, UserItemMatrix):
+        if not isinstance(data, Transactions):
             log.error('Attempt to set incompatible data type.'
-                      ' Must be <UserItemMatrix>.')
-            raise TypeError('Data must be of type <UserItemMatrix>!')
+                      ' Must be <Transactions>.')
+            raise TypeError('Data must be of type <Transactions>!')
         return data
 
     def __has(self, attribute):

@@ -4,7 +4,7 @@
 import logging
 import unittest as ut
 from ...datastructures.help import TestDataFrom
-from ...datastructures import TrainTest, UserItemMatrix
+from ...datastructures import TrainTest, Transactions
 
 
 class TestTrainTest(ut.TestCase):
@@ -99,7 +99,7 @@ class TestTrainTest(ut.TestCase):
 
     def test_train_type(self):
          self.data.split(1)
-         self.assertIsInstance(self.data.train, UserItemMatrix)
+         self.assertIsInstance(self.data.train, Transactions)
 
     def test_train_number_of_corrupted_records(self):
         self.data.split(1, only_new=True)

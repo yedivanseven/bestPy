@@ -3,7 +3,7 @@
 import logging as log
 from .similarities import default_similarity, all_similarities
 from .baselines import default_baseline
-from ..datastructures import UserItemMatrix
+from ..datastructures import Transactions
 
 
 class CollaborativeFiltering():
@@ -92,10 +92,10 @@ class CollaborativeFiltering():
         return binarize
 
     def __type_checked(self, data):
-        if not isinstance(data, UserItemMatrix):
+        if not isinstance(data, Transactions):
             log.error('Attempt to set incompatible data type.'
-                      ' Must be <UserItemMatrix>.')
-            raise TypeError('Data must be of type <UserItemMatrix>!')
+                      ' Must be <Transactions>.')
+            raise TypeError('Data must be of type <Transactions>!')
         return data
 
     def __base_attribute_checked(self, baseline):

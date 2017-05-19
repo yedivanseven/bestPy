@@ -4,14 +4,14 @@
 import logging
 import unittest as ut
 from ...algorithms import MostPopular
-from ...datastructures import UserItemMatrix
+from ...datastructures import Transactions
 
 
 class TestMostPopular(ut.TestCase):
 
     def setUp(self):
         file = './bestPy/tests/data/data50.csv'
-        self.data = UserItemMatrix.from_csv(file)
+        self.data = Transactions.from_csv(file)
         self.algorithm = MostPopular()
 
     def test_has_attribute_binarize(self):
@@ -62,8 +62,8 @@ class TestMostPopular(ut.TestCase):
 
     def test_data_type(self):
         log_msg = ['ERROR:root:Attempt to set incompatible data type.'
-                  ' Must be <UserItemMatrix>.']
-        err_msg = 'Data must be of type <UserItemMatrix>!'
+                  ' Must be <Transactions>.']
+        err_msg = 'Data must be of type <Transactions>!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg):
                 _ = self.algorithm.operating_on('bar')

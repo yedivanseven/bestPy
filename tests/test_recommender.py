@@ -4,7 +4,7 @@
 import logging
 import unittest as ut
 from ..algorithms import default_algorithm, default_baseline, TruncatedSVD
-from ..datastructures import UserItemMatrix
+from ..datastructures import Transactions
 from .. import RecommendationBasedOn
 
 
@@ -13,8 +13,8 @@ class TestRecommenderInitialization(ut.TestCase):
     def test_logs_and_raises_error_with_wrong_data_type(self):
         data = 12.3
         log_msg = ['ERROR:root:Attempt to instantiate with incompatible data'
-                  ' type. Must be <UserItemMatrix>.']
-        err_msg = 'Data must be of type <UserItemMatrix>!'
+                  ' type. Must be <Transactions>.']
+        err_msg = 'Data must be of type <Transactions>!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg):
                 _ = RecommendationBasedOn(data)
@@ -25,7 +25,7 @@ class TestRecommender(ut.TestCase):
 
     def setUp(self):
         file = './bestPy/tests/data/data50.csv'
-        self.data = UserItemMatrix.from_csv(file)
+        self.data = Transactions.from_csv(file)
         self.algorithm = default_algorithm()
         self.recommender = RecommendationBasedOn(self.data)
 
@@ -292,7 +292,7 @@ class TestRecommender(ut.TestCase):
     def test_data_is_passed_on_to_baseline(self):
         file = './bestPy/tests/data/data25semicolon.csv'
         with self.assertLogs(level=logging.WARNING):
-            data = UserItemMatrix.from_csv(file)
+            data = Transactions.from_csv(file)
         baseline = default_baseline().operating_on(data)
         self.recommender.baseline = baseline
         should_be = self.data.item.count
@@ -380,7 +380,7 @@ class TestRecommender(ut.TestCase):
     def test_data_is_passed_on_to_algorithm(self):
         file = './bestPy/tests/data/data25semicolon.csv'
         with self.assertLogs(level=logging.WARNING):
-            data = UserItemMatrix.from_csv(file)
+            data = Transactions.from_csv(file)
         algorithm = default_algorithm().operating_on(data)
         recommender = self.recommender.using(algorithm)
         should_be = self.data.item.count

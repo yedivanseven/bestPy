@@ -4,7 +4,7 @@ import logging as log
 from numpy import argpartition
 from .algorithms import default_algorithm
 from .algorithms import default_baseline
-from .datastructures import UserItemMatrix
+from .datastructures import Transactions
 
 RETURNING = True
 
@@ -72,10 +72,10 @@ class RecommendationBasedOn():
         return item_scores
 
     def __type_checked(self, data):
-        if not isinstance(data, UserItemMatrix):
+        if not isinstance(data, Transactions):
             log.error('Attempt to instantiate with incompatible data type.'
-                      ' Must be <UserItemMatrix>.')
-            raise TypeError('Data must be of type <UserItemMatrix>!')
+                      ' Must be <Transactions>.')
+            raise TypeError('Data must be of type <Transactions>!')
         return data
 
     def __check_base_attributes_of(self, algorithm):

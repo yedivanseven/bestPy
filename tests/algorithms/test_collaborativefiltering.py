@@ -4,14 +4,14 @@
 import logging
 import unittest as ut
 from ...algorithms import CollaborativeFiltering, Baseline, default_baseline
-from ...datastructures import UserItemMatrix
+from ...datastructures import Transactions
 from ...algorithms.similarities import default_similarity, sokalsneath
 
 class TestCollaborativeFiltering(ut.TestCase):
 
     def setUp(self):
         file = './bestPy/tests/data/data50.csv'
-        self.data = UserItemMatrix.from_csv(file)
+        self.data = Transactions.from_csv(file)
         self.algorithm = CollaborativeFiltering()
 
     def test_has_attribute_binarize(self):
@@ -62,8 +62,8 @@ class TestCollaborativeFiltering(ut.TestCase):
 
     def test_data_type(self):
         log_msg = ['ERROR:root:Attempt to set incompatible data type.'
-                  ' Must be <UserItemMatrix>.']
-        err_msg = 'Data must be of type <UserItemMatrix>!'
+                  ' Must be <Transactions>.']
+        err_msg = 'Data must be of type <Transactions>!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg):
                 _ = self.algorithm.operating_on('foz')
@@ -310,7 +310,7 @@ class TestCollaborativeFiltering(ut.TestCase):
     def test_logs_uncomparable_user_and_returns_default_baseline(self):
         target = 6
         file = './bestPy/tests/data/data50.csv'
-        data = UserItemMatrix.from_csv(file)
+        data = Transactions.from_csv(file)
         log_msg = ['INFO:root:Uncomparable user with ID 13. Returning baseline'
                    ' recommendation.']
         self.algorithm = self.algorithm.operating_on(data)
@@ -323,7 +323,7 @@ class TestCollaborativeFiltering(ut.TestCase):
     def test_logs_uncomparable_user_and_returns_explicit_baseline(self):
         target = 6
         file = './bestPy/tests/data/data50.csv'
-        data = UserItemMatrix.from_csv(file)
+        data = Transactions.from_csv(file)
         log_msg = ['INFO:root:Uncomparable user with ID 13. Returning baseline'
                    ' recommendation.']
         self.algorithm = self.algorithm.operating_on(data)
@@ -339,7 +339,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         should_be = Baseline().operating_on(self.data).for_one().tolist()
         file = './bestPy/tests/data/data25semicolon.csv'
         with self.assertLogs(level=logging.WARNING):
-            data = UserItemMatrix.from_csv(file)
+            data = Transactions.from_csv(file)
         baseline = Baseline().operating_on(data)
         self.algorithm.baseline = baseline
         self.algorithm = self.algorithm.operating_on(self.data)
@@ -352,7 +352,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         should_be = Baseline().operating_on(self.data).for_one().tolist()
         file = './bestPy/tests/data/data25semicolon.csv'
         with self.assertLogs(level=logging.WARNING):
-            data = UserItemMatrix.from_csv(file)
+            data = Transactions.from_csv(file)
         baseline = Baseline().operating_on(data)
         self.algorithm = self.algorithm.operating_on(self.data)
         self.algorithm.baseline = baseline

@@ -4,16 +4,16 @@
 import unittest as ut
 import logging
 import scipy
-from ...datastructures import UserItemMatrix
+from ...datastructures import Transactions
 from ...datastructures.help import IndexFrom, MatrixFrom
 
 
-class TestUserItemMatrix(ut.TestCase):
+class TestTransactions(ut.TestCase):
 
     def setUp(self):
         file = './bestPy/tests/data/data25comma.csv'
         with self.assertLogs(level=logging.WARNING):
-             self.data = UserItemMatrix.from_csv(file, ',')
+             self.data = Transactions.from_csv(file, ',')
 
     def test_has_attribute_number_of_transactions(self):
         self.assertTrue(hasattr(self.data, 'number_of_transactions'))

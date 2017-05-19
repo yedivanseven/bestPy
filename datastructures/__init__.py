@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .useritemmatrix import UserItemMatrix
+from .transactions import Transactions
 from .traintest import TrainTest
 from .postgreSQLparams import PostgreSQLparams

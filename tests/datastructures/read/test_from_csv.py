@@ -62,25 +62,25 @@ class BaseTests():
         self.assertDictEqual(counts_should_be, counts)
 
 
-class TestUserItemMatrixFromCsvSemicolonFile(ut.TestCase, BaseTests):
+class TestTransactionsFromCsvSemicolonFile(ut.TestCase, BaseTests):
     def setUp(self):
         self.file = './bestPy/tests/data/data25semicolon.csv'
         self.separator = ';'
 
 
-class TestUserItemMatrixFromCsvCommaFile(ut.TestCase, BaseTests):
+class TestTransactionsFromCsvCommaFile(ut.TestCase, BaseTests):
     def setUp(self):
         self.file = './bestPy/tests/data/data25comma.csv'
         self.separator = ','
 
 
-class TestUserItemMatrixFromCsvSemicolonStream(ut.TestCase, BaseTests):
+class TestTransactionsFromCsvSemicolonStream(ut.TestCase, BaseTests):
     def setUp(self):
         self.file = open('./bestPy/tests/data/data25semicolon.csv')
         self.separator = ';'
 
 
-class TestUserItemMatrixFromCsvCommaStream(ut.TestCase, BaseTests):
+class TestTransactionsFromCsvCommaStream(ut.TestCase, BaseTests):
     def setUp(self):
         self.file = open('./bestPy/tests/data/data25comma.csv')
         self.separator = ','

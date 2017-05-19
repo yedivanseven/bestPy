@@ -4,7 +4,7 @@ import logging as log
 from operator import itemgetter
 from .help import TestDataFrom, FileFrom
 from .traintestbase import TrainTestBase
-from .useritemmatrix import UserItemMatrix
+from .transactions import Transactions
 
 
 class TrainTest(TrainTestBase):
@@ -35,7 +35,7 @@ class TrainTest(TrainTestBase):
                      and (item, timestamp) not in last_unique_items_of[user])
         self.__test = TestDataFrom(test, hold_out, only_new)
         TrainTest.test = property(lambda self: self.__test)
-        self.__train = UserItemMatrix.from_csv(FileFrom(train))
+        self.__train = Transactions.from_csv(FileFrom(train))
         TrainTest.train = property(lambda self: self.__train)
 
     def __check_boolean_type_of(self, only_new):

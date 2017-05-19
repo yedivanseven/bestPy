@@ -5,7 +5,7 @@ from . import read
 from .help import IndexFrom, MatrixFrom
 
 
-class UserItemMatrix():
+class Transactions():
     def __init__(self, n_rec, n_err, user_i, item_j, counts):
         self.__number_of_transactions = n_rec
         self.__number_of_corrupted_records = n_err
