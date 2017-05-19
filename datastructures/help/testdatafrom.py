@@ -53,8 +53,8 @@ class TestDataFrom():
         if not isinstance(hold_out, int):
             log.error('Attempt to set non-integer type as "hold_out".')
             raise TypeError('"hold_out" must be of type <int>!')
-        should_be = len(next(iter(self.__data.values())))
-        if hold_out != should_be:
+        what_it_should_be = len(next(iter(self.__data.values())))
+        if hold_out != what_it_should_be:
             log.error('Attempt to set argument "hold_out" to value other than'
                       ' the number of held-out items.')
             raise ValueError('"hold_out" differs from no. of held-out items!')

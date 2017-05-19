@@ -23,21 +23,36 @@ class BaseTests():
             _ = from_csv(self.file, self.separator)
             self.assertListEqual(log.output, log_msg)
 
-    def test_total_number_of_records(self):
+    def test_integer_type_of_number_of_records(self):
+        with self.assertLogs(level=logging.WARNING):
+            n_rec, _, _, _, _ = from_csv(self.file, self.separator)
+        self.assertIsInstance(n_rec, int)
+
+    def test_correct_value_of_number_of_records(self):
         with self.assertLogs(level=logging.WARNING):
             n_rec, _, _, _, _ = from_csv(self.file, self.separator)
         self.assertEqual(n_rec, 21)
 
-    def test_number_of_corrupted_records(self):
+    def test_integer_type_of_number_of_corrupted_records(self):
+        with self.assertLogs(level=logging.WARNING):
+            _, n_err, _, _, _ = from_csv(self.file, self.separator)
+        self.assertIsInstance(n_err, int)
+
+    def test_correct_value_of_number_of_corrupted_records(self):
         with self.assertLogs(level=logging.WARNING):
             _, n_err, _, _, _ = from_csv(self.file, self.separator)
         self.assertEqual(n_err, 5)
 
-    def test_user_index_dict(self):
-        user_i_should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
+    def test_dict_type_of_user_index(self):
         with self.assertLogs(level=logging.WARNING):
             _, _, user_i, _, _ = from_csv(self.file, self.separator)
-        self.assertDictEqual(user_i_should_be, user_i)
+        self.assertIsInstance(user_i, dict)
+
+    def test_correct_value_of_user_index_dict(self):
+        should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
+        with self.assertLogs(level=logging.WARNING):
+            _, _, user_i, _, _ = from_csv(self.file, self.separator)
+        self.assertDictEqual(should_be, user_i)
 
     def test_item_index_dict(self):
         item_j_should_be = {'AC016EL50CPHALID-1749': 0,
