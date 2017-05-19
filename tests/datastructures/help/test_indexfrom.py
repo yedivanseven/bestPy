@@ -3,10 +3,26 @@
 
 import unittest as ut
 import logging
-from ....datastructures.help import Index
+from ....datastructures.help import IndexFrom
 
 
-class TestIndex(ut.TestCase):
+class TestInstatiateIndex(ut.TestCase):
+
+    def test_error_on_wrong_argument_type(self):
+        log_msg = ['ERROR:root:Attempt to instantiate index object with'
+                   ' non-dictionary argument.']
+        err_msg = 'Argument of index object must be of type <dict>!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(TypeError, msg=err_msg):
+                _ = IndexFrom('foo')
+
+    def test_warning_on_empty_dictionary_as_argument(self):
+        log_msg = ['WARNING:root:Index instantiated with empty dictionary.']
+        with self.assertLogs(level=logging.WARNING) as log:
+            _ = IndexFrom({})
+
+
+class TestIndexFrom(ut.TestCase):
 
     def setUp(self):
         self.dictionary = {'AC016EL50CPHALID-1749': 0,
@@ -21,7 +37,7 @@ class TestIndex(ut.TestCase):
                            3: 'OL756EL65HDYALID-4834',
                            4: 'OL756EL55HAMALID-4744',
                            5: 'AC016EL56BKHALID-943'}
-        self.index = Index(self.dictionary)
+        self.index = IndexFrom(self.dictionary)
 
     def test_has_attribute_index_of(self):
         self.assertTrue(hasattr(self.index, 'index_of'))

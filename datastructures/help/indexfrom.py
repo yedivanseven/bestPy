@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import logging as log
 
-class Index():
+
+class IndexFrom():
     def __init__(self, index_of):
-        self.__index_of = index_of
+        self.__index_of = self.__dict_type_and_empty_checked(index_of)
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
@@ -26,3 +28,12 @@ class Index():
 
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
+
+    def __dict_type_and_empty_checked(self, index_of):
+        if not isinstance(index_of, dict):
+            log.error('Attempt to instantiate index object with'
+                      ' non-dictionary argument.')
+            raise TypeError('Argument of index object must be of type <dict>!')
+        if len(index_of) == 0:
+            log.warning('Index instantiated with empty dictionary.')
+        return index_of

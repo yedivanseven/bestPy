@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .index import Index
-from .matrix import Matrix
+from .indexfrom import IndexFrom
+from .matrixfrom import MatrixFrom
 from .testdatafrom import TestDataFrom
 from .filefrom import FileFrom

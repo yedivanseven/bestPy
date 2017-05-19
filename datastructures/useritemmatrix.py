@@ -2,7 +2,7 @@
 
 from numpy import unique
 from . import read
-from .help import Index, Matrix
+from .help import IndexFrom, MatrixFrom
 
 
 class UserItemMatrix():
@@ -10,9 +10,9 @@ class UserItemMatrix():
         self.__number_of_transactions = n_rec
         self.__number_of_corrupted_records = n_err
         self.__number_of_userItem_pairs = len(counts)
-        self.__user = Index(user_i)
-        self.__item = Index(item_j)
-        self.__matrix = Matrix(counts)
+        self.__user = IndexFrom(user_i)
+        self.__item = IndexFrom(item_j)
+        self.__matrix = MatrixFrom(counts)
 
     @classmethod
     def from_csv(cls, file, separator=';'):

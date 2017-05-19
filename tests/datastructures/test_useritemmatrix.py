@@ -5,7 +5,7 @@ import unittest as ut
 import logging
 import scipy
 from ...datastructures import UserItemMatrix
-from ...datastructures.help import Index, Matrix
+from ...datastructures.help import IndexFrom, MatrixFrom
 
 
 class TestUserItemMatrix(ut.TestCase):
@@ -65,7 +65,7 @@ class TestUserItemMatrix(ut.TestCase):
             self.data.user = 45.6
 
     def test_type_of_attribute_user(self):
-        self.assertIsInstance(self.data.user, Index)
+        self.assertIsInstance(self.data.user, IndexFrom)
 
     def test_correct_value_of_user(self):
         should_be = {'4': 0, '11': 1, '10': 2, '7': 3}
@@ -79,7 +79,7 @@ class TestUserItemMatrix(ut.TestCase):
             self.data.item = 'baz'
 
     def test_type_of_attribute_item(self):
-        self.assertIsInstance(self.data.item, Index)
+        self.assertIsInstance(self.data.item, IndexFrom)
 
     def test_correct_value_of_item(self):
         should_be = {'AC016EL50CPHALID-1749': 0,
@@ -98,7 +98,7 @@ class TestUserItemMatrix(ut.TestCase):
             self.data.item = 7.89
 
     def test_type_of_attribute_matrix(self):
-        self.assertIsInstance(self.data.matrix, Matrix)
+        self.assertIsInstance(self.data.matrix, MatrixFrom)
 
     def test_correct_value_of_matrix(self):
         should_be = [[1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
