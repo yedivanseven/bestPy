@@ -26,17 +26,19 @@ class TestTrainTest(ut.TestCase):
         log_msg = ['ERROR:root:Attempt to set "only_new" to non-boolean type.']
         err_msg = 'Flag "only_new" can only be True or False!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.data.split(2, only_new='foo')
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_split_hold_out_not_integer(self):
         log_msg = ['ERROR:root:Attempt to set "hold_out" to non-integer type.']
         err_msg = 'Parameter "hold_out" must be an integer!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.data.split('bar')
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_split_hold_smaller_than_one(self):
         log_msg = ['WARNING:root:Attempt to set hold_out < 1. Resetting to 1.']
@@ -143,11 +145,6 @@ class TestTrainTest(ut.TestCase):
         self.data.split(1)
         self.assertEqual(self.data.train.item.count, 3)
 
-    # def test_train_count_buys_of_only_new(self):
-    #     should_be = {(0, 0): 1, (1, 1): 1, (2, 2): 10}
-    #     self.data.split(1)
-    #     self.assertDictEqual(self.data.train._count_buys_of, should_be)
-
     def test_train_number_of_transactions_also_old(self):
         self.data.split(1, only_new=False)
         self.assertEqual(self.data.train.number_of_transactions, 19)
@@ -185,11 +182,6 @@ class TestTrainTest(ut.TestCase):
     def test_train_number_of_items_also_old(self):
         self.data.split(1, only_new=False)
         self.assertEqual(self.data.train.item.count, 4)
-
-    # def test_train_count_buys_of_also_old(self):
-    #     should_be = {(0, 0): 1, (1, 1): 1, (2, 2): 10, (2, 3): 7}
-    #     self.data.split(1, only_new=False)
-    #     self.assertDictEqual(self.data.train._count_buys_of, should_be)
 
 
 if __name__ == '__main__':

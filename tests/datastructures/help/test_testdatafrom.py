@@ -13,54 +13,60 @@ class TestInstantiationOfTestDataFrom(ut.TestCase):
                    ' test data.']
         err_msg = 'Test data must be of type <dict>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = TestDataFrom(1, 2, True)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_wrong_value_type_in_data(self):
         log_msg = ['ERROR:root:Attempt to initialize test-data object from'
                   ' dictionary with values not of type <set>.']
         err_msg = 'Test data values must be of type <set>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = TestDataFrom({1: 'baz'}, 1, True)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_empty_value_set_in_data(self):
         log_msg = ['ERROR:root:Attempt to initialize test-data object from'
                   ' dictionary with empty set as values.']
         err_msg = 'Test data values must not be empty sets!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = TestDataFrom({1: set({})}, 1, True)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_wrong_hold_out_type(self):
         log_msg = ['ERROR:root:Attempt to set non-integer type as'
                    ' "hold_out".']
         err_msg = '"hold_out" must be of type <int>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = TestDataFrom({1: {'foo'}}, 'bar', False)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_wrong_hold_out_value(self):
         log_msg = ['ERROR:root:Attempt to set argument "hold_out" to value'
                    ' other than the number of held-out items.']
         err_msg = '"hold_out" differs from no. of held-out items!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = TestDataFrom({1: {'foo'}}, 2, False)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_wrong_only_new_type(self):
         log_msg = ['ERROR:root:Attempt to set non-boolean type as'
                    ' "only_new".']
         err_msg = '"only_new" must be of type <bool>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = TestDataFrom({1: {'foo'}}, 1, 'baz')
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
 
 class TestTestDataFrom(ut.TestCase):

@@ -189,27 +189,30 @@ class TestPostGreSqlParams(ut.TestCase):
                    ' positive integer!']
         err_msg = 'Limit must be "all" or a positive integer!'
         with self.assertLogs(level=logging.WARNING) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 self.database.limit = -100
         self.assertListEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_limit_float(self):
         log_msg = ['ERROR:root:Limit must be the string "all" or a'
                    ' positive integer!']
         err_msg = 'Limit must be "all" or a positive integer!'
         with self.assertLogs(level=logging.WARNING) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 self.database.limit = 12.3
         self.assertListEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_limit_not_all(self):
         log_msg = ['ERROR:root:Limit must be the string "all" or a'
                    ' positive integer!']
         err_msg = 'Limit must be "all" or a positive integer!'
         with self.assertLogs(level=logging.WARNING) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 self.database.limit = 'foo'
         self.assertListEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_requested_int(self):
         self.database.limit = 123

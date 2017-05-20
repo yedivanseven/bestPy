@@ -21,9 +21,10 @@ class TestCollaborativeFiltering(ut.TestCase):
         log_msg = ['ERROR:root:Attempt to set "binarize" to non-boolean type.']
         err_msg = 'Attribute "binarize" must be True or False!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.algorithm.binarize = 'foo'
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_binarize_true(self):
         self.algorithm.binarize = True
@@ -65,9 +66,10 @@ class TestCollaborativeFiltering(ut.TestCase):
                   ' Must be <Transactions>.']
         err_msg = 'Data must be of type <Transactions>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = self.algorithm.operating_on('foz')
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_no_attribute_for_one_after_wrong_data_type(self):
         with self.assertLogs(level=logging.ERROR):
@@ -104,9 +106,10 @@ class TestCollaborativeFiltering(ut.TestCase):
                    ' mandatory "operating_on()" method.']
         err_msg = 'Baseline lacks "operating_on()" method!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 self.algorithm.baseline = MockUp()
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_baseline_operating_on_method_not_callable(self):
         class MockUp():
@@ -117,9 +120,10 @@ class TestCollaborativeFiltering(ut.TestCase):
                    ' object is not callable.']
         err_msg = 'Operating_on() method of baseline not callable!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.algorithm.baseline = baseline
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_baseline_has_no_has_data_attrribute(self):
         class MockUp():
@@ -130,9 +134,10 @@ class TestCollaborativeFiltering(ut.TestCase):
                    ' mandatory "has_data" attribute.']
         err_msg = 'Baseline lacks "has_data" attribute!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 self.algorithm.baseline = baseline
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_data_not_attached_to_baseline(self):
         class MockUp():
@@ -146,9 +151,10 @@ class TestCollaborativeFiltering(ut.TestCase):
                    " False after attaching data."]
         err_msg = 'Cannot attach data to baseline object!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 self.algorithm = self.algorithm.operating_on(self.data)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_baseline_has_no_for_one_method(self):
         class MockUp():
@@ -162,9 +168,10 @@ class TestCollaborativeFiltering(ut.TestCase):
                    ' mandatory "for_one()" method.']
         err_msg = 'Baseline lacks "for_one()" method!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 self.algorithm = self.algorithm.operating_on(self.data)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_baseline_for_one_method_is_not_callable(self):
         class MockUp():
@@ -180,9 +187,10 @@ class TestCollaborativeFiltering(ut.TestCase):
                    ' is not callable.']
         err_msg = '"for_one()" method of baseline not callable!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.algorithm = self.algorithm.operating_on(self.data)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_has_default_similarity(self):
         should_be = default_similarity.__name__
@@ -199,9 +207,10 @@ class TestCollaborativeFiltering(ut.TestCase):
         err_msg = ('Unrecognized similarity! See "all_similarities"' +
                    ' from the similarities module for your choices.')
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.algorithm.similarity = dice
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_binarized_recommendation_does_not_change(self):
         target = 5

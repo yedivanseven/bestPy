@@ -22,9 +22,10 @@ class TestCollaborativeFiltering(ut.TestCase):
         log_msg = ['ERROR:root:Attempt to set "binarize" to non-boolean type.']
         err_msg = 'Attribute "binarize" must be True or False!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.algorithm.binarize = 'foo'
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_binarize_true(self):
         self.algorithm.binarize = True
@@ -49,18 +50,20 @@ class TestCollaborativeFiltering(ut.TestCase):
                    ' non-integer type.']
         err_msg = '"number_of_factors" must be a positive integer!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.algorithm.number_of_factors = 'bar'
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_set_number_of_factors_to_negative_value(self):
         log_msg = ['ERROR:root:Attempt to set number_of_factors to'
                    ' value < 1.']
         err_msg = '"number_of_factors" must be a positive integer!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 self.algorithm.number_of_factors = -3
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_has_attribute_operating_on(self):
         self.assertTrue(hasattr(self.algorithm, 'operating_on'))
@@ -129,9 +132,10 @@ class TestCollaborativeFiltering(ut.TestCase):
                   ' Must be <Transactions>.']
         err_msg = 'Data must be of type <Transactions>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = self.algorithm.operating_on('foz')
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_no_attribute_for_one_after_wrong_data_type(self):
         with self.assertLogs(level=logging.ERROR):

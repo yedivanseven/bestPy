@@ -16,9 +16,10 @@ class TestRecommenderInitialization(ut.TestCase):
                   ' type. Must be <Transactions>.']
         err_msg = 'Data must be of type <Transactions>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = RecommendationBasedOn(data)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
 
 class TestRecommender(ut.TestCase):
@@ -41,9 +42,10 @@ class TestRecommender(ut.TestCase):
                    ' "operating_on()" method.']
         err_msg = 'Object lacks "operating_on()" method!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 _ = self.recommender.using(algorithm)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_algorithm_with_operating_method_not_callable(self):
         class MockUp():
@@ -54,9 +56,10 @@ class TestRecommender(ut.TestCase):
                    ' is not callable.']
         err_msg = '"operating_on()" method of object not callable!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = self.recommender.using(algorithm)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_algorithm_without_has_data_attribute(self):
         class MockUp():
@@ -67,9 +70,10 @@ class TestRecommender(ut.TestCase):
                    ' "has_data" attribute.']
         err_msg = 'Object lacks "has_data" attribute!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 _ = self.recommender.using(algorithm)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_data_not_attachable_to_algorithm(self):
         class MockUp():
@@ -83,9 +87,10 @@ class TestRecommender(ut.TestCase):
                    " after attaching data."]
         err_msg = 'Cannot attach data to object!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = self.recommender.using(algorithm)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_algorithm_has_no_for_one_method(self):
         class MockUp():
@@ -99,9 +104,10 @@ class TestRecommender(ut.TestCase):
                    ' "for_one()" method.']
         err_msg = 'Object lacks "for_one()" method!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 _ = self.recommender.using(algorithm)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_algorithm_for_one_method_is_not_callable(self):
         class MockUp():
@@ -116,9 +122,10 @@ class TestRecommender(ut.TestCase):
                    ' is not callable.']
         err_msg = '"for_one()" method of object not callable!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = self.recommender.using(algorithm)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_has_attribute_algorithm(self):
         self.assertTrue(hasattr(self.recommender, 'algorithm'))
@@ -203,9 +210,10 @@ class TestRecommender(ut.TestCase):
                    ' "operating_on()" method.']
         err_msg = 'Object lacks "operating_on()" method!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 self.recommender.baseline = baseline
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_baseline_with_operating_method_not_callable(self):
         class MockUp():
@@ -216,9 +224,10 @@ class TestRecommender(ut.TestCase):
                    ' is not callable.']
         err_msg = '"operating_on()" method of object not callable!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.recommender.baseline = baseline
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_baseline_without_has_data_attribute(self):
         class MockUp():
@@ -229,9 +238,10 @@ class TestRecommender(ut.TestCase):
                    ' "has_data" attribute.']
         err_msg = 'Object lacks "has_data" attribute!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 self.recommender.baseline = baseline
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_data_not_attachable_to_baseline(self):
         class MockUp():
@@ -245,9 +255,10 @@ class TestRecommender(ut.TestCase):
                    " after attaching data."]
         err_msg = 'Cannot attach data to object!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 self.recommender.baseline = baseline
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_baseline_has_no_for_one_method(self):
         class MockUp():
@@ -261,9 +272,10 @@ class TestRecommender(ut.TestCase):
                    ' "for_one()" method.']
         err_msg = 'Object lacks "for_one()" method!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(AttributeError, msg=err_msg):
+            with self.assertRaises(AttributeError, msg=err_msg) as err:
                 self.recommender.baseline = baseline
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_baseline_for_one_method_is_not_callable(self):
         class MockUp():
@@ -278,9 +290,10 @@ class TestRecommender(ut.TestCase):
                    ' is not callable.']
         err_msg = '"for_one()" method of object not callable!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 self.recommender.baseline = baseline
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_setting_legitimate_baseline_works(self):
         baseline = TruncatedSVD()
@@ -325,9 +338,10 @@ class TestRecommender(ut.TestCase):
         err_msg = ('Requested number of recommendations must be' +
                    ' a positive integer!')
         with self.assertLogs(level = logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = self.recommender.for_one(target, 0)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_wrong_recommendation_number_type(self):
         target = '4'
@@ -336,9 +350,10 @@ class TestRecommender(ut.TestCase):
         err_msg = ('Requested number of recommendations must be' +
                    ' a positive integer!')
         with self.assertLogs(level = logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = self.recommender.for_one(target, 23.5)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_logs_warning_on_unknown_user(self):
         target = 'john doe'

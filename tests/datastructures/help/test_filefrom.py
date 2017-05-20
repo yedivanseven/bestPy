@@ -28,22 +28,24 @@ class TestFileFrom(ut.TestCase):
                    ' string. Was it created from a string iterator?']
         err_msg = 'Line read from file-like object is not a string!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 with self.int_stream as file:
                     for line in file:
                         _ = line
         self.assertListEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_readline_like_file_fails(self):
         log_msg = ['ERROR:root:Failed to read line from file-like object.'
                    ' Was it created from an iterator?']
         err_msg = 'Object was not created from an iterator!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 with self.no_stream as file:
                     for line in file:
                         _ = line
         self.assertListEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
 
 if __name__ == '__main__':

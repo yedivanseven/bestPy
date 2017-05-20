@@ -13,13 +13,16 @@ class TestInstatiateIndex(ut.TestCase):
                    ' non-dictionary argument.']
         err_msg = 'Argument of index object must be of type <dict>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = IndexFrom('foo')
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_warning_on_empty_dictionary_as_argument(self):
         log_msg = ['WARNING:root:Index instantiated with empty dictionary.']
         with self.assertLogs(level=logging.WARNING) as log:
             _ = IndexFrom({})
+        self.assertEqual(log.output, log_msg)
 
 
 class TestIndexFrom(ut.TestCase):

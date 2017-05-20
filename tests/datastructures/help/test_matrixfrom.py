@@ -14,85 +14,106 @@ class TestInstatiateMatrix(ut.TestCase):
                    ' non-dictionary argument.']
         err_msg = 'Argument of matrix object must be of type <dict>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = MatrixFrom('foo')
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_warning_on_empty_dictionary_as_argument(self):
         log_msg = ['WARNING:root:Matrix instantiated with empty dictionary.']
         with self.assertLogs(level=logging.WARNING) as log:
             _ = MatrixFrom({})
+        self.assertEqual(log.output, log_msg)
 
     def test_error_on_key_not_of_type_tuple(self):
-        log_msg = ['Attempt to instantiate matrix object from dictionary'
-                   ' with keys not 2-tuple of integer >= 0.']
+        log_msg = ['ERROR:root:Attempt to instantiate matrix object from'
+                   ' dictionary with keys not 2-tuple of integer >= 0.']
         err_msg = 'Keys of dictionary must be 2-tuple of integer >= 0!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = MatrixFrom({'foo': 1})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_key_tuple_too_long(self):
-        log_msg = ['Attempt to instantiate matrix object from dictionary'
-                   ' with keys not 2-tuple of integer >= 0.']
+        log_msg = ['ERROR:root:Attempt to instantiate matrix object from'
+                   ' dictionary with keys not 2-tuple of integer >= 0.']
         err_msg = 'Keys of dictionary must be 2-tuple of integer >= 0!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = MatrixFrom({(1, 2, 3): 1})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_key_tuple_too_short(self):
-        log_msg = ['Attempt to instantiate matrix object from dictionary'
-                   ' with keys not 2-tuple of integer >= 0.']
+        log_msg = ['ERROR:root:Attempt to instantiate matrix object from'
+                   ' dictionary with keys not 2-tuple of integer >= 0.']
         err_msg = 'Keys of dictionary must be 2-tuple of integer >= 0!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = MatrixFrom({(1,): 1})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_first_element_in_key_not_integer(self):
-        log_msg = ['Attempt to instantiate matrix object from dictionary'
-                   ' with keys not 2-tuple of integer >= 0.']
+        log_msg = ['ERROR:root:Attempt to instantiate matrix object from'
+                   ' dictionary with keys not 2-tuple of integer >= 0.']
         err_msg = 'Keys of dictionary must be 2-tuple of integer >= 0!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = MatrixFrom({(1.0, 1): 1})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_second_element_in_key_not_integer(self):
-        log_msg = ['Attempt to instantiate matrix object from dictionary'
-                   ' with keys not 2-tuple of integer >= 0.']
+        log_msg = ['ERROR:root:Attempt to instantiate matrix object from'
+                   ' dictionary with keys not 2-tuple of integer >= 0.']
         err_msg = 'Keys of dictionary must be 2-tuple of integer >= 0!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = MatrixFrom({(1, 'bar'): 1})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_first_element_in_key_negative(self):
-        log_msg = ['Attempt to instantiate matrix object from dictionary'
-                   ' with keys not 2-tuple of integer >= 0.']
+        log_msg = ['ERROR:root:Attempt to instantiate matrix object from'
+                   ' dictionary with keys not 2-tuple of integer >= 0.']
         err_msg = 'Keys of dictionary must be 2-tuple of integer >= 0!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = MatrixFrom({(-1, 0): 2})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_second_element_in_key_negative(self):
-        log_msg = ['Attempt to instantiate matrix object from dictionary'
-                   ' with keys not 2-tuple of integer >= 0.']
+        log_msg = ['ERROR:root:Attempt to instantiate matrix object from'
+                   ' dictionary with keys not 2-tuple of integer >= 0.']
         err_msg = 'Keys of dictionary must be 2-tuple of integer >= 0!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = MatrixFrom({(1, -3): 4})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_wrong_type_of_value(self):
-        log_msg = ['Attempt to create matrix object from dictionary'
+        log_msg = ['ERROR:root:Attempt to create matrix object from dictionary'
                    'with values not positive integers.']
         err_msg = 'Values of dictionary must be positive integers!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = MatrixFrom({(1, 1): 'baz'})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_error_on_non_positive_value(self):
-        log_msg = ['Attempt to create matrix object from dictionary'
+        log_msg = ['ERROR:root:Attempt to create matrix object from dictionary'
                    'with values not positive integers.']
         err_msg = 'Values of dictionary must be positive integers!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(ValueError, msg=err_msg):
+            with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = MatrixFrom({(1, 1): 0})
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
 class TestMatrixFrom(ut.TestCase):
 

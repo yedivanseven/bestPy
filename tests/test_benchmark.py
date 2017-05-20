@@ -16,9 +16,10 @@ class TestBenchmarkInitialization(ut.TestCase):
                    ' recommender. Must be of type <RecommendationBasedOn>.']
         err_msg = 'Recommender must be of type <RecommendationBasedOn>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = Benchmark(recommender)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
 
 class TestBenchmark(ut.TestCase):
@@ -45,9 +46,10 @@ class TestBenchmark(ut.TestCase):
                    ' Must be <TestDataFrom>.']
         err_msg = 'Test data must be of type <TestDataFrom>!'
         with self.assertLogs(level=logging.ERROR) as log:
-            with self.assertRaises(TypeError, msg=err_msg):
+            with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = self.benchmark.against(data)
         self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_has_atrribute_score_with_test_data(self):
         benchmark = self.benchmark.against(self.data.test)
