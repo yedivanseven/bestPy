@@ -23,15 +23,30 @@ class BaseTests():
             _ = from_csv(self.file, self.separator, self.fmt)
             self.assertListEqual(log.output, log_msg)
 
-    def test_total_number_of_records(self):
+    def test_integer_type_number_of_records(self):
+        with self.assertLogs(level=logging.WARNING):
+            n_rec, _, _, _ = from_csv(self.file, self.separator, self.fmt)
+        self.assertIsInstance(n_rec, int)
+
+    def test_correct_value_of_number_of_records(self):
         with self.assertLogs(level=logging.WARNING):
             n_rec, _, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_rec, 21)
 
-    def test_number_of_corrupted_records(self):
+    def test_integer_type_of_number_of_corrupted_records(self):
+        with self.assertLogs(level=logging.WARNING):
+            _, n_err, _, _ = from_csv(self.file, self.separator, self.fmt)
+        self.assertIsInstance(n_err, int)
+
+    def test_correct_value_of_number_of_corrupted_records(self):
         with self.assertLogs(level=logging.WARNING):
             _, n_err, _, _ = from_csv(self.file, self.separator, self.fmt)
         self.assertEqual(n_err, 5)
+
+    def test_dict_type_last_unique_items(self):
+        with self.assertLogs(level=logging.WARNING):
+            _, _, unique, _ = from_csv(self.file, self.separator, self.fmt)
+        self.assertIsInstance(unique, dict)
 
     def test_last_unique_user_list(self):
         should_be = ['4', '11', '10', '7']
@@ -59,6 +74,11 @@ class BaseTests():
         actually_is = {user: list(item.values())
                        for user, item in unique.items()}
         self.assertDictEqual(actually_is, should_be)
+
+    def test_list_type_transactions(self):
+        with self.assertLogs(level=logging.WARNING):
+            _, _, _, transacts = from_csv(self.file, self.separator, self.fmt)
+        self.assertIsInstance(transacts, list)
 
     def test_transaction_list(self):
         should_be = [('2012-03-06T23:26:35', '4', 'AC016EL50CPHALID-1749'),
@@ -99,6 +119,7 @@ class TestTrainTestFromCsvCommaFile(ut.TestCase, BaseTests):
         self.file = './bestPy/tests/data/data25comma.csv'
         self.separator = ','
         self.fmt = None
+
 
 class TestTrainTestFromCsvFileSeparator(ut.TestCase):
 

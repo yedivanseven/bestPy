@@ -8,7 +8,7 @@ class TrainTestBase():
     def __init__(self, n_rec, n_err, last_unique, transactions):
         self.__number_of_transactions = self.__int_type_value_checked(n_rec)
         self.__number_of_corrupted_records = self.__type_range_checked(n_err)
-        self.__unique = last_unique
+        self.__unique = self.__dict_type_and_structure_checked(last_unique)
         self.__transactions = transactions
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
@@ -60,3 +60,20 @@ class TrainTestBase():
             log.error(log_msg)
             raise ValueError(err_msg)
         return n_err
+
+    def __dict_type_and_structure_checked(self, unique):
+        if not isinstance(unique, dict):
+            log.error('Attempt to instantiate data object with last unique'
+                      ' buys not of required type <dict>.')
+            raise TypeError('Last unique items bought must be of type <dict>!')
+        if len(unique) < 1:
+            log.error('Attempt to instantiate data object with empty <dict>'
+                      ' of last unique items bought.')
+            raise ValueError('Last unique items dictionary must not be empty!')
+        items = next(iter(unique.values()))
+        if not isinstance(items, dict):
+            log.error('Attempt to instantiate data object with values in last'
+                      ' unique item dictionary not of type <dict>.')
+            raise TypeError('Last unique item values must be of type <dict>!')
+
+        return unique
