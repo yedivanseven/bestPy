@@ -49,12 +49,14 @@ class TestTrainTest(ut.TestCase):
     def test_split_hold_out_greater_than_maximum(self):
         log_msg = ['WARNING:root:Hold_out > meaningful maximum of 2.'
                    ' Resetting to 2.',
-                   'WARNING:root:Index instantiated with empty dictionary.',
-                   'WARNING:root:Index instantiated with empty dictionary.',
-                   'WARNING:root:Matrix instantiated with empty dictionary.']
+                   'ERROR:root:Attempt to instantiate data object with number'
+                   ' of valid transactions not a positive integer.']
+        err_msg = 'Number of valid transactions not a positive integer!'
         with self.assertLogs(level=logging.WARNING) as log:
-            self.data.split(7)
+            with self.assertRaises(ValueError, msg=err_msg) as err:
+                self.data.split(7)
         self.assertListEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     def test_has_atrribute_train_after_split(self):
         self.data.split(1)
@@ -72,8 +74,9 @@ class TestTrainTest(ut.TestCase):
         should_be = {'12': {'SA848EL83DOYALID-2416', 'BL152EL82CRXALID-1817'},
                      '11': {'LE629EL54ANHALID-345', 'CA189EL29AGOALID-170'},
                      '7' : {'AC016EL56BKHALID-943', 'OL756EL55HAMALID-4744'}}
-        with self.assertLogs(level=logging.WARNING):
-            self.data.split(2, only_new=True)
+        with self.assertLogs(level=logging.ERROR):
+            with self.assertRaises(ValueError):
+                self.data.split(2, only_new=True)
         self.assertDictEqual(self.data.test.data, should_be)
         self.data.split(2, only_new=False)
         self.assertDictEqual(self.data.test.data, should_be)
@@ -88,7 +91,8 @@ class TestTrainTest(ut.TestCase):
 
     def test_test_hold_out(self):
         with self.assertLogs(level=logging.WARNING):
-            self.data.split(2, only_new=True)
+            with self.assertRaises(ValueError):
+                self.data.split(2, only_new=True)
         self.assertEqual(self.data.test.hold_out, 2)
         self.data.split(2, only_new=False)
         self.assertEqual(self.data.test.hold_out, 2)

@@ -8,6 +8,54 @@ from ...datastructures import Transactions
 from ...datastructures.help import IndexFrom, MatrixFrom
 
 
+class TestInstantiateTransactions(ut.TestCase):
+
+    def setUp(self):
+        file = './bestPy/tests/data/data25comma.csv'
+        with self.assertLogs(level=logging.WARNING):
+             self.data = Transactions.from_csv(file, ',')
+
+    def test_error_on_wrong_type_of_number_of_transactions(self):
+        log_msg = ['ERROR:root:Attempt to instantiate data object with number'
+                   ' of valid transactions not a positive integer.']
+        err_msg = 'Number of valid transactions not a positive integer!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(TypeError, msg=err_msg) as err:
+                _ = Transactions(12.3, 0, 1, 1, 1)
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
+
+    def test_error_on_non_positive_number_of_transactions(self):
+        log_msg = ['ERROR:root:Attempt to instantiate data object with number'
+                   ' of valid transactions not a positive integer.']
+        err_msg = 'Number of valid transactions not a positive integer!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(ValueError, msg=err_msg) as err:
+                _ = Transactions(0, 0, 1, 1, 1)
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
+
+    def test_error_on_wrong_type_of_number_of_corrupted_records(self):
+        log_msg = ['ERROR:root:Attempt to instantiate data object with number'
+                   ' of corrupted records not an integer >= 0.']
+        err_msg = 'Number of corrupted records not an integer >= 0!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(TypeError, msg=err_msg) as err:
+                _ = Transactions(2, 'foo', 1, 1, 1)
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
+
+    def test_error_on_non_positive_number_of_corrupted_records(self):
+        log_msg = ['ERROR:root:Attempt to instantiate data object with number'
+                   ' of corrupted records not an integer >= 0.']
+        err_msg = 'Number of corrupted records not an integer >= 0!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(ValueError, msg=err_msg) as err:
+                _ = Transactions(1, -1, 1, 1, 1)
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
+
+
 class TestTransactions(ut.TestCase):
 
     def setUp(self):
