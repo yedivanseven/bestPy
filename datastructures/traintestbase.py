@@ -8,8 +8,8 @@ class TrainTestBase():
     def __init__(self, n_rec, n_err, last_unique, transactions):
         self.__number_of_transactions = self.__int_type_value_checked(n_rec)
         self.__number_of_corrupted_records = self.__type_range_checked(n_err)
-        self.__unique = self.__dict_type_and_structure_checked(last_unique)
-        self.__transactions = transactions
+        self.__unique = self.__dict_type_and_empty_checked(last_unique)
+        self.__transactions = self.__list_type_and_entry_checked(transactions)
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @classmethod
@@ -61,7 +61,7 @@ class TrainTestBase():
             raise ValueError(err_msg)
         return n_err
 
-    def __dict_type_and_structure_checked(self, unique):
+    def __dict_type_and_empty_checked(self, unique):
         if not isinstance(unique, dict):
             log.error('Attempt to instantiate data object with last unique'
                       ' buys not of required type <dict>.')
@@ -75,5 +75,32 @@ class TrainTestBase():
             log.error('Attempt to instantiate data object with values in last'
                       ' unique item dictionary not of type <dict>.')
             raise TypeError('Last unique item values must be of type <dict>!')
-
+        if len(items) < 1:
+            log.error('Attempt to instantiate data object with empty <dict>'
+                      ' as entry of last unique items dictionary.')
+            raise ValueError('Entries of last unique items must not be empty!')
         return unique
+
+    def __list_type_and_entry_checked(self, transactions):
+        if not isinstance(transactions, list):
+            log.error('Attempt to instantiate data object with transactions'
+                      ' not of required type <list>.')
+            raise TypeError('Transactions must be of type <list>!')
+        if len(transactions) < 1:
+            log.error('Attempt to instantiate data object with empty'
+                      ' transaction list.')
+            raise ValueError('Transaction list must not be empty!')
+        log_msg = ('Attempt to instantiate data object with transactions'
+                  ' not 3-tuples of strings.')
+        err_msg = 'Transactions must be 3-tuples of strings!'
+        first = transactions[0]
+        if not isinstance(first, tuple):
+            log.error(log_msg)
+            raise TypeError(err_msg)
+        if len(first) != 3:
+            log.error(log_msg)
+            raise TypeError(err_msg)
+        if not all(isinstance(entry, str) for entry in first):
+            log.error(log_msg)
+            raise TypeError(err_msg)
+        return transactions
