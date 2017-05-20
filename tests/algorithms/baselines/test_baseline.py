@@ -17,7 +17,7 @@ class TestBaseline(ut.TestCase):
     def test_has_attribute_binarize(self):
         self.assertTrue(hasattr(self.baseline, 'binarize'))
 
-    def test_binarize_type(self):
+    def test_error_on_wrong_type_of_binarize(self):
         log_msg = ['ERROR:root:Attempt to set "binarize" to non-boolean type.']
         err_msg = 'Attribute "binarize" must be True or False!'
         with self.assertLogs(level=logging.ERROR) as log:
@@ -26,11 +26,11 @@ class TestBaseline(ut.TestCase):
         self.assertEqual(log.output, log_msg)
         self.assertEqual(err.msg, err_msg)
 
-    def test_binarize_true(self):
+    def test_set_binarize_to_true(self):
         self.baseline.binarize = True
         self.assertTrue(self.baseline.binarize)
 
-    def test_binarize_false(self):
+    def test_set_binarize_to_false(self):
         self.baseline.binarize = False
         self.assertFalse(self.baseline.binarize)
 
@@ -43,10 +43,10 @@ class TestBaseline(ut.TestCase):
     def test_has_attribute_has_data(self):
         self.assertTrue(hasattr(self.baseline, 'has_data'))
 
-    def test_has_data_false(self):
+    def test_attribute_has_data_is_false_without_data(self):
         self.assertFalse(self.baseline.has_data)
 
-    def test_has_data_true(self):
+    def test_attribute_has_data_is_true_with_data(self):
         self.baseline = self.baseline.operating_on(self.data)
         self.assertTrue(self.baseline.has_data)
 
@@ -61,7 +61,7 @@ class TestBaseline(ut.TestCase):
             self.baseline.has_data = 'john'
         self.assertTrue(self.baseline.has_data)
 
-    def test_data_type(self):
+    def test_error_on_setting_wrong_data_type(self):
         log_msg = ['ERROR:root:Attempt to set incompatible data type.'
                   ' Must be <Transactions>.']
         err_msg = 'Data must be of type <Transactions>!'
@@ -71,16 +71,16 @@ class TestBaseline(ut.TestCase):
         self.assertEqual(log.output, log_msg)
         self.assertEqual(err.msg, err_msg)
 
-    def test_no_attribute_for_one_after_wrong_data_type(self):
+    def test_has_no_attribute_for_one_after_setting_wrong_data_type(self):
         with self.assertLogs(level=logging.ERROR):
             with self.assertRaises(TypeError):
                 _ = self.baseline.operating_on('baz')
         self.assertFalse(hasattr(self.baseline, 'for_one'))
 
-    def test_no_attribute_for_one_without_data(self):
+    def test_has_no_attribute_for_one_without_data(self):
         self.assertFalse(hasattr(self.baseline, 'for_one'))
 
-    def test_has_attribute_for_one_with_data(self):
+    def test_has_attribute_for_one_with_correct_data_type(self):
         self.baseline = self.baseline.operating_on(self.data)
         self.assertTrue(hasattr(self.baseline, 'for_one'))
 
@@ -100,7 +100,7 @@ class TestBaseline(ut.TestCase):
         actually_is = self.baseline.for_one().tolist()
         self.assertListEqual(should_be, actually_is)
 
-    def test_recommendation_for_target(self):
+    def test_recommendation_for_explicit_target(self):
         target = 123
         self.baseline = self.baseline.operating_on(self.data)
         with_target = self.baseline.for_one(target).tolist()

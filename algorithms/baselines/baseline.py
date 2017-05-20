@@ -51,6 +51,9 @@ class Baseline():
         if self.__has('number_of_buys'):
             delattr(self, self.__class_prefix + 'number_of_buys')
 
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)
+
     def __check_bool_type_of(self, binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
@@ -62,6 +65,3 @@ class Baseline():
                       ' Must be <Transactions>.')
             raise TypeError('Data must be of type <Transactions>!')
         return data
-
-    def __has(self, attribute):
-        return hasattr(self, self.__class_prefix + attribute)
