@@ -38,6 +38,12 @@ class TrainTest(TrainTestBase):
         self.__train = Transactions.from_csv(FileFrom(train))
         TrainTest.train = property(lambda self: self.__train)
 
+    def __last(self, unique):
+        return sorted(unique.items(), key=itemgetter(1), reverse=True)
+
+    def __items_from(self, last_transactions):
+        return set(tuple(zip(*last_transactions))[0])
+
     def __check_boolean_type_of(self, only_new):
         if not isinstance(only_new, bool):
             log.error('Attempt to set "only_new" to non-boolean type.')
@@ -55,9 +61,3 @@ class TrainTest(TrainTestBase):
                         ' Resetting to {0}.'.format(self.max_hold_out))
             hold_out = self.max_hold_out
         return hold_out
-
-    def __last(self, unique):
-        return sorted(unique.items(), key=itemgetter(1), reverse=True)
-
-    def __items_from(self, last_transactions):
-        return set(tuple(zip(*last_transactions))[0])
