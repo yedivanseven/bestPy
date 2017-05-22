@@ -8,10 +8,18 @@ from ..datastructures import Transactions
 
 class CollaborativeFiltering():
     def __init__(self):
+        self.__binarize = True
         self.__similarity = default_similarity
         self.__baseline = default_baseline()
-        self.__binarize = True
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
+
+    @property
+    def binarize(self):
+        return self.__binarize
+
+    @binarize.setter
+    def binarize(self, binarize):
+        self.__binarize = self.__bool_type_checked(binarize)
 
     @property
     def similarity(self):
@@ -25,22 +33,6 @@ class CollaborativeFiltering():
         self.__similarity = similarity
 
     @property
-    def binarize(self):
-        return self.__binarize
-
-    @binarize.setter
-    def binarize(self, binarize):
-        self.__binarize = self.__bool_type_checked(binarize)
-
-    def operating_on(self, data):
-        self.__data = self.__type_checked(data)
-        self.__baseline = self.__baseline.operating_on(data)
-        self.__baseline = self.__data_attribute_checked(self.__baseline)
-        self.__delete_sim_mat()
-        self.for_one = self.__for_one
-        return self
-
-    @property
     def baseline(self):
         return self.__baseline.__class__.__name__
 
@@ -50,6 +42,14 @@ class CollaborativeFiltering():
         if self.has_data:
             self.__baseline = self.__baseline.operating_on(self.__data)
             self.__baseline = self.__data_attribute_checked(self.__baseline)
+
+    def operating_on(self, data):
+        self.__data = self.__type_checked(data)
+        self.__baseline = self.__baseline.operating_on(data)
+        self.__baseline = self.__data_attribute_checked(self.__baseline)
+        self.__delete_sim_mat()
+        self.for_one = self.__for_one
+        return self
 
     @property
     def has_data(self):
@@ -77,6 +77,9 @@ class CollaborativeFiltering():
     def __no_one_else_bought_items_bought_by(self, target):
         items_bought_by_target = self.__data.matrix.by_row[target].indices
         return self.__data.users_who_bought(items_bought_by_target).size == 1
+
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)
 
     def __permitted(self, similarity):
         if not similarity in all_similarities:
@@ -127,6 +130,3 @@ class CollaborativeFiltering():
                       ' is not callable.')
             raise TypeError('"for_one()" method of baseline not callable!')
         return baseline
-
-    def __has(self, attribute):
-        return hasattr(self, self.__class_prefix + attribute)

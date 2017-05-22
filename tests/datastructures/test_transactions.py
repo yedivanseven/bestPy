@@ -6,6 +6,7 @@ import logging
 import scipy
 from ...datastructures import Transactions
 from ...datastructures.help import IndexFrom, MatrixFrom
+from ...datastructures.read import from_csv
 
 
 class TestInstantiateTransactions(ut.TestCase):
@@ -52,6 +53,44 @@ class TestInstantiateTransactions(ut.TestCase):
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = Transactions(1, -1, 1, 1, 1)
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
+
+
+class TestInconsitentiesInTransactions(ut.TestCase):
+
+    def setUp(self):
+        file = './bestPy/tests/data/data25comma.csv'
+        with self.assertLogs(level=logging.WARNING):
+             self.nrec, self.nerr, self.user, self.item, self.count = from_csv(
+                file, ',')
+
+    def test_error_on_inconsistent_user_item_number_and_matrix_shape(self):
+        log_msg = ['ERROR:root:Attempt to instantiate data object with number'
+                   ' of customers/articles incompatible with matrix shape.']
+        err_msg = 'Number of users/items incompatible with matrix shape!'
+        self.user.update({'foo':'bar'})
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(ValueError, msg=err_msg) as err:
+                _ = Transactions(self.nrec,
+                                 self.nerr,
+                                 self.user,
+                                 self.item,
+                                 self.count)
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
+
+    def test_error_on_inconsistent_transaction_number_and_matrix_values(self):
+        log_msg = ['ERROR:root:Attempt to instantiate data object with number'
+                  ' of transactions incompatible with matrix values.']
+        err_msg = 'Number of transactions incompatible with values in matrix!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(ValueError, msg=err_msg) as err:
+                _ = Transactions(self.nrec + 1,
+                                 self.nerr,
+                                 self.user,
+                                 self.item,
+                                 self.count)
         self.assertEqual(log.output, log_msg)
         self.assertEqual(err.msg, err_msg)
 

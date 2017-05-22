@@ -52,7 +52,7 @@ class MatrixFrom():
         if not isinstance(user_item_counts, dict):
             log.error('Attempt to instantiate matrix object with'
                       ' non-dictionary argument.')
-            raise TypeError('Argument of matrix object must be of type <dict>!')
+            raise TypeError('Argument of matrix object must be <dict>!')
         if len(user_item_counts) < 1:
             log.warning('Matrix instantiated with empty dictionary.')
         else:

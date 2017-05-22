@@ -5,9 +5,9 @@ from . import split
 
 
 class TrainTestBase():
-    def __init__(self, n_rec, n_err, last_unique, transactions):
-        self.__number_of_transactions = self.__int_type_value_checked(n_rec)
-        self.__number_of_corrupted_records = self.__type_range_checked(n_err)
+    def __init__(self, n_trans, n_corr, last_unique, transactions):
+        self.__number_of_transactions = self.__int_type_value_checked(n_trans)
+        self.__number_of_corrupted_records = self.__type_range_checked(n_corr)
         self.__unique = self.__dict_type_and_empty_checked(last_unique)
         self.__transactions = self.__list_type_and_entry_checked(transactions)
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
@@ -37,29 +37,29 @@ class TrainTestBase():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __int_type_value_checked(self, n_rec):
+    def __int_type_value_checked(self, n_trans):
         log_msg = ('Attempt to instantiate data object with number of'
                    ' transactions not a positive integer.')
         err_msg = 'Number of transactions not a positive integer!'
-        if not isinstance(n_rec, int):
+        if not isinstance(n_trans, int):
             log.error(log_msg)
             raise TypeError(err_msg)
-        if n_rec < 1:
+        if n_trans < 1:
             log.error(log_msg)
             raise ValueError(err_msg)
-        return n_rec
+        return n_trans
 
-    def __type_range_checked(self, n_err):
+    def __type_range_checked(self, n_corr):
         log_msg = ('Attempt to instantiate data object with number of'
                    ' corrupted records not an integer >= 0.')
         err_msg = 'Number of corrupted records not an integer >= 0!'
-        if not isinstance(n_err, int):
+        if not isinstance(n_corr, int):
             log.error(log_msg)
             raise TypeError(err_msg)
-        if n_err < 0:
+        if n_corr < 0:
             log.error(log_msg)
             raise ValueError(err_msg)
-        return n_err
+        return n_corr
 
     def __dict_type_and_empty_checked(self, unique):
         if not isinstance(unique, dict):

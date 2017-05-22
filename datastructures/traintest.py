@@ -8,8 +8,8 @@ from .transactions import Transactions
 
 
 class TrainTest(TrainTestBase):
-    def __init__(self, n_rec, n_err, unique, trans):
-        super().__init__(n_rec, n_err, unique, trans)
+    def __init__(self, n_trans, n_corr, unique, transactions):
+        super().__init__(n_trans, n_corr, unique, transactions)
         self.__unique = self._TrainTestBase__unique
         self.__transactions = self._TrainTestBase__transactions
 

@@ -55,6 +55,9 @@ class MostPopular():
         if self.__has('scaled_baseline'):
             delattr(self, self.__class_prefix + 'scaled_baseline')
 
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)
+
     def __check_bool_type_of(self, binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
@@ -66,6 +69,3 @@ class MostPopular():
                       ' Must be <Transactions>.')
             raise TypeError('Data must be of type <Transactions>!')
         return data
-
-    def __has(self, attribute):
-        return hasattr(self, self.__class_prefix + attribute)

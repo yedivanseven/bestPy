@@ -57,7 +57,8 @@ class TestDataFrom():
         if hold_out != what_it_should_be:
             log.error('Attempt to set argument "hold_out" to value other than'
                       ' the number of held-out items.')
-            raise ValueError('"hold_out" differs from no. of held-out items!')
+            raise ValueError('"hold_out" differs from the number of'
+                             ' held-out items!')
         return hold_out
 
     def __bool_type_checked(self, only_new):

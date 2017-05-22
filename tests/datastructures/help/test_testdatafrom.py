@@ -51,7 +51,7 @@ class TestInstantiationOfTestDataFrom(ut.TestCase):
     def test_wrong_hold_out_value(self):
         log_msg = ['ERROR:root:Attempt to set argument "hold_out" to value'
                    ' other than the number of held-out items.']
-        err_msg = '"hold_out" differs from no. of held-out items!'
+        err_msg = '"hold_out" differs from the number of held-out items!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = TestDataFrom({1: {'foo'}}, 2, False)

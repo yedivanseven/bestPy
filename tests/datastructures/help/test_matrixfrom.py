@@ -12,7 +12,7 @@ class TestInstatiateMatrix(ut.TestCase):
     def test_error_on_wrong_argument_type(self):
         log_msg = ['ERROR:root:Attempt to instantiate matrix object with'
                    ' non-dictionary argument.']
-        err_msg = 'Argument of matrix object must be of type <dict>!'
+        err_msg = 'Argument of matrix object must be <dict>!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = MatrixFrom('foo')

@@ -8,9 +8,20 @@ from ..datastructures import Transactions
 
 class TruncatedSVD():
     def __init__(self):
-        self.__number_of_factors = 20
         self.__binarize = True
+        self.__number_of_factors = 20
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
+
+    @property
+    def binarize(self):
+        return self.__binarize
+
+    @binarize.setter
+    def binarize(self, binarize):
+        self.__check_bool_type_of(binarize)
+        if binarize != self.binarize:
+            self.__delete_USV_matrices()
+        self.__binarize = binarize
 
     @property
     def number_of_factors(self):
@@ -23,17 +34,6 @@ class TruncatedSVD():
         self.__set(number_of_factors)
         if self.number_of_factors != previous_number_of_factors:
             self.__delete_USV_matrices()
-
-    @property
-    def binarize(self):
-        return self.__binarize
-
-    @binarize.setter
-    def binarize(self, binarize):
-        self.__check_bool_type_of(binarize)
-        if binarize != self.binarize:
-            self.__delete_USV_matrices()
-        self.__binarize = binarize
 
     def operating_on(self, data):
         self.__data = self.__type_checked(data)
@@ -86,6 +86,9 @@ class TruncatedSVD():
         else:
             self.__number_of_factors = number_of_factors
 
+    def __has(self, attribute):
+        return hasattr(self, self.__class_prefix + attribute)
+
     def __check_integer_type_and_range_of(self, number_of_factors):
         error_message = '"number_of_factors" must be a positive integer!'
         if not isinstance(number_of_factors, int):
@@ -106,6 +109,3 @@ class TruncatedSVD():
                       ' Must be <Transactions>.')
             raise TypeError('Data must be of type <Transactions>!')
         return data
-
-    def __has(self, attribute):
-        return hasattr(self, self.__class_prefix + attribute)

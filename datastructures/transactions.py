@@ -7,9 +7,9 @@ from .help import IndexFrom, MatrixFrom
 
 
 class Transactions():
-    def __init__(self, n_rec, n_err, user_i, item_j, counts):
-        self.__number_of_transactions = self.__int_type_value_checked(n_rec)
-        self.__number_of_corrupted_records = self.__type_range_checked(n_err)
+    def __init__(self, n_trans, n_corr, user_i, item_j, counts):
+        self.__number_of_transactions = self.__int_type_value_checked(n_trans)
+        self.__number_of_corrupted_records = self.__type_range_checked(n_corr)
         self.__user = IndexFrom(user_i)
         self.__item = IndexFrom(item_j)
         self.__matrix = MatrixFrom(counts)
@@ -51,31 +51,43 @@ class Transactions():
     def users_who_bought(self, items):
         return unique(self.matrix.by_col[:, items].indices)
 
-    def __int_type_value_checked(self, n_rec):
+    def __int_type_value_checked(self, n_trans):
         log_msg = ('Attempt to instantiate data object with number of'
                    ' valid transactions not a positive integer.')
         err_msg = 'Number of valid transactions not a positive integer!'
-        if not isinstance(n_rec, int):
+        if not isinstance(n_trans, int):
             log.error(log_msg)
             raise TypeError(err_msg)
-        if n_rec < 1:
+        if n_trans < 1:
             log.error(log_msg)
             raise ValueError(err_msg)
-        return n_rec
+        return n_trans
 
-    def __type_range_checked(self, n_err):
+    def __type_range_checked(self, n_corr):
         log_msg = ('Attempt to instantiate data object with number of'
                    ' corrupted records not an integer >= 0.')
         err_msg = 'Number of corrupted records not an integer >= 0!'
-        if not isinstance(n_err, int):
+        if not isinstance(n_corr, int):
             log.error(log_msg)
             raise TypeError(err_msg)
-        if n_err < 0:
+        if n_corr < 0:
             log.error(log_msg)
             raise ValueError(err_msg)
-        return n_err
+        return n_corr
 
     def __check_data_for_consistency(self):
-        assert((self.user.count, self.item.count) == self.matrix.by_col.shape)
-        assert(self.number_of_transactions == self.matrix.by_col.sum().sum())
-        assert(self.number_of_userItem_pairs == self.matrix.by_col.getnnz())
+        if (self.user.count, self.item.count) != self.matrix.by_col.shape:
+            log.error('Attempt to instantiate data object with number of'
+                      ' customers/articles incompatible with matrix shape.')
+            raise ValueError('Number of users/items incompatible with'
+                             ' matrix shape!')
+        if self.number_of_transactions != self.matrix.by_col.sum().sum():
+            log.error('Attempt to instantiate data object with number of'
+                      ' transactions incompatible with matrix values.')
+            raise ValueError('Number of transactions incompatible with values'
+                             ' in matrix!')
+        if self.number_of_userItem_pairs != self.matrix.by_col.getnnz():
+            log.error('Attempt to instantiate data object with number of'
+                      ' user/item pairs incompatible with matrix values.')
+            raise ValueError('Number of user/item pairs incompatible with'
+                             'values in matrix!')
