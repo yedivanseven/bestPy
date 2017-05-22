@@ -5,9 +5,9 @@ import logging as log
 
 class TestDataFrom():
     def __init__(self, data, hold_out, only_new):
-        self.__data = self.__dict_type_and_structure_checked(data)
-        self.__hold_out = self.__int_type_and_value_checked(hold_out)
-        self.__only_new = self.__bool_type_checked(only_new)
+        self.__data = self.__dictionary_type_and_structure_checked(data)
+        self.__hold_out = self.__integer_type_and_value_checked(hold_out)
+        self.__only_new = self.__boolean_type_checked(only_new)
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
 
     @property
@@ -31,7 +31,7 @@ class TestDataFrom():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __dict_type_and_structure_checked(self, data):
+    def __dictionary_type_and_structure_checked(self, data):
         if not isinstance(data, dict):
             log.error('Attempt to set non-dictionary type as test data.')
             raise TypeError('Test data must be of type <dict>!')
@@ -49,7 +49,7 @@ class TestDataFrom():
                 raise ValueError('Test data values must not be empty sets!')
         return data
 
-    def __int_type_and_value_checked(self, hold_out):
+    def __integer_type_and_value_checked(self, hold_out):
         if not isinstance(hold_out, int):
             log.error('Attempt to set non-integer type as "hold_out".')
             raise TypeError('"hold_out" must be of type <int>!')
@@ -61,7 +61,7 @@ class TestDataFrom():
                              ' held-out items!')
         return hold_out
 
-    def __bool_type_checked(self, only_new):
+    def __boolean_type_checked(self, only_new):
         if not isinstance(only_new, bool):
             log.error('Attempt to set non-boolean type as "only_new".')
             raise TypeError('"only_new" must be of type <bool>!')

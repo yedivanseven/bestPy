@@ -34,6 +34,6 @@ class IndexFrom():
             log.error('Attempt to instantiate index object with'
                       ' non-dictionary argument.')
             raise TypeError('Argument of index object must be of type <dict>!')
-        if len(index_of) == 0:
+        if len(index_of) < 1:
             log.warning('Index instantiated with empty dictionary.')
         return index_of
