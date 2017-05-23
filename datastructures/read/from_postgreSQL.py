@@ -35,7 +35,8 @@ def from_postgreSQL(database):
     try:
         connection = connect(database.login)
     except OperationalError:
-        log.error('Failed connecting to {}.'.format(database.login_db_name))
+        log.error('Failed connecting to {} @{}.'.format(database.login_db_name,
+                                                        database.login_host))
         raise OperationalError('Connect to database failed. Check settings!')
 
     with connection.cursor() as cursor:
