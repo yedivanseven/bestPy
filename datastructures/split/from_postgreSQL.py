@@ -28,8 +28,7 @@ def from_postgreSQL(database):
         return 1
 
     def log_corrupted_transaction(record):
-        log.warning('Transaction record {0} from database is incomplete. '
-                    'Skipping.'.format(number_of_transactions + 1))
+        log.warning('Incomplete record returned from database. Skipping.')
         return 0
 
     process = {True : process_valid_transaction,
@@ -38,7 +37,8 @@ def from_postgreSQL(database):
     try:
         connection = connect(database.login)
     except OperationalError:
-        log.error('Failed connecting to {}.'.format(database.login_db_name))
+        log.error('Failed connecting to {} @{}.'.format(database.login_db_name,
+                                                        database.login_host))
         raise OperationalError('Connect to database failed. Check settings!')
 
     with connection.cursor() as cursor:
