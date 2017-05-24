@@ -56,6 +56,8 @@ def from_postgreSQL(database):
         finally:
             connection.close()
 
+    compare(number_of_transactions, database)
+
     return (number_of_transactions,
             number_of_corrupted_records,
             finalized(last_unique_items_of),
@@ -78,6 +80,16 @@ def converted(timestamp):
         log.error('Type of timestamp field is neither integer nor timestamp!')
         raise TypeError('Timestamp field must be an integer or a timestamp!')
     return converted[type_of](timestamp)
+
+
+def compare(available, database):
+    if available < database._requested:
+        log.warning('Requested {0} transactions from table {1} but only {2} '
+                    'available. Fetched all {2}.'.format(database.limit,
+                                                         database.table,
+                                                         available))
+        log.info('Resetting limit to the maximum of {}.'.format(available))
+        database.limit = available
 
 
 def finalized(last_unique):

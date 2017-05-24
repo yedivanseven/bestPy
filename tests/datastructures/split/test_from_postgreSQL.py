@@ -164,6 +164,89 @@ class TestSplitFromPostgreSQL(ut.TestCase):
             _ = from_postgreSQL(database())
         self.assertEqual(log.output, log_msg)
 
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_logging_and_reset_of_limit_when_too_large(self):
+        db = database()
+        db.limit = 123
+        log_msg = ['WARNING:root:Incomplete record returned from database.'
+                   ' Skipping.',
+                   'WARNING:root:Incomplete record returned from database.'
+                   ' Skipping.',
+                   'WARNING:root:Incomplete record returned from database.'
+                   ' Skipping.',
+                   'WARNING:root:Incomplete record returned from database.'
+                   ' Skipping.',
+                   'WARNING:root:Incomplete record returned from database.'
+                   ' Skipping.',
+                   'WARNING:root:Incomplete record returned from database.'
+                   ' Skipping.',
+                   'WARNING:root:Requested 123 transactions from table head100'
+                   ' but only 100 available. Fetched all 100.']
+        with self.assertLogs(level=logging.WARNING) as log:
+                _ = from_postgreSQL(db)
+        self.assertEqual(log.output, log_msg)
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_error_on_timestamp_field_neither_integer_nor_timestamp(self):
+        # needs test table with timestamp field neither integer nor timestamp
+        # overwrite the table attribute of the database to pick it
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_timestamp_field_is_read_and_converted_correctly(self):
+        # needs new table created, e.g., from data25timestamp_fmt.csv
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_int_type_of_number_of_transactions(self):
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_correct_number_of_transactions(self):
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_int_type_of_number_of_corrupted_records(self):
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_correct_number_of_corrupted_records(self):
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_dict_type_of_last_unique_items(self):
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_correct_values_in_last_unique_items(self):
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_list_type_of_transactions(self):
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_correct_values_transactions(self):
+        pass
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_number_of_transactions_equals_length_transaction_list(self):
+        with self.assertLogs(level=logging.WARNING):
+            n_rec, _, _, transacts = from_postgreSQL(database())
+        self.assertEqual(n_rec, len(transacts))
+
 
 if __name__ == '__main__':
     ut.main()

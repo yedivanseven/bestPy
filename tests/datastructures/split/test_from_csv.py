@@ -106,6 +106,11 @@ class BaseTests():
             _, _, _, transacts = from_csv(self.file, self.separator, self.fmt)
         self.assertListEqual(should_be, transacts)
 
+    def test_number_of_transactions_equals_length_transaction_list(self):
+        with self.assertLogs(level=logging.WARNING):
+            n_rec, _, _, transacts = from_csv(self.file, self.separator, self.fmt)
+        self.assertEqual(n_rec, len(transacts))
+
 
 class TestTrainTestFromCsvSemicolonFile(ut.TestCase, BaseTests):
     def setUp(self):
