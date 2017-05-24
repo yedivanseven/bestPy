@@ -19,7 +19,7 @@ class CollaborativeFiltering():
 
     @binarize.setter
     def binarize(self, binarize):
-        self.__binarize = self.__bool_type_checked(binarize)
+        self.__binarize = self.__boolean_type_checked(binarize)
 
     @property
     def similarity(self):
@@ -44,7 +44,7 @@ class CollaborativeFiltering():
             self.__baseline = self.__data_attribute_checked(self.__baseline)
 
     def operating_on(self, data):
-        self.__data = self.__type_checked(data)
+        self.__data = self.__transactions_type_checked(data)
         self.__baseline = self.__baseline.operating_on(data)
         self.__baseline = self.__data_attribute_checked(self.__baseline)
         self.__delete_sim_mat()
@@ -88,13 +88,13 @@ class CollaborativeFiltering():
                             ' from the similarities module for your choices.')
         return similarity
 
-    def __bool_type_checked(self, binarize):
+    def __boolean_type_checked(self, binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
             raise TypeError('Attribute "binarize" must be True or False!')
         return binarize
 
-    def __type_checked(self, data):
+    def __transactions_type_checked(self, data):
         if not isinstance(data, Transactions):
             log.error('Attempt to set incompatible data type.'
                       ' Must be <Transactions>.')

@@ -16,13 +16,13 @@ class MostPopular():
 
     @binarize.setter
     def binarize(self, binarize):
-        self.__check_bool_type_of(binarize)
+        self.__check_boolean_type_of(binarize)
         if binarize != self.binarize:
             self.__delete_precomputed()
         self.__baseline.binarize = binarize
 
     def operating_on(self, data):
-        self.__data = self.__type_checked(data)
+        self.__data = self.__transactions_type_checked(data)
         self.__baseline = self.__baseline.operating_on(data)
         self.__delete_precomputed()
         self.for_one = self.__for_one
@@ -58,12 +58,12 @@ class MostPopular():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __check_bool_type_of(self, binarize):
+    def __check_boolean_type_of(self, binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
             raise TypeError('Attribute "binarize" must be True or False!')
 
-    def __type_checked(self, data):
+    def __transactions_type_checked(self, data):
         if not isinstance(data, Transactions):
             log.error('Attempt to set incompatible data type.'
                       ' Must be <Transactions>.')

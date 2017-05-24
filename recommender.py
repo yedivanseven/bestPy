@@ -11,7 +11,7 @@ RETURNING = True
 
 class RecommendationBasedOn():
     def __init__(self, data):
-        self.__data = self.__type_checked(data)
+        self.__data = self.__transactions_type_checked(data)
         self.__only_new = True
         self.__baseline = default_baseline().operating_on(data)
         self.__recommendation = default_algorithm().operating_on(data)
@@ -71,7 +71,7 @@ class RecommendationBasedOn():
             item_scores[already_bought] = float('-inf')
         return item_scores
 
-    def __type_checked(self, data):
+    def __transactions_type_checked(self, data):
         if not isinstance(data, Transactions):
             log.error('Attempt to instantiate with incompatible data type.'
                       ' Must be <Transactions>.')

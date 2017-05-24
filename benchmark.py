@@ -10,7 +10,7 @@ class Benchmark():
         self.__recommendation = self.__validated(recommender)
 
     def against(self, test):
-        self.__test = self.__type_checked(test)
+        self.__test = self.__testdata_type_checked(test)
         if test.only_new and not self.__recommendation.only_new:
             self.__recommendation = self.__recommendation.pruning_old
             log.info('Resetting recommender to "pruning_old" because of'
@@ -36,7 +36,7 @@ class Benchmark():
                             ' <RecommendationBasedOn>!')
         return recommender
 
-    def __type_checked(self, data):
+    def __testdata_type_checked(self, data):
         if not isinstance(data, TestDataFrom):
             log.error('Attempt to set incompatible type of test data.'
                       ' Must be <TestDataFrom>.')
