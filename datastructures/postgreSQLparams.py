@@ -3,6 +3,7 @@
 import logging as log
 from psycopg2.extensions import AsIs
 
+
 class PostgreSQLparams():
     def __init__(self):
         self.__login_db_name = '<dbname>'
