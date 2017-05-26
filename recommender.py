@@ -71,14 +71,16 @@ class RecommendationBasedOn():
             item_scores[already_bought] = float('-inf')
         return item_scores
 
-    def __transactions_type_checked(self, data):
+    @staticmethod
+    def __transactions_type_checked(data):
         if not isinstance(data, Transactions):
             log.error('Attempt to instantiate with incompatible data type.'
                       ' Must be <Transactions>.')
             raise TypeError('Data must be of type <Transactions>!')
         return data
 
-    def __check_base_attributes_of(self, algorithm):
+    @staticmethod
+    def __check_base_attributes_of(algorithm):
         if not hasattr(algorithm, 'operating_on'):
             log.error('Attempt to set object lacking mandatory'
                       ' "operating_on()" method.')
@@ -92,7 +94,8 @@ class RecommendationBasedOn():
                       ' "has_data" attribute.')
             raise AttributeError('Object lacks "has_data" attribute!')
 
-    def __check_data_attributes_of(self, algorithm):
+    @staticmethod
+    def __check_data_attributes_of(algorithm):
         if not algorithm.has_data:
             log.error("Object's 'has_data' attribute returned False"
                       " after attaching data.")

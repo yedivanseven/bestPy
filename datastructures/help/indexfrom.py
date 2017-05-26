@@ -29,7 +29,8 @@ class IndexFrom():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __dict_type_and_empty_checked(self, index_of):
+    @staticmethod
+    def __dict_type_and_empty_checked(index_of):
         if not isinstance(index_of, dict):
             log.error('Attempt to instantiate index object with'
                       ' non-dictionary argument.')

@@ -31,7 +31,8 @@ class TestDataFrom():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __dictionary_type_and_structure_checked(self, data):
+    @staticmethod
+    def __dictionary_type_and_structure_checked(data):
         if not isinstance(data, dict):
             log.error('Attempt to set non-dictionary type as test data.')
             raise TypeError('Test data must be of type <dict>!')
@@ -61,7 +62,8 @@ class TestDataFrom():
                              ' held-out items!')
         return hold_out
 
-    def __boolean_type_checked(self, only_new):
+    @staticmethod
+    def __boolean_type_checked(only_new):
         if not isinstance(only_new, bool):
             log.error('Attempt to set non-boolean type as "only_new".')
             raise TypeError('"only_new" must be of type <bool>!')

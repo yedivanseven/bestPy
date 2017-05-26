@@ -28,7 +28,8 @@ class Benchmark():
                     for user, items in self.__test.data.items())
         return total / self.__test.number_of_cases
 
-    def __validated(self, recommender):
+    @staticmethod
+    def __validated(recommender):
         if not isinstance(recommender, RecommendationBasedOn):
             log.error('Attempt to instantiate with incompatible recommender.'
                       ' Must be of type <RecommendationBasedOn>.')
@@ -36,7 +37,8 @@ class Benchmark():
                             ' <RecommendationBasedOn>!')
         return recommender
 
-    def __testdata_type_checked(self, data):
+    @staticmethod
+    def __testdata_type_checked(data):
         if not isinstance(data, TestDataFrom):
             log.error('Attempt to set incompatible type of test data.'
                       ' Must be <TestDataFrom>.')

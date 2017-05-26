@@ -116,12 +116,14 @@ class PostgreSQLparams():
                       'limit': self.__limit}
         return params
 
-    def __prepend(self, parameter, prefix):
+    @staticmethod
+    def __prepend(parameter, prefix):
         if not isinstance(parameter, str):
             log.warning(prefix + ' should be a string. Trying nevertheless!')
         return prefix + "='" + str(parameter) + "'"
 
-    def __convert(self, parameter, prefix):
+    @staticmethod
+    def __convert(parameter, prefix):
         if not isinstance(parameter, str):
             log.warning(prefix + ' should be a string. Trying nevertheless!')
         return str(parameter)

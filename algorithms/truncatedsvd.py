@@ -89,7 +89,8 @@ class TruncatedSVD():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __check_integer_type_and_range_of(self, number_of_factors):
+    @staticmethod
+    def __check_integer_type_and_range_of(number_of_factors):
         error_message = '"number_of_factors" must be a positive integer!'
         if not isinstance(number_of_factors, int):
             log.error('Attempt to set number_of_factors to non-integer type.')
@@ -98,12 +99,14 @@ class TruncatedSVD():
             log.error('Attempt to set number_of_factors to value < 1.')
             raise ValueError(error_message)
 
-    def __check_boolean_type_of(self, binarize):
+    @staticmethod
+    def __check_boolean_type_of(binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
             raise TypeError('Attribute "binarize" must be True or False!')
 
-    def __transactions_type_checked(self, data):
+    @staticmethod
+    def __transactions_type_checked(data):
         if not isinstance(data, Transactions):
             log.error('Attempt to set incompatible data type.'
                       ' Must be <Transactions>.')

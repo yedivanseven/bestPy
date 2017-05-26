@@ -38,13 +38,16 @@ class TrainTest(TrainTestBase):
         self.__train = Transactions.from_csv(FileFrom(train))
         TrainTest.train = property(lambda self: self.__train)
 
-    def __last(self, unique):
+    @staticmethod
+    def __last(unique):
         return sorted(unique.items(), key=itemgetter(1), reverse=True)
 
-    def __items_from(self, last_transactions):
+    @staticmethod
+    def __items_from(last_transactions):
         return set(tuple(zip(*last_transactions))[0])
 
-    def __check_boolean_type_of(self, only_new):
+    @staticmethod
+    def __check_boolean_type_of(only_new):
         if not isinstance(only_new, bool):
             log.error('Attempt to set "only_new" to non-boolean type.')
             raise TypeError('Flag "only_new" can only be True or False!')

@@ -48,7 +48,8 @@ class MatrixFrom():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __validated(self, user_item_counts):
+    @staticmethod
+    def __validated(user_item_counts):
         if not isinstance(user_item_counts, dict):
             log.error('Attempt to instantiate matrix object with'
                       ' non-dictionary argument.')

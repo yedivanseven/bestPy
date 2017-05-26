@@ -81,27 +81,31 @@ class CollaborativeFiltering():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __permitted(self, similarity):
+    @staticmethod
+    def __permitted(similarity):
         if not similarity in all_similarities:
             log.error('Attempt to set unrecognized similarity.')
             raise TypeError('Unrecognized similarity! See "all_similarities"'
                             ' from the similarities module for your choices.')
         return similarity
 
-    def __boolean_type_checked(self, binarize):
+    @staticmethod
+    def __boolean_type_checked(binarize):
         if not isinstance(binarize, bool):
             log.error('Attempt to set "binarize" to non-boolean type.')
             raise TypeError('Attribute "binarize" must be True or False!')
         return binarize
 
-    def __transactions_type_checked(self, data):
+    @staticmethod
+    def __transactions_type_checked(data):
         if not isinstance(data, Transactions):
             log.error('Attempt to set incompatible data type.'
                       ' Must be <Transactions>.')
             raise TypeError('Data must be of type <Transactions>!')
         return data
 
-    def __base_attribute_checked(self, baseline):
+    @staticmethod
+    def __base_attribute_checked(baseline):
         if not hasattr(baseline, 'operating_on'):
             log.error('Attempt to set baseline object lacking mandatory'
                       ' "operating_on()" method.')
@@ -116,7 +120,8 @@ class CollaborativeFiltering():
             raise AttributeError('Baseline lacks "has_data" attribute!')
         return baseline
 
-    def __data_attribute_checked(self, baseline):
+    @staticmethod
+    def __data_attribute_checked(baseline):
         if not baseline.has_data:
             log.error("Baseline object's 'has_data' attribute returned False"
                       " after attaching data.")

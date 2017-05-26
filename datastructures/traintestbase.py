@@ -37,7 +37,8 @@ class TrainTestBase():
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
 
-    def __int_type_value_checked(self, n_trans):
+    @staticmethod
+    def __int_type_value_checked(n_trans):
         log_msg = ('Attempt to instantiate data object with number of'
                    ' transactions not a positive integer.')
         err_msg = 'Number of transactions not a positive integer!'
@@ -49,7 +50,8 @@ class TrainTestBase():
             raise ValueError(err_msg)
         return n_trans
 
-    def __type_range_checked(self, n_corr):
+    @staticmethod
+    def __type_range_checked(n_corr):
         log_msg = ('Attempt to instantiate data object with number of'
                    ' corrupted records not an integer >= 0.')
         err_msg = 'Number of corrupted records not an integer >= 0!'
@@ -61,7 +63,8 @@ class TrainTestBase():
             raise ValueError(err_msg)
         return n_corr
 
-    def __dict_type_and_empty_checked(self, unique):
+    @staticmethod
+    def __dict_type_and_empty_checked(unique):
         if not isinstance(unique, dict):
             log.error('Attempt to instantiate data object with last unique'
                       ' buys not of required type <dict>.')
@@ -81,7 +84,8 @@ class TrainTestBase():
             raise ValueError('Entries of last unique items must not be empty!')
         return unique
 
-    def __list_type_and_entry_checked(self, transactions):
+    @staticmethod
+    def __list_type_and_entry_checked(transactions):
         if not isinstance(transactions, list):
             log.error('Attempt to instantiate data object with transactions'
                       ' not of required type <list>.')

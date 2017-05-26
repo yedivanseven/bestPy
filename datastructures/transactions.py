@@ -51,7 +51,8 @@ class Transactions():
     def users_who_bought(self, items):
         return unique(self.matrix.by_col[:, items].indices)
 
-    def __int_type_value_checked(self, n_trans):
+    @staticmethod
+    def __int_type_value_checked(n_trans):
         log_msg = ('Attempt to instantiate data object with number of'
                    ' valid transactions not a positive integer.')
         err_msg = 'Number of valid transactions not a positive integer!'
@@ -63,7 +64,8 @@ class Transactions():
             raise ValueError(err_msg)
         return n_trans
 
-    def __type_range_checked(self, n_corr):
+    @staticmethod
+    def __type_range_checked(n_corr):
         log_msg = ('Attempt to instantiate data object with number of'
                    ' corrupted records not an integer >= 0.')
         err_msg = 'Number of corrupted records not an integer >= 0!'
