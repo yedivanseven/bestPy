@@ -14,7 +14,7 @@ class Benchmark:
     ----------
     recommender : RecommendationBasedOn
         A configured instance of bestPy.RecommendationBasedOn
-        with training data already attached.
+        with suitable training data.
 
     Methods
     -------
@@ -32,6 +32,7 @@ class Benchmark:
     --------
     >>> benchmark = Benchmark(recommender).against(data.test)
     >>> score = benchmark.score
+    0.8934756
 
     '''
 
@@ -51,8 +52,7 @@ class Benchmark:
 
         Returns
         -------
-        self : Benchmark
-            The instance of Benchmark it is called on.
+        The instance of Benchmark it is called on.
 
         Examples
         --------

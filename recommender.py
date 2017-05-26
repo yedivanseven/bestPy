@@ -33,12 +33,12 @@ class RecommendationBasedOn:
         recommend also articles that a given customer has bought before.
 
     only_new : bool
-        Whether the recommenations include articles that
+        Whether the recommendations include articles that
         a given customer has bought before or not.
 
     baseline : object, optional
         Algorithm object to provide a cold-start recommendation for
-        unknown customers. Defaults to bestPy.algorithms.Baseline
+        unknown customers. Defaults to bestPy.algorithms.Baseline.
 
     Methods
     -------

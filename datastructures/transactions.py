@@ -18,7 +18,7 @@ class Transactions:
     Attributes
     ----------
     number_of_transactions : int
-        Number of transactions in the dataset before splitting.
+        Number of transactions in the dataset.
 
     number_of_corrupted_records : int
         Number of corrupted records skipped when reading data.
