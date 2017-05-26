@@ -17,9 +17,9 @@ def from_csv(file, separator=';'):
         return 1
 
     def log_corrupted_transaction():
-        line = number_of_transactions + number_of_corrupted_records + 1
+        line_number = number_of_transactions + number_of_corrupted_records + 1
         log.warning('Transaction on line {0} contains empty fields. '
-                    'Skipping.'.format(line))
+                    'Skipping.'.format(line_number))
         return 0
 
     process = {True : process_valid_transaction,

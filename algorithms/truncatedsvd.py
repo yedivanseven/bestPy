@@ -6,7 +6,7 @@ from scipy.sparse.linalg import svds
 from ..datastructures import Transactions
 
 
-class TruncatedSVD():
+class TruncatedSVD:
     def __init__(self):
         self.__binarize = True
         self.__number_of_factors = 20
@@ -38,7 +38,7 @@ class TruncatedSVD():
     def operating_on(self, data):
         self.__data = self.__transactions_type_checked(data)
         TruncatedSVD.max_number_of_factors = property(
-            lambda self: self.__data.matrix.min_shape - 1
+            lambda obj: obj.__data.matrix.min_shape - 1
         )
         self.__reset(self.number_of_factors)
         self.__delete_USV_matrices()

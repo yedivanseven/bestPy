@@ -4,7 +4,7 @@ import logging as log
 from . import split
 
 
-class TrainTestBase():
+class TrainTestBase:
     def __init__(self, n_trans, n_corr, last_unique, transactions):
         self.__number_of_transactions = self.__int_type_value_checked(n_trans)
         self.__number_of_corrupted_records = self.__type_range_checked(n_corr)

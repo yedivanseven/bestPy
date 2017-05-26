@@ -34,9 +34,9 @@ class TrainTest(TrainTestBase):
                      if user in keep.keys()
                      and (item, timestamp) not in last_unique_items_of[user])
         self.__test = TestDataFrom(test, hold_out, only_new)
-        TrainTest.test = property(lambda self: self.__test)
+        TrainTest.test = property(lambda obj: obj.__test)
         self.__train = Transactions.from_csv(FileFrom(train))
-        TrainTest.train = property(lambda self: self.__train)
+        TrainTest.train = property(lambda obj: obj.__train)
 
     @staticmethod
     def __last(unique):

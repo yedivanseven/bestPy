@@ -5,7 +5,7 @@ from . import RecommendationBasedOn
 from .datastructures.help import TestDataFrom
 
 
-class Benchmark():
+class Benchmark:
     def __init__(self, recommender):
         self.__recommendation = self.__validated(recommender)
 
@@ -19,7 +19,7 @@ class Benchmark():
             self.__recommendation = self.__recommendation.keeping_old
             log.info('Resetting recommender to "keeping_old" because of'
                      ' test-data preference.')
-        Benchmark.score = property(lambda self: self.__score())
+        Benchmark.score = property(lambda obj: obj.__score())
         return self
 
     def __score(self):

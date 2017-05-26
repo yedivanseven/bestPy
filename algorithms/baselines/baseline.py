@@ -4,7 +4,7 @@ import logging as log
 from ...datastructures import Transactions
 
 
-class Baseline():
+class Baseline:
     def __init__(self):
         self.__binarize = True
         self.__depending_on_whether_we = {True : self.__count_unique_buyers,

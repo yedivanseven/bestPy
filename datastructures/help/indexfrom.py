@@ -3,7 +3,7 @@
 import logging as log
 
 
-class IndexFrom():
+class IndexFrom:
     def __init__(self, index_of):
         self.__index_of = self.__dict_type_and_empty_checked(index_of)
         self.__class_prefix = '_' + self.__class__.__name__ + '__'

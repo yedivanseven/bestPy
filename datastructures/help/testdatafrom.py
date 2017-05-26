@@ -3,7 +3,7 @@
 import logging as log
 
 
-class TestDataFrom():
+class TestDataFrom:
     def __init__(self, data, hold_out, only_new):
         self.__data = self.__dictionary_type_and_structure_checked(data)
         self.__hold_out = self.__integer_type_and_value_checked(hold_out)

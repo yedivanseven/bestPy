@@ -6,7 +6,7 @@ from .baselines import default_baseline
 from ..datastructures import Transactions
 
 
-class CollaborativeFiltering():
+class CollaborativeFiltering:
     def __init__(self):
         self.__binarize = True
         self.__similarity = default_similarity

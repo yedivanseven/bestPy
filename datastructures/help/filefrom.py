@@ -6,6 +6,7 @@ from io import TextIOBase
 
 class FileFrom(TextIOBase):
     def __init__(self, generator):
+        super().__init__()
         self.__generator = generator
 
     def readline(self):

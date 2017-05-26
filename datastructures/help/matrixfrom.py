@@ -4,7 +4,7 @@ import logging as log
 from scipy.sparse import csc_matrix
 
 
-class MatrixFrom():
+class MatrixFrom:
     def __init__(self, user_item_counts):
         self.__counts_users = self.__validated(user_item_counts)
         self.__class_prefix = '_' + self.__class__.__name__ + '__'

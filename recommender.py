@@ -9,7 +9,7 @@ from .datastructures import Transactions
 RETURNING = True
 
 
-class RecommendationBasedOn():
+class RecommendationBasedOn:
     def __init__(self, data):
         self.__data = self.__transactions_type_checked(data)
         self.__only_new = True

@@ -5,7 +5,7 @@ from ..datastructures import Transactions
 from .baselines import Baseline
 
 
-class MostPopular():
+class MostPopular:
     def __init__(self):
         self.__baseline = Baseline()
         self.__class_prefix = '_' + self.__class__.__name__ + '__'

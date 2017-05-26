@@ -93,7 +93,7 @@ def compare(available, database):
 
 
 def finalized(last_unique):
-    finalized = {user: {item: time.isoformat()
-                        for item, time in article.items()}
-                 for user, article in last_unique.items()}
-    return finalized
+    last_unique_items = {user: {item: time.isoformat()
+                                for item, time in article.items()}
+                         for user, article in last_unique.items()}
+    return last_unique_items

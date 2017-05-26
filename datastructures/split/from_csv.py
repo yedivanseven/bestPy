@@ -18,9 +18,9 @@ def from_csv(file, separator=';', fmt=None):
         try:
             time = depending_on(format_of)(timestamp)
         except (ValueError, OverflowError):
-            line = number_of_transactions + number_of_corrupted_records + 1
+            line_no = number_of_transactions + number_of_corrupted_records + 1
             log.warning('Could not interpret timestamp on line {0}. '
-                        'Skipping.'.format(line))
+                        'Skipping.'.format(line_no))
             return 0
         if time > last_unique_items_of[user][item]:
             last_unique_items_of[user][item] = time
@@ -28,9 +28,9 @@ def from_csv(file, separator=';', fmt=None):
         return 1
 
     def log_corrupted_transaction():
-        line = number_of_transactions + number_of_corrupted_records + 1
+        line_number = number_of_transactions + number_of_corrupted_records + 1
         log.warning('Transaction on line {0} contains empty fields. '
-                    'Skipping.'.format(line))
+                    'Skipping.'.format(line_number))
         return 0
 
     process = {True : process_transaction_time,
@@ -91,7 +91,7 @@ def depending_on(fmt=None):
 
 
 def finalized(last_unique):
-    finalized = {user: {item: time.isoformat()
-                        for item, time in article.items()}
-                 for user, article in last_unique.items()}
-    return finalized
+    last_unique_items = {user: {item: time.isoformat()
+                                for item, time in article.items()}
+                         for user, article in last_unique.items()}
+    return last_unique_items
