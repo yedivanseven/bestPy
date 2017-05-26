@@ -8,12 +8,85 @@ from .transactions import Transactions
 
 
 class TrainTest(TrainTestBase):
+    '''Transaction data split into training and test sets for benchmarking.
+
+    Direct instantiation of this class is discouraged and, therefore,
+    not documented. Use the classmethods "from_csv", "from_postgreSQL", ...
+    instead and refer to the docstrings there!
+
+    -------------------------------------------------
+
+    Attributes
+    ----------
+    train : Transactions
+        Instance of bestPy.datastructures.Transactions holding
+        the training data. Revealed after calling the "split" method.
+
+    test : object
+        Object with test data as dictionary in its "data" attribute.
+        Further attributes include the number of test cases.
+        Is revealed only after calling the "split" method.
+
+    number_of_transactions : int
+        Number of transactions in the dataset before splitting.
+
+    number_of_corrupted_records : int
+        Number of corrupted records skipped when reading data.
+
+    max_hold_out : int
+        Maximum number of unique articles to hold out for testing.
+
+    Methods
+    -------
+    split(hold_out, only_new)
+        Splits transaction data into training and test sets, holding out
+        the last "hold_out" unique articles each customer bought as test
+        set. The training set depends on whether "only_new" articles should
+        be recommened or also previously purchased ones. Once called, the
+        data attributes "train" and "test" are revealed.
+
+    Examples
+    --------
+    >>> data = TrainTest.from_csv(file)
+    >>> data.split(4, True)
+    >>> data.test.number_of_cases
+    10475
+
+    >>> data = TrainTest.from_postgreSQL(database)
+    >>> data.split(6, False)
+    >>> data.train.number_of_transactions
+    345697
+
+    '''
+
     def __init__(self, n_trans, n_corr, unique, transactions):
         super().__init__(n_trans, n_corr, unique, transactions)
         self.__unique = self._TrainTestBase__unique
         self.__transactions = self._TrainTestBase__transactions
 
     def split(self, hold_out=5, only_new=True):
+        '''Split transaction data into training and test set for benchmarking.
+
+        -----------------------
+
+        Parameters
+        ----------
+        hold_out : int, optional
+            How many unique articles to retain from each
+            customer's purchase history for testing later.
+            Defaults to 5.
+
+        only_new : bool
+            Whether only articles that a given customer has not yet
+            bought will be recommended.
+
+        Examples
+        --------
+        >>> data.split(4, True)
+
+        >>> data.split(6, False)
+
+        '''
         self.__check_boolean_type_of(only_new)
         hold_out = self.__checked_for_integer_type_and_range_of(hold_out)
         keep = {user: items

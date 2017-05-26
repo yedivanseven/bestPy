@@ -14,10 +14,65 @@ class TrainTestBase:
 
     @classmethod
     def from_csv(cls, file, separator=';', fmt=None):
+        '''Read transaction data from a CSV file.
+
+        -----------------------------------------
+
+        Parameters
+        ----------
+        file : str
+            Path to and name of CSV file holding transaction data
+            in three columns: timestamp, customer ID, article ID.
+
+        separator : str, optional
+            Delimiter character between entries on each line in the file.
+            Defaults to ';'.
+
+        fmt : str, optional
+            Datetime format string of the timestamp entries. Defaults to
+            None, meaning that the format is an (integer) Unix timestamp.
+
+        Returns
+        -------
+        Instance of TrainTest holding transaction data to split.
+
+        Examples
+        --------
+        >>> file = '/path/to/my/file.csv'
+        >>> data = TrainTest.from_csv(file, ',', '%Y-%m-%d %H:%M:%S')
+
+        >>> file = '/path/to/my/otherfile.csv'
+        >>> data = TrainTest.from_csv(file, '|')
+
+        See Also
+        --------
+        Consult the documentation of the python datetime module
+        for the correct formatting of datetime format strings.
+
+
+        '''
         return cls(*split.from_csv(file, separator=separator, fmt=fmt))
 
     @classmethod
     def from_postgreSQL(cls, database):
+        '''Read transaction data from a PostgreSQL database.
+
+        -----------------------------------------
+
+        Parameters
+        ----------
+        database : PostgreSQLparams
+            Configured instance of bestPy.datastructures.PostgreSQLparams.
+
+        Returns
+        -------
+        Instance of TrainTest holding transaction data to split.
+
+        Examples
+        --------
+        >>> data = TrainTest.from_postgreSQL(database)
+
+        '''
         return cls(*split.from_postgreSQL(database))
 
     @property

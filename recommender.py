@@ -10,6 +10,57 @@ RETURNING = True
 
 
 class RecommendationBasedOn:
+    '''Merges data and algorithm into an engine to make actual recommendations.
+
+    -------------------------------------
+
+    Parameters
+    ----------
+    data : object
+        A data instance (currently of bestPy.datastructures.Transactions).
+
+    Attributes
+    ----------
+    algorithm : str
+        The name of the algorithm used to make recommendations.
+
+    pruning_old : RecommendationBasedOn
+        The instance of RecommendationBasedOn it is called on, now set to
+        recommend only articles that a given customer has not bought before.
+
+    keeping_old : RecommendationBasedOn
+        The instance of RecommendationBasedOn it is called on, now set to
+        recommend also articles that a given customer has bought before.
+
+    only_new : bool
+        Whether the recommenations include articles that
+        a given customer has bought before or not.
+
+    baseline : object, optional
+        Algorithm object to provide a cold-start recommendation for
+        unknown customers. Defaults to bestPy.algorithms.Baseline
+
+    Methods
+    -------
+    using(algorithm) : RecommendationBasedOn
+        Called with a recommendation-algorithm object as argument, it
+        returns the instance of RecommendationBasedOn it is called on.
+
+    for_one(target, max_number_of_items) : generator
+        Returns a generator of up to max_number_of_items article IDs,
+        which are the recommendations for the customer with ID "target".
+
+    Examples
+    --------
+    >>> reco = RecommendationBasedOn(data).using(algorithm).pruning_old
+    >>> top_two = reco.for_one(customer, 2)
+    >>> for article in top_two:
+    >>>     print(article)
+    'bestPyHoodieMedium'
+    'bestPyBaseCap'
+
+    '''
+
     def __init__(self, data):
         self.__data = self.__transactions_type_checked(data)
         self.__only_new = True
@@ -19,6 +70,26 @@ class RecommendationBasedOn:
                                          RETURNING: self.__calculated}
 
     def using(self, algorithm):
+        '''Sets the algorithm object to compute recommendations.
+
+        --------------------------------------------------------
+
+        Parameters
+        ----------
+        algorithm : object, optional
+            An algorithm object to provide actual recommendations.
+            Defaults to bestPy.algorithms.CollaborativeFiltering.
+
+        Returns
+        -------
+        The RecommendationBasedOn instance it is called on.
+
+        Examples
+        --------
+        >>> recommendation = RecommendationBasedOn(data).pruning_old
+        >>> recommendation = recommendation.using(algorithm)
+
+        '''
         self.__check_base_attributes_of(algorithm)
         self.__recommendation = algorithm.operating_on(self.__data)
         self.__check_data_attributes_of(algorithm)
@@ -53,6 +124,36 @@ class RecommendationBasedOn:
         self.__check_data_attributes_of(baseline)
 
     def for_one(self, target, max_number_of_items=5):
+        '''Provides the actual recommendations.
+
+        ---------------------------------------------------
+
+        Parameters
+        ----------
+        target : object
+            ID of the customer to provide a recommendation for.
+
+        max_number_of_items : int, optional
+            The number of recommendations to provide. If fewer
+            than that are available, only the available number
+            will be returned. Defaults to 5.
+
+        Returns
+        -------
+        recommendations : generator
+            A generator for up to max_number_of_items article IDs
+            that are the recommendations for the specified customer.
+
+        Examples
+        --------
+        >>> reco = RecommendationBasedOn(data).using(algorithm).keeping_old
+        >>> top_two = reco.for_one(customer, 2)
+        >>> for article in top_two:
+        >>>     print(article)
+        'bestPyHoodieMedium'
+        'bestPyBaseCap'
+
+        '''
         head = self.__integer_type_and_range_checked(max_number_of_items)
         type_of = target in self.__data.user.index_of.keys()
         item_scores = self.__recommendation_for[type_of](target)
@@ -81,6 +182,7 @@ class RecommendationBasedOn:
 
     @staticmethod
     def __check_base_attributes_of(algorithm):
+        '''Check methods of algorithm and baseline before they get data.'''
         if not hasattr(algorithm, 'operating_on'):
             log.error('Attempt to set object lacking mandatory'
                       ' "operating_on()" method.')
@@ -96,6 +198,7 @@ class RecommendationBasedOn:
 
     @staticmethod
     def __check_data_attributes_of(algorithm):
+        '''Check methods of algorithm and baseline after they got data.'''
         if not algorithm.has_data:
             log.error("Object's 'has_data' attribute returned False"
                       " after attaching data.")

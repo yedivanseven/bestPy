@@ -5,6 +5,45 @@ from psycopg2.extensions import AsIs
 
 
 class PostgreSQLparams:
+    '''Holds parameters needed to retrieve transaction data from PostgreSQL.
+
+    ----------------------------
+
+    Attributes
+    ----------
+    login_db_name : str
+        Name of the database.
+
+    login_host : str
+        Host that the database is running on.
+
+    login_user : str
+        Name of user with access to table in database.
+
+    login_password : str
+        Password of user.
+
+    login : str
+        The current login string that will be used to log into the database.
+
+    table : str
+        Name of database table to retrieve transaction data from.
+
+    timestamp : str
+        Name of column with the timestamps of the transactions.
+
+    userID : str
+        Name of column with the customer IDs of the transactions.
+
+    itemID : str
+        Name of column with the article IDs of the transactions.
+
+    limit : int > 0 or str 'all', optional
+        How many records to retrieve from the database.
+        Defaults to 100.
+
+    '''
+
     def __init__(self):
         self.__login_db_name = '<dbname>'
         self.__login_host = '<host>'
@@ -50,7 +89,7 @@ class PostgreSQLparams:
 
     @property
     def login(self):
-        prefix = '_login'
+        prefix = '__login'
         params = [getattr(self, attr) for attr in dir(self) if prefix in attr]
         return ' '.join(params)
 

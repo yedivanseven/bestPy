@@ -7,6 +7,51 @@ from .help import IndexFrom, MatrixFrom
 
 
 class Transactions:
+    '''Read and hold transaction data from a number of sources.
+
+    Direct instantiation of this class is discouraged and, therefore,
+    not documented. Use the classmethods "from_csv", "from_postgreSQL", ...
+    instead and refer to the docstrings there!
+
+    -------------------------------------------------
+
+    Attributes
+    ----------
+    number_of_transactions : int
+        Number of transactions in the dataset before splitting.
+
+    number_of_corrupted_records : int
+        Number of corrupted records skipped when reading data.
+
+    number_of_userItem_pairs : int
+        Number of times any article has been bought by a unique user.
+
+    user : object
+        Provides two dictionary attributes to translate between
+        the customer ID in the data and the internally used
+        integer index, "id_of[someindex]" and "index_of[someID]".
+
+    item : object
+        Provides two dictionary attributes to translate between
+        the article ID in the data and the internally used
+        integer index, "id_of[someindex]" and "index_of[someID]".
+
+    matrix : object
+        Holds transaction data as customer-article matrix with the
+        former as rows, the latter as columns, and the number of
+        times a customer has bought an article as entries.
+
+    Examples
+    --------
+    >>> data = Transactions.from_csv(file)
+    >>> data.number_of_transactions
+    205830
+
+    >>> data = Transactions.from_postgreSQL(database)
+    >>> data.user.id_of['first customer']
+    0
+
+    '''
     def __init__(self, n_trans, n_corr, user_i, item_j, counts):
         self.__number_of_transactions = self.__int_type_value_checked(n_trans)
         self.__number_of_corrupted_records = self.__type_range_checked(n_corr)
@@ -18,10 +63,52 @@ class Transactions:
 
     @classmethod
     def from_csv(cls, file, separator=';'):
+        '''Read transaction data from a CSV file.
+
+        -----------------------------------------
+
+        Parameters
+        ----------
+        file : str
+            Path to and name of CSV file holding transaction data
+            in three columns: timestamp, customer ID, article ID.
+
+        separator : str, optional
+            Delimiter character between entries on each line in the file.
+            Defaults to ';'.
+
+        Returns
+        -------
+        Instance of Transactions holding the data.
+
+        Examples
+        --------
+        >>> file = '/path/to/my/file.csv'
+        >>> data = Transactions.from_csv(file, '|')
+
+        '''
         return cls(*read.from_csv(file, separator=separator))
 
     @classmethod
     def from_postgreSQL(cls, database):
+        '''Read transaction data from a PostgreSQL database.
+
+        -----------------------------------------
+
+        Parameters
+        ----------
+        database : PostgreSQLparams
+            Configured instance of bestPy.datastructures.PostgreSQLparams.
+
+        Returns
+        -------
+        Instance of Transactions holding the data.
+
+        Examples
+        --------
+        >>> data = Transactions.from_postgreSQL(database)
+
+        '''
         return cls(*read.from_postgreSQL(database))
 
     @property
