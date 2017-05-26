@@ -58,7 +58,7 @@ class MatrixFrom():
             log.warning('Matrix instantiated with empty dictionary.')
         else:
             key_log = ('Attempt to instantiate matrix object from dictionary'
-                      ' with keys not 2-tuple of integer >= 0.')
+                       ' with keys not 2-tuple of integer >= 0.')
             key_err = 'Keys of dictionary must be 2-tuple of integer >= 0!'
             val_log = ('Attempt to create matrix object from dictionary'
                        'with values not positive integers.')

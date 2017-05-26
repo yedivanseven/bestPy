@@ -31,7 +31,7 @@ class TrainTestBase():
     @property
     def max_hold_out(self):
         if not self.__has('max_hold_out'):
-            self.__max_hold_out =  max(len(u) for u in self.__unique.values())
+            self.__max_hold_out = max(len(u) for u in self.__unique.values())
         return self.__max_hold_out
 
     def __has(self, attribute):
@@ -95,7 +95,7 @@ class TrainTestBase():
                       ' transaction list.')
             raise ValueError('Transaction list must not be empty!')
         log_msg = ('Attempt to instantiate data object with transactions'
-                  ' not 3-tuples of strings.')
+                   ' not 3-tuples of strings.')
         err_msg = 'Transactions must be 3-tuples of strings!'
         first = transactions[0]
         if not isinstance(first, tuple):

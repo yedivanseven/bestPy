@@ -93,5 +93,5 @@ def depending_on(fmt=None):
 def finalized(last_unique):
     finalized = {user: {item: time.isoformat()
                         for item, time in article.items()}
-                for user, article in last_unique.items()}
+                 for user, article in last_unique.items()}
     return finalized

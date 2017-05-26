@@ -83,7 +83,7 @@ class CollaborativeFiltering():
 
     @staticmethod
     def __permitted(similarity):
-        if not similarity in all_similarities:
+        if similarity not in all_similarities:
             log.error('Attempt to set unrecognized similarity.')
             raise TypeError('Unrecognized similarity! See "all_similarities"'
                             ' from the similarities module for your choices.')

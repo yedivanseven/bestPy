@@ -113,7 +113,7 @@ class RecommendationBasedOn():
         if not isinstance(requested, int):
             log.error('Requested number of recommendations is not an integer.')
             raise TypeError('Requested number of recommendations must be'
-                             ' a positive integer!')
+                            ' a positive integer!')
         if requested < 1:
             log.error('Requested number of recommendations < 1.')
             raise ValueError('Requested number of recommendations must be'
