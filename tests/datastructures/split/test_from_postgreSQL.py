@@ -30,7 +30,7 @@ def no_connection_to(database):
 
 class TestSplitFromPostgreSQL(ut.TestCase):
 
-    def test_error_on_wrong_databse_object_type(self):
+    def test_error_on_wrong_database_object_type(self):
         log_msg = ['ERROR:root:Attempt to set database parameter object of'
                    ' incompatible type. Must be <PostgreSQLparams>.']
         err_msg = ('Database parameter object must be of'
@@ -190,35 +190,95 @@ class TestSplitFromPostgreSQL(ut.TestCase):
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_error_on_timestamp_field_neither_integer_nor_timestamp(self):
-        # needs test table with timestamp field neither integer nor timestamp
-        # overwrite the table attribute of the database to pick it
-        pass
+        db = database()
+        db.table = 'time_type_test'
+        log_msg = ['ERROR:root:Type of timestamp field is neither integer'
+                   ' nor timestamp.']
+        err_msg = 'Timestamp field must be an integer or a timestamp!'
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(TypeError, msg=err_msg) as err:
+                _ = from_postgreSQL(db)
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_timestamp_field_is_read_and_converted_correctly(self):
-        # needs new table created, e.g., from data25timestamp_fmt.csv
-        pass
+        db = database()
+        db.table = 'data25timestamp'
+        should_be = ('2012-03-06T23:26:35', '2012-03-09T16:18:02',
+                     '2012-03-09T16:18:02', '2012-03-09T16:18:52',
+                     '2012-03-09T16:19:01', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14')
+        with self.assertLogs(level=logging.WARNING):
+            _, _, _, transactions = from_postgreSQL(db)
+        actually_is = list(zip(*transactions))[0]
+        self.assertTupleEqual(actually_is, should_be)
+
+    @ut.skipIf(no_connection_to(database()),
+              'Could not establish connection to test database.')
+    def test_unix_epoch_field_is_read_and_converted_correctly(self):
+        db = database()
+        db.table = 'head25'
+        should_be = ('2012-03-06T23:26:35', '2012-03-06T23:53:45',
+                     '2012-03-09T16:18:02', '2012-03-09T16:18:02',
+                     '2012-03-09T16:18:33', '2012-03-09T16:18:52',
+                     '2012-03-09T16:19:01', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14', '2012-03-09T16:20:14',
+                     '2012-03-09T16:20:14')
+        _, _, _, transactions = from_postgreSQL(db)
+        actually_is = list(zip(*transactions))[0]
+        self.assertTupleEqual(actually_is, should_be)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_int_type_of_number_of_transactions(self):
-        pass
+        db = database()
+        db.table = 'data25timestamp'
+        with self.assertLogs(level=logging.WARNING):
+            n_rec, _, _, _ = from_postgreSQL(db)
+        self.assertIsInstance(n_rec, int)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_correct_number_of_transactions(self):
-        pass
+        db = database()
+        db.table = 'data25timestamp'
+        with self.assertLogs(level=logging.WARNING):
+            n_rec, _, _, _ = from_postgreSQL(db)
+        self.assertEqual(n_rec, 21)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_int_type_of_number_of_corrupted_records(self):
-        pass
+        db = database()
+        db.table = 'data25timestamp'
+        with self.assertLogs(level=logging.WARNING):
+            _, n_err, _, _ = from_postgreSQL(db)
+        self.assertIsInstance(n_err, int)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_correct_number_of_corrupted_records(self):
-        pass
+        db = database()
+        db.table = 'data25timestamp'
+        with self.assertLogs(level=logging.WARNING):
+            _, n_err, _, _ = from_postgreSQL(db)
+        self.assertEqual(n_err, 1)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
@@ -228,24 +288,64 @@ class TestSplitFromPostgreSQL(ut.TestCase):
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_correct_values_in_last_unique_items(self):
-        pass
+        db = database()
+        db.table = 'data25timestamp'
+        with self.assertLogs(level=logging.WARNING):
+            _, _, last_unique, _ = from_postgreSQL(db)
+        self.assertIsInstance(last_unique, dict)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_list_type_of_transactions(self):
-        pass
+        db = database()
+        db.table = 'data25timestamp'
+        should_be = {'4' : {'AC016EL50CPHALID-1749': '2012-03-06T23:26:35'},
+                     '12': {'SA848EL83DOYALID-2416': '2012-03-09T16:18:02',
+                            'BL152EL82CRXALID-1817': '2012-03-09T16:18:02'},
+                     '11': {'LE629EL54ANHALID-345': '2012-03-09T16:18:52'},
+                     '10': {'OL756EL65HDYALID-4834': '2012-03-09T16:19:01'},
+                     '7' : {'OL756EL55HAMALID-4744': '2012-03-09T16:20:14',
+                            'AC016EL56BKHALID-943': '2012-03-09T16:20:14'}}
+        with self.assertLogs(level=logging.WARNING):
+            _, _, last_unique, _ = from_postgreSQL(db)
+        self.assertDictEqual(last_unique, should_be)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_correct_values_transactions(self):
-        pass
+        db = database()
+        db.table = 'data25timestamp'
+        should_be = [('2012-03-06T23:26:35', '4', 'AC016EL50CPHALID-1749'),
+                     ('2012-03-09T16:18:02', '12', 'SA848EL83DOYALID-2416'),
+                     ('2012-03-09T16:18:02', '12', 'BL152EL82CRXALID-1817'),
+                     ('2012-03-09T16:18:52', '11', 'LE629EL54ANHALID-345'),
+                     ('2012-03-09T16:19:01', '10', 'OL756EL65HDYALID-4834'),
+                     ('2012-03-09T16:20:14', '7', 'OL756EL55HAMALID-4744'),
+                     ('2012-03-09T16:20:14', '7', 'OL756EL55HAMALID-4744'),
+                     ('2012-03-09T16:20:14', '7', 'OL756EL55HAMALID-4744'),
+                     ('2012-03-09T16:20:14', '7', 'OL756EL55HAMALID-4744'),
+                     ('2012-03-09T16:20:14', '7', 'OL756EL55HAMALID-4744'),
+                     ('2012-03-09T16:20:14', '7', 'OL756EL55HAMALID-4744'),
+                     ('2012-03-09T16:20:14', '7', 'OL756EL55HAMALID-4744'),
+                     ('2012-03-09T16:20:14', '7', 'OL756EL55HAMALID-4744'),
+                     ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
+                     ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
+                     ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
+                     ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
+                     ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
+                     ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
+                     ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943'),
+                     ('2012-03-09T16:20:14', '7', 'AC016EL56BKHALID-943')]
+        with self.assertLogs(level=logging.WARNING):
+            _, _, _, transactions = from_postgreSQL(db)
+        self.assertListEqual(transactions, should_be)
 
     @ut.skipIf(no_connection_to(database()),
               'Could not establish connection to test database.')
     def test_number_of_transactions_equals_length_transaction_list(self):
         with self.assertLogs(level=logging.WARNING):
-            n_rec, _, _, transacts = from_postgreSQL(database())
-        self.assertEqual(n_rec, len(transacts))
+            n_rec, _, _, transactions = from_postgreSQL(database())
+        self.assertEqual(n_rec, len(transactions))
 
 
 if __name__ == '__main__':

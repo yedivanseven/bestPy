@@ -77,7 +77,7 @@ def converted(timestamp):
                          int: lambda time: dt.datetime.fromtimestamp(time)}
     type_of = type(timestamp)
     if type_of not in converted.keys():
-        log.error('Type of timestamp field is neither integer nor timestamp!')
+        log.error('Type of timestamp field is neither integer nor timestamp.')
         raise TypeError('Timestamp field must be an integer or a timestamp!')
     return converted[type_of](timestamp)
 
