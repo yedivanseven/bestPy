@@ -10,10 +10,12 @@ class IndexFrom:
 
     @property
     def index_of(self):
+        '''Dictionary with unique ID as key and integer index as value.'''
         return self.__index_of
 
     @property
     def id_of(self):
+        '''Dictionary with integer index as key and unique ID as value.'''
         if not self.__has('id_of'):
             self.__id_of = {value: key
                             for key, value

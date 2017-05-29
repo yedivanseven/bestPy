@@ -16,8 +16,6 @@ class TrainTestBase:
     def from_csv(cls, file, separator=';', fmt=None):
         '''Read transaction data from a CSV file.
 
-        -----------------------------------------
-
         Parameters
         ----------
         file : str
@@ -30,11 +28,11 @@ class TrainTestBase:
 
         fmt : str, optional
             Datetime format string of the timestamp entries. Defaults to
-            None, meaning that the format is an (integer) Unix timestamp.
+            `None`, meaning that the format is an (integer) Unix timestamp.
 
         Returns
         -------
-        Instance of TrainTest holding transaction data to split.
+        Instance of `TrainTest` holding transaction data to split.
 
         Examples
         --------
@@ -57,16 +55,14 @@ class TrainTestBase:
     def from_postgreSQL(cls, database):
         '''Read transaction data from a PostgreSQL database.
 
-        -----------------------------------------
-
         Parameters
         ----------
-        database : PostgreSQLparams
-            Configured instance of bestPy.datastructures.PostgreSQLparams.
+        database : `PostgreSQLparams`
+            Configured instance of `bestPy.datastructures.PostgreSQLparams`.
 
         Returns
         -------
-        Instance of TrainTest holding transaction data to split.
+        Instance of `TrainTest` holding transaction data to split.
 
         Examples
         --------
@@ -85,6 +81,7 @@ class TrainTestBase:
 
     @property
     def max_hold_out(self):
+        '''Maximum number of articles that can be retained as test set.'''
         if not self.__has('max_hold_out'):
             self.__max_hold_out = max(len(u) for u in self.__unique.values())
         return self.__max_hold_out

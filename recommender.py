@@ -12,24 +12,22 @@ RETURNING = True
 class RecommendationBasedOn:
     '''Merges data and algorithm into an engine to make actual recommendations.
 
-    -------------------------------------
-
     Parameters
     ----------
     data : object
-        A data instance (currently of bestPy.datastructures.Transactions).
+        A data instance (currently of `bestPy.datastructures.Transactions`).
 
     Attributes
     ----------
     algorithm : str
         The name of the algorithm used to make recommendations.
 
-    pruning_old : RecommendationBasedOn
-        The instance of RecommendationBasedOn it is called on, now set to
+    pruning_old : `RecommendationBasedOn`
+        The instance of `RecommendationBasedOn` it is called on, now set to
         recommend only articles that a given customer has not bought before.
 
-    keeping_old : RecommendationBasedOn
-        The instance of RecommendationBasedOn it is called on, now set to
+    keeping_old : `RecommendationBasedOn`
+        The instance of `RecommendationBasedOn` it is called on, now set to
         recommend also articles that a given customer has bought before.
 
     only_new : bool
@@ -38,17 +36,17 @@ class RecommendationBasedOn:
 
     baseline : object, optional
         Algorithm object to provide a cold-start recommendation for
-        unknown customers. Defaults to bestPy.algorithms.Baseline.
+        unknown customers. Defaults to `bestPy.algorithms.Baseline`.
 
     Methods
     -------
-    using(algorithm) : RecommendationBasedOn
+    using(algorithm) : `RecommendationBasedOn`
         Called with a recommendation-algorithm object as argument, it
-        returns the instance of RecommendationBasedOn it is called on.
+        returns the instance of `RecommendationBasedOn` it is called on.
 
     for_one(target, max_number_of_items) : generator
-        Returns a generator of up to max_number_of_items article IDs,
-        which are the recommendations for the customer with ID "target".
+        Returns a generator of up to `max_number_of_items article` IDs,
+        which are the recommendations for the customer with ID `target`.
 
     Examples
     --------
@@ -72,17 +70,15 @@ class RecommendationBasedOn:
     def using(self, algorithm):
         '''Sets the algorithm object to compute recommendations.
 
-        --------------------------------------------------------
-
         Parameters
         ----------
         algorithm : object, optional
             An algorithm object to provide actual recommendations.
-            Defaults to bestPy.algorithms.CollaborativeFiltering.
+            Defaults to `bestPy.algorithms.CollaborativeFiltering`.
 
         Returns
         -------
-        The RecommendationBasedOn instance it is called on.
+        The `RecommendationBasedOn` instance it is called on.
 
         Examples
         --------
@@ -126,8 +122,6 @@ class RecommendationBasedOn:
     def for_one(self, target, max_number_of_items=5):
         '''Provides the actual recommendations.
 
-        ---------------------------------------------------
-
         Parameters
         ----------
         target : object
@@ -141,7 +135,7 @@ class RecommendationBasedOn:
         Returns
         -------
         recommendations : generator
-            A generator for up to max_number_of_items article IDs
+            A generator for up to `max_number_of_items` article IDs
             that are the recommendations for the specified customer.
 
         Examples

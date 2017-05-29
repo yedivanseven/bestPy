@@ -11,6 +11,7 @@ class MatrixFrom:
 
     @property
     def by_col(self):
+        '''Customer-article matrix in scipy compressed sparse column format.'''
         if not self.__has('by_col'):
             counts, indices = tuple(zip(*((count, user_item)
                                           for user_item, count
@@ -21,6 +22,7 @@ class MatrixFrom:
 
     @property
     def bool_by_col(self):
+        '''Customer-article CSC matrix with all non-zero entries set to 1.'''
         if not self.__has('bool_by_col'):
             self.__bool_by_col = self.by_col.copy()
             self.__bool_by_col.data[:] = 1.0
@@ -28,12 +30,14 @@ class MatrixFrom:
 
     @property
     def by_row(self):
+        '''Customer-article matrix in scipy compressed sparse row format.'''
         if not self.__has('by_row'):
             self.__by_row = self.by_col.tocsr()
         return self.__by_row
 
     @property
     def bool_by_row(self):
+        '''Customer-article CSR matrix with all non-zero entries set to 1.'''
         if not self.__has('bool_by_row'):
             self.__bool_by_row = self.by_row.copy()
             self.__bool_by_row.data[:] = 1.0
@@ -41,6 +45,7 @@ class MatrixFrom:
 
     @property
     def min_shape(self):
+        '''Number of rows or number of columns, whichever is smaller.'''
         if not self.__has('min_shape'):
             self.__min_shape = min(self.by_col.shape)
         return self.__min_shape

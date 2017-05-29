@@ -8,20 +8,18 @@ from .datastructures.help import TestDataFrom
 class Benchmark:
     '''Benchmarks a given recommendation engine against held-out test data.
 
-    ------------------------------------------------------------
-
     Parameters
     ----------
-    recommender : RecommendationBasedOn
-        A configured instance of bestPy.RecommendationBasedOn
+    recommender : `RecommendationBasedOn`
+        A configured instance of `bestPy.RecommendationBasedOn`
         with suitable training data.
 
     Methods
     -------
-    against(test) : Benchmark instance it is called from
-        Called with a TestDataFrom instance as argument, it returns
-        the Benchmark instance it is called from and unlocks the
-        otherwise hidden attribute "score".
+    against(test) : `Benchmark` instance it is invoked on.
+        Called with a `TestDataFrom` instance as argument, it returns
+        the `Benchmark` instance it is invoked on and unlocks the
+        otherwise hidden attribute `score`.
 
     Attributes
     ----------
@@ -42,17 +40,15 @@ class Benchmark:
     def against(self, test):
         '''Sets the test data to score the provided recommendation engine.
 
-        -----------------
-
         Parameters
         ----------
-        test : TestDataFrom
-            An instance of TestDataFrom, best provided by the test attribute
-            of a bestPy.datastructures.TrainTest instance.
+        test : object
+            An test-data object, best provided by the `test` attribute 
+            of a `bestPy.datastructures.TrainTest` instance.
 
         Returns
         -------
-        The instance of Benchmark it is called on.
+        The instance of `Benchmark` it is called on.
 
         Examples
         --------

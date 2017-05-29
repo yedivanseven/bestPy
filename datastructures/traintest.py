@@ -11,21 +11,18 @@ class TrainTest(TrainTestBase):
     '''Transaction data split into training and test sets for benchmarking.
 
     Direct instantiation of this class is discouraged and, therefore,
-    not documented. Use the classmethods "from_csv", "from_postgreSQL", ...
+    not documented. Use the classmethods `from_csv`, `from_postgreSQL`, ...
     instead and refer to the docstrings there!
-
-    -------------------------------------------------
 
     Attributes
     ----------
-    train : Transactions
-        Instance of bestPy.datastructures.Transactions holding
-        the training data. Revealed after calling the "split" method.
+    train : `Transactions`
+        Instance of `bestPy.datastructures.Transactions` holding
+        the training data. Revealed after calling the `split` method.
 
     test : object
-        Object with test data as dictionary in its "data" attribute.
-        Further attributes include the number of test cases.
-        Is revealed only after calling the "split" method.
+        Object with test data as dictionary in its `data` attribute, revealed
+        only after calling the `split` method.
 
     number_of_transactions : int
         Number of transactions in the dataset before splitting.
@@ -34,16 +31,16 @@ class TrainTest(TrainTestBase):
         Number of corrupted records skipped when reading data.
 
     max_hold_out : int
-        Maximum number of unique articles to hold out for testing.
+        Maximum number of unique articles that can be held out for testing.
 
     Methods
     -------
     split(hold_out, only_new)
-        Splits transaction data into training and test sets, holding out
-        the last "hold_out" unique articles each customer bought as test
-        set. The training set depends on whether "only_new" articles should
-        be recommened or also previously purchased ones. Once called, the
-        data attributes "train" and "test" are revealed.
+        Splits transaction data. The last `hold_out` unique articles each
+        customer bought (up to a maximum of `max_hold_out`) are held out as
+        test set. The training set depends on whether `only_new` articles
+        should be recommened or also previously purchased ones. Once called,
+        the data attributes `train` and `test` are revealed.
 
     Examples
     --------
@@ -67,14 +64,12 @@ class TrainTest(TrainTestBase):
     def split(self, hold_out=5, only_new=True):
         '''Split transaction data into training and test set for benchmarking.
 
-        -----------------------
-
         Parameters
         ----------
         hold_out : int, optional
             How many unique articles to retain from each
             customer's purchase history for testing later.
-            Defaults to 5.
+            Default is 5 and maximum value is attribute `max_hold_out`.
 
         only_new : bool
             Whether only articles that a given customer has not yet
@@ -108,15 +103,19 @@ class TrainTest(TrainTestBase):
                      and (item, timestamp) not in last_unique_items_of[user])
         self.__test = TestDataFrom(test, hold_out, only_new)
         TrainTest.test = property(lambda obj: obj.__test)
+        TrainTest.test.__doc__ = TrainTest.test_docstring
         self.__train = Transactions.from_csv(FileFrom(train))
         TrainTest.train = property(lambda obj: obj.__train)
+        TrainTest.train.__doc__ = TrainTest.train_doctring
 
     @staticmethod
     def __last(unique):
+        '''Sort dict by time and return list of (item, time) tuples.'''
         return sorted(unique.items(), key=itemgetter(1), reverse=True)
 
     @staticmethod
     def __items_from(last_transactions):
+        '''Get set of items from list of (item, timestamp) tuples.'''
         return set(tuple(zip(*last_transactions))[0])
 
     @staticmethod
@@ -137,3 +136,29 @@ class TrainTest(TrainTestBase):
                         ' Resetting to {0}.'.format(self.max_hold_out))
             hold_out = self.max_hold_out
         return hold_out
+
+    test_docstring = '''Test data to benchmark algorithms and baselines.
+
+                     Attributes
+                     ----------
+                     data : dict
+                        Test data as dictionary with customer IDs as keys and
+                        set of `hold-out` article IDs as values.
+
+                     hold_out : int
+                         Number of articles in test set for each customer.
+
+                     only_new : bool
+                         Whether `only_new` articles are recommended.
+
+                     number_of_cases : int
+                         Number of users in the test data set.
+
+                     '''
+    train_doctring = '''Training data of type `Transactions`.
+
+                     See also
+                     --------
+                     Documentation of `bestPy.datastructures.Transactions`
+
+                     '''

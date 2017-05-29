@@ -197,7 +197,7 @@ class TestTransactions(ut.TestCase):
 
     def test_users_who_bought(self):
         should_be = [[0], [1], [1], [2], [3], [3]]
-        actual = [self.data.users_who_bought(i).tolist() for i in range(6)]
+        actual = [self.data._users_who_bought(i).tolist() for i in range(6)]
         self.assertListEqual(should_be, actual)
 
 

@@ -5,6 +5,36 @@ from ...datastructures import Transactions
 
 
 class Baseline:
+    '''Baseline recommendation based only on article popularity.
+
+    Attributes
+    ----------
+    binarize : bool, optional
+        Whether article popularity is evaluated as number of unique buyers
+        (``True``) or number of times bought (``False``). Defaults to ``True``.
+
+    Methods
+    -------
+    operating_on(data) : `Baseline`
+        Returns the `Baseline` instance it is called on with the `data`
+        object attached to it. It then `has_data` and reveals the method ...
+
+    for_one() : array
+        Returns an array with ratings of all articles. The higher the rating,
+        the more highly recommended the article with that rating's index is.
+
+    Examples
+    --------
+    >>> baseline = Baseline().operating_on(data)
+    >>> baseline.has_data
+    True
+
+    >>> baseline.binarize = False
+    >>> baseline.for_one()
+    array([ 1.,  5.,  7.,  1.,  1.])
+
+    '''
+
     def __init__(self):
         self.__binarize = True
         self.__depending_on_whether_we = {True : self.__count_unique_buyers,
@@ -13,6 +43,7 @@ class Baseline:
 
     @property
     def binarize(self):
+        '''Count number of: times bought (``True``) or buyers (``False``).'''
         return self.__binarize
 
     @binarize.setter
@@ -23,6 +54,24 @@ class Baseline:
         self.__binarize = binarize
 
     def operating_on(self, data):
+        '''Set data object for the baseline algorithm to operate on.
+
+        Parameters
+        ----------
+        data : `Transactions`
+            Instance of `bestPy.datastructures.Transactions`.
+
+        Returns
+        -------
+        The instance of `Baseline` it is called on.
+
+        Examples
+        --------
+        >>> baseline = Baseline().operating_on(data)
+        >>> baseline.has_data
+        True
+
+        '''
         self.__data = self.__transactions_type_checked(data)
         self.__delete_precomputed()
         self.for_one = self.__for_one
@@ -33,6 +82,15 @@ class Baseline:
         return self.__has('data')
 
     def __for_one(self, target=None):
+        '''Returns array with the popularity of all articles.
+
+        Examples
+        --------
+        >>> baseline = Baseline().operating_on(data)
+        >>> baseline.for_one()
+        array([ 1.,  5.,  7.,  1.,  1.])
+
+        '''
         return self.__depending_on_whether_we[self.binarize]()
 
     def __count_unique_buyers(self):

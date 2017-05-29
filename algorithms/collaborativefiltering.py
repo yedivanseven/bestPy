@@ -7,6 +7,54 @@ from ..datastructures import Transactions
 
 
 class CollaborativeFiltering:
+    '''Collaborative filtering based on article-article similarity.
+
+    Attributes
+    ----------
+    binarize : bool, optional
+        Whether the customer-article matrix contains the number of unique
+        buyers (``True``) or number of times bought (``False``) as entries.
+        Defaults to ``True``.
+
+    similarity : function, optional
+        Takes data object of type `bestPy.datastructures.Transactions` as
+        argument and returns similarity matrix in scipy compressed sparse
+        column (CSC) format. Defaults to `kulsinski`.
+
+    baseline : object, object
+        Fall-back algorithm needed for customers that only bought articles
+        no one else bought. Defaults to `bestPy.algorithms.Baseline`.
+
+    Methods
+    -------
+    operating_on(data) : `CollaborativeFiltering`
+        Returns the `CollaborativeFiltering` instance it is called on with
+        the `data` object attached. It then `has_data` and reveals method ...
+
+    for_one(target) : array
+        Returns an array with ratings of all articles for the customer with
+        the internal integer index `target`. The higher the rating,
+        the more highly recommended the article is for customer `target`.
+
+    Examples
+    --------
+    >>> ratings = CollaborativeFiltering().operating_on(data)
+    >>> ratings.has_data
+    True
+
+    >>> ratings.similarity
+    'kulsinksi'
+
+    >>> ratings.baseline
+    'Baseline'
+
+    >>> customer = 245
+    >>> ratings.binarize = True
+    >>> ratings.for_one(customer)
+    array([ 0.16129032,  0.09677419, ...., 0.06451613])
+
+    '''
+
     def __init__(self):
         self.__binarize = True
         self.__similarity = default_similarity
@@ -15,6 +63,7 @@ class CollaborativeFiltering:
 
     @property
     def binarize(self):
+        '''Count number of: times bought (``True``) or buyers (``False``).'''
         return self.__binarize
 
     @binarize.setter
@@ -23,6 +72,7 @@ class CollaborativeFiltering:
 
     @property
     def similarity(self):
+        '''Measure used to compute the similarity between articles.'''
         return self.__similarity.__name__
 
     @similarity.setter
@@ -34,6 +84,7 @@ class CollaborativeFiltering:
 
     @property
     def baseline(self):
+        '''Baseline algorithm used for uncomparable customers.'''
         return self.__baseline.__class__.__name__
 
     @baseline.setter
@@ -44,10 +95,30 @@ class CollaborativeFiltering:
             self.__baseline = self.__data_attribute_checked(self.__baseline)
 
     def operating_on(self, data):
+        '''Set data object for the algorithm to operate on.
+
+        Parameters
+        ----------
+        data : `Transactions`
+            Instance of `bestPy.datastructures.Transactions`.
+
+        Returns
+        -------
+        The instance of `CollaborativeFiltering` it is called on.
+
+        Examples
+        --------
+        >>> algorithm = CollaborativeFiltering().operating_on(data)
+        >>> algorithm.has_data
+        True
+
+        '''
         self.__data = self.__transactions_type_checked(data)
         self.__baseline = self.__baseline.operating_on(data)
         self.__baseline = self.__data_attribute_checked(self.__baseline)
         self.__delete_sim_mat()
+        self.__depending_on_whether_we = {True: self.__data.matrix.bool_by_row,
+                                          False: self.__data.matrix.by_row}
         self.for_one = self.__for_one
         return self
 
@@ -56,13 +127,31 @@ class CollaborativeFiltering:
         return self.__has('data')
 
     def __for_one(self, target):
+        '''Make an actual recommendation for the target customer.
+
+        Parameters
+        ----------
+        target : int
+            Internally used integer index of the target customer.
+
+        Returns
+        -------
+        array : float
+            Suitability ratings of all items for the target customer.
+
+        Examples
+        --------
+        >>> ratings = CollaborativeFiltering().operating_on(data)
+        >>> customer = 245
+        >>> ratings.for_one(customer)
+        array([ 0.16129032,  0.09677419, ...., 0.06451613])
+
+        '''
         if self.__no_one_else_bought_items_bought_by(target):
             log.info('Uncomparable user with ID {}. Returning baseline'
                      ' recommendation.'.format(self.__data.user.id_of[target]))
             return self.__baseline.for_one()
-        history_vector = self.__data.matrix.by_row[target]
-        if self.binarize:
-            history_vector.data[:] = 1.0
+        history_vector = self.__depending_on_whether_we[self.binarize][target]
         return history_vector.dot(self.__similarity_matrix()).A[0]
 
     def __similarity_matrix(self):
@@ -76,7 +165,7 @@ class CollaborativeFiltering:
 
     def __no_one_else_bought_items_bought_by(self, target):
         items_bought_by_target = self.__data.matrix.by_row[target].indices
-        return self.__data.users_who_bought(items_bought_by_target).size == 1
+        return self.__data._users_who_bought(items_bought_by_target).size == 1
 
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
@@ -106,6 +195,7 @@ class CollaborativeFiltering:
 
     @staticmethod
     def __base_attribute_checked(baseline):
+        '''Check methods and attributes of baseline before data is attached.'''
         if not hasattr(baseline, 'operating_on'):
             log.error('Attempt to set baseline object lacking mandatory'
                       ' "operating_on()" method.')
@@ -122,6 +212,7 @@ class CollaborativeFiltering:
 
     @staticmethod
     def __data_attribute_checked(baseline):
+        '''Check methods and attirbutes of baseline after data is attached.'''
         if not baseline.has_data:
             log.error("Baseline object's 'has_data' attribute returned False"
                       " after attaching data.")

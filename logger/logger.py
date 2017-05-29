@@ -6,8 +6,6 @@ import logging as log
 def write_log_to(file, log_level=30):
     '''Initialize the logging functionality of bestPy.
 
-    ------------------------------------------------
-
     Parameters
     ----------
     file : str

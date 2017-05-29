@@ -10,10 +10,8 @@ class Transactions:
     '''Read and hold transaction data from a number of sources.
 
     Direct instantiation of this class is discouraged and, therefore,
-    not documented. Use the classmethods "from_csv", "from_postgreSQL", ...
+    not documented. Use the classmethods `from_csv`, `from_postgreSQL`, ...
     instead and refer to the docstrings there!
-
-    -------------------------------------------------
 
     Attributes
     ----------
@@ -28,13 +26,13 @@ class Transactions:
 
     user : object
         Provides two dictionary attributes to translate between
-        the customer ID in the data and the internally used
-        integer index, "id_of[someindex]" and "index_of[someID]".
+        the unqiue customer ID in the data and the internally used
+        (integer) customer index.
 
     item : object
         Provides two dictionary attributes to translate between
-        the article ID in the data and the internally used
-        integer index, "id_of[someindex]" and "index_of[someID]".
+        the unique article ID in the data and the internally used
+        (integer) article index.
 
     matrix : object
         Holds transaction data as customer-article matrix with the
@@ -48,8 +46,11 @@ class Transactions:
     205830
 
     >>> data = Transactions.from_postgreSQL(database)
-    >>> data.user.id_of['first customer']
+    >>> data.user.index_of['first customer']
     0
+
+    >>> data.item.id_of[1]
+    'second article'
 
     '''
     def __init__(self, n_trans, n_corr, user_i, item_j, counts):
@@ -65,8 +66,6 @@ class Transactions:
     def from_csv(cls, file, separator=';'):
         '''Read transaction data from a CSV file.
 
-        -----------------------------------------
-
         Parameters
         ----------
         file : str
@@ -79,7 +78,7 @@ class Transactions:
 
         Returns
         -------
-        Instance of Transactions holding the data.
+        Instance of `Transactions` holding the data.
 
         Examples
         --------
@@ -93,16 +92,14 @@ class Transactions:
     def from_postgreSQL(cls, database):
         '''Read transaction data from a PostgreSQL database.
 
-        -----------------------------------------
-
         Parameters
         ----------
-        database : PostgreSQLparams
-            Configured instance of bestPy.datastructures.PostgreSQLparams.
+        database : `PostgreSQLparams`
+            Configured instance of `bestPy.datastructures.PostgreSQLparams`.
 
         Returns
         -------
-        Instance of Transactions holding the data.
+        Instance of `Transactions` holding the data.
 
         Examples
         --------
@@ -125,17 +122,20 @@ class Transactions:
 
     @property
     def user(self):
+        '''Convert between unique customer ID and internal integer index.'''
         return self.__user
 
     @property
     def item(self):
+        '''Convert between unique article ID and internal integer index.'''
         return self.__item
 
     @property
     def matrix(self):
+        '''Customer-article matrix in various `scipy.sparse` formats.'''
         return self.__matrix
 
-    def users_who_bought(self, items):
+    def _users_who_bought(self, items):
         return unique(self.matrix.by_col[:, items].indices)
 
     @staticmethod

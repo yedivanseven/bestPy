@@ -7,6 +7,47 @@ from ..datastructures import Transactions
 
 
 class TruncatedSVD:
+    '''Recommendation based on a truncated SVD of the cutomer-article matrix.
+
+    Attributes
+    ----------
+    binarize : bool, optional
+        Whether the customer-article matrix contains the number of unique
+        buyers (``True``) or number of times bought (``False``) as entries.
+        Defaults to ``True``.
+
+    number_of_factors : integer, optional
+        Number of latent variables thought to charaterize both the customers
+        and the articles. Defaults to 20.
+
+    Methods
+    -------
+    operating_on(data) : `TruncatedSVD`
+        Returns the `TruncatedSVD` instance it is called on with the `data`
+        object attached to it. It then `has_data` and reveals the method ...
+
+    for_one(target) : array
+        Returns an array with ratings of all articles for the customer with
+        the internal integer index `target`. The higher the rating,
+        the more highly recommended the article is for customer `target`.
+
+    Examples
+    --------
+    >>> ratings = TruncatedSVD().operating_on(data)
+    >>> ratings.has_data
+    True
+
+    >>> ratings.max_number_of_factors
+    278
+
+    >>> ratings.binarize = False
+    >>> ratings.number_of_factors = 30
+    >>> customer = 245
+    >>> ratings.for_one(customer)
+    array([ 0.16129032,  0.09677419, ...., 0.06451613])
+
+    '''
+
     def __init__(self):
         self.__binarize = True
         self.__number_of_factors = 20
@@ -14,6 +55,7 @@ class TruncatedSVD:
 
     @property
     def binarize(self):
+        '''Count number of: times bought (``True``) or buyers (``False``).'''
         return self.__binarize
 
     @binarize.setter
@@ -25,6 +67,7 @@ class TruncatedSVD:
 
     @property
     def number_of_factors(self):
+        '''Number of latent variables characterizing cutomers and articles.'''
         return self.__number_of_factors
 
     @number_of_factors.setter
@@ -36,10 +79,33 @@ class TruncatedSVD:
             self.__delete_USV_matrices()
 
     def operating_on(self, data):
+        '''Set data object for the algorithm to operate on.
+
+        Parameters
+        ----------
+        data : `Transactions`
+            Instance of `bestPy.datastructures.Transactions`.
+
+        Returns
+        -------
+        The instance of `TruncatedSVD` it is called on.
+
+        Examples
+        --------
+        >>> algorithm = TruncatedSVD().operating_on(data)
+        >>> algorithm.has_data
+        True
+
+        >>> algorithm.max_number_of_factors
+        278
+
+        '''
         self.__data = self.__transactions_type_checked(data)
         TruncatedSVD.max_number_of_factors = property(
             lambda obj: obj.__data.matrix.min_shape - 1
         )
+        doc = '''Maximum number of latent variables suported by the data.'''
+        TruncatedSVD.max_number_of_factors.__doc__ = doc
         self.__reset(self.number_of_factors)
         self.__delete_USV_matrices()
         self.for_one = self.__for_one
@@ -50,6 +116,27 @@ class TruncatedSVD:
         return self.__has('data')
 
     def __for_one(self, target):
+        '''Make an actual recommendation for the target customer.
+
+        Parameters
+        ----------
+        target : int
+            Internally used integer index of the target customer.
+
+        Returns
+        -------
+        array : float
+            Suitability ratings of all items for the target customer.
+
+        Examples
+        --------
+        >>> ratings = TruncatedSVD().operating_on(data)
+        >>> ratings.number_of_factors = 30
+        >>> customer = 245
+        >>> ratings.for_one(customer)
+        array([ 0.16129032,  0.09677419, ...., 0.06451613])
+
+        '''
         if not self.__has('U'):
             self.__compute_USV_matrices()
         return self.__U[target].dot(self.__SV)
