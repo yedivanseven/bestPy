@@ -142,8 +142,8 @@ class TrainTest(TrainTestBase):
                        Attributes
                        ----------
                        data : dict
-                           Test data as dictionary with customer IDs as keys and
-                           set of `hold-out` article IDs as values.
+                           Test data as dictionary with customer IDs as keys
+                           and set of `hold-out` article IDs as values.
 
                        hold_out : int
                            Number of articles in test set for each customer.
