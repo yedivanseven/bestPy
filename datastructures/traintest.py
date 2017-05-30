@@ -106,7 +106,7 @@ class TrainTest(TrainTestBase):
         TrainTest.test.__doc__ = TrainTest.__test_docstring
         self.__train = Transactions.from_csv(FileFrom(train))
         TrainTest.train = property(lambda obj: obj.__train)
-        TrainTest.train.__doc__ = TrainTest.__train_doctring
+        TrainTest.train.__doc__ = TrainTest.__train_docstring
 
     @staticmethod
     def __last(unique):
@@ -155,10 +155,10 @@ class TrainTest(TrainTestBase):
                            Number of users in the test data set.
 
                        """
-    __train_doctring = """Training data of type `Transactions`.
+    __train_docstring = """Training data of type `Transactions`.
 
-                       See also
-                       --------
-                       Documentation of `bestPy.datastructures.Transactions`
+                        See also
+                        --------
+                        Documentation of `bestPy.datastructures.Transactions`
 
-                       """
+                        """
