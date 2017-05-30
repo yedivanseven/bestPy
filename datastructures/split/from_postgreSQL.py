@@ -15,9 +15,9 @@ def from_postgreSQL(database):
     last_unique_items_of = defaultdict(lambda:
                            defaultdict(lambda: dt.datetime(1, 1, 1)))
 
-    query = '''SELECT %(timestamp)s, %(userid)s, %(articleid)s
+    query = """SELECT %(timestamp)s, %(userid)s, %(articleid)s
                FROM %(table)s
-               LIMIT %(limit)s'''
+               LIMIT %(limit)s"""
 
     def process_valid_transaction(record):
         timestamp, user, item = record

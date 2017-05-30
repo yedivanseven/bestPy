@@ -5,7 +5,7 @@ from ...datastructures import Transactions
 
 
 class Baseline:
-    '''Baseline recommendation based only on article popularity.
+    """Baseline recommendation based only on article popularity.
 
     Attributes
     ----------
@@ -33,7 +33,7 @@ class Baseline:
     >>> baseline.for_one()
     array([ 1.,  5.,  7.,  1.,  1.])
 
-    '''
+    """
 
     def __init__(self):
         self.__binarize = True
@@ -43,7 +43,7 @@ class Baseline:
 
     @property
     def binarize(self):
-        '''Count number of: times bought (``True``) or buyers (``False``).'''
+        """Count number of: times bought (``True``) or buyers (``False``)."""
         return self.__binarize
 
     @binarize.setter
@@ -54,7 +54,7 @@ class Baseline:
         self.__binarize = binarize
 
     def operating_on(self, data):
-        '''Set data object for the baseline algorithm to operate on.
+        """Set data object for the baseline algorithm to operate on.
 
         Parameters
         ----------
@@ -71,7 +71,7 @@ class Baseline:
         >>> baseline.has_data
         True
 
-        '''
+        """
         self.__data = self.__transactions_type_checked(data)
         self.__delete_precomputed()
         self.for_one = self.__for_one
@@ -82,7 +82,7 @@ class Baseline:
         return self.__has('data')
 
     def __for_one(self, target=None):
-        '''Returns array with the popularity of all articles.
+        """Returns array with the popularity of all articles.
 
         Examples
         --------
@@ -90,7 +90,7 @@ class Baseline:
         >>> baseline.for_one()
         array([ 1.,  5.,  7.,  1.,  1.])
 
-        '''
+        """
         return self.__depending_on_whether_we[self.binarize]()
 
     def __count_unique_buyers(self):

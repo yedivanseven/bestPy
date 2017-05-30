@@ -7,7 +7,7 @@ from ..datastructures import Transactions
 
 
 class TruncatedSVD:
-    '''Recommendation based on a truncated SVD of the customer-article matrix.
+    """Recommendation based on a truncated SVD of the customer-article matrix.
 
     Attributes
     ----------
@@ -50,7 +50,7 @@ class TruncatedSVD:
     >>> ratings.for_one(customer)
     array([ 0.16129032,  0.09677419, ...., 0.06451613])
 
-    '''
+    """
 
     def __init__(self):
         self.__binarize = True
@@ -59,7 +59,7 @@ class TruncatedSVD:
 
     @property
     def binarize(self):
-        '''Count number of: times bought (``True``) or buyers (``False``).'''
+        """Count number of: times bought (``True``) or buyers (``False``)."""
         return self.__binarize
 
     @binarize.setter
@@ -71,7 +71,7 @@ class TruncatedSVD:
 
     @property
     def number_of_factors(self):
-        '''Number of latent variables characterizing cutomers and articles.'''
+        """Number of latent variables characterizing cutomers and articles."""
         return self.__number_of_factors
 
     @number_of_factors.setter
@@ -83,7 +83,7 @@ class TruncatedSVD:
             self.__delete_USV_matrices()
 
     def operating_on(self, data):
-        '''Set data object for the algorithm to operate on.
+        """Set data object for the algorithm to operate on.
 
         Parameters
         ----------
@@ -104,12 +104,12 @@ class TruncatedSVD:
         >>> algorithm.max_number_of_factors
         278
 
-        '''
+        """
         self.__data = self.__transactions_type_checked(data)
         TruncatedSVD.max_number_of_factors = property(
             lambda obj: obj.__data.matrix.min_shape - 1
         )
-        doc = '''Maximum number of latent variables suported by the data.'''
+        doc = """Maximum number of latent variables suported by the data."""
         TruncatedSVD.max_number_of_factors.__doc__ = doc
         self.__reset(self.number_of_factors)
         self.__delete_USV_matrices()
@@ -121,7 +121,7 @@ class TruncatedSVD:
         return self.__has('data')
 
     def __for_one(self, target):
-        '''Make an actual recommendation for the target customer.
+        """Make an actual recommendation for the target customer.
 
         Parameters
         ----------
@@ -141,7 +141,7 @@ class TruncatedSVD:
         >>> ratings.for_one(customer)
         array([ 0.16129032,  0.09677419, ...., 0.06451613])
 
-        '''
+        """
         if not self.__has('U'):
             self.__compute_USV_matrices()
         return self.__U[target].dot(self.__SV)

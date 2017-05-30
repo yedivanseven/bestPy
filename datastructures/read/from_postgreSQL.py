@@ -14,11 +14,11 @@ def from_postgreSQL(database):
     itemIndex_of = defaultdict(lambda: len(itemIndex_of))
     count_buys_of = defaultdict(int)
 
-    query = '''SELECT %(userid)s, %(articleid)s, COUNT(*) as count
+    query = """SELECT %(userid)s, %(articleid)s, COUNT(*) as count
                FROM (SELECT %(userid)s, %(articleid)s
                      FROM %(table)s
                      LIMIT %(limit)s) AS head
-               GROUP BY %(userid)s, %(articleid)s'''
+               GROUP BY %(userid)s, %(articleid)s"""
 
     def process_valid_transaction(record):
         user, item, count = record

@@ -5,7 +5,7 @@ from psycopg2.extensions import AsIs
 
 
 class PostgreSQLparams:
-    '''Holds parameters needed to retrieve transaction data from PostgreSQL.
+    """Holds parameters needed to retrieve transaction data from PostgreSQL.
 
     Attributes
     ----------
@@ -40,7 +40,7 @@ class PostgreSQLparams:
         How many records to retrieve from the database.
         Defaults to 100.
 
-    '''
+    """
 
     def __init__(self):
         self.__login_db_name = '<dbname>'
@@ -87,7 +87,7 @@ class PostgreSQLparams:
 
     @property
     def login(self):
-        '''Current state of the string used for database login (read-only).'''
+        """Current state of the string used for database login (read-only)."""
         prefix = '__login'
         params = [getattr(self, attr) for attr in dir(self) if prefix in attr]
         return ' '.join(params)

@@ -7,7 +7,7 @@ from ..datastructures import Transactions
 
 
 class CollaborativeFiltering:
-    '''Collaborative filtering based on article-article similarity.
+    """Collaborative filtering based on article-article similarity.
 
     Attributes
     ----------
@@ -53,7 +53,7 @@ class CollaborativeFiltering:
     >>> ratings.for_one(customer)
     array([ 0.16129032,  0.09677419, ...., 0.06451613])
 
-    '''
+    """
 
     def __init__(self):
         self.__binarize = True
@@ -63,7 +63,7 @@ class CollaborativeFiltering:
 
     @property
     def binarize(self):
-        '''Count number of: times bought (``True``) or buyers (``False``).'''
+        """Count number of: times bought (``True``) or buyers (``False``)."""
         return self.__binarize
 
     @binarize.setter
@@ -72,7 +72,7 @@ class CollaborativeFiltering:
 
     @property
     def similarity(self):
-        '''Measure used to compute the similarity between articles.'''
+        """Measure used to compute the similarity between articles."""
         return self.__similarity.__name__
 
     @similarity.setter
@@ -84,7 +84,7 @@ class CollaborativeFiltering:
 
     @property
     def baseline(self):
-        '''Baseline algorithm used for uncomparable customers.'''
+        """Baseline algorithm used for uncomparable customers."""
         return self.__baseline.__class__.__name__
 
     @baseline.setter
@@ -95,7 +95,7 @@ class CollaborativeFiltering:
             self.__baseline = self.__data_attribute_checked(self.__baseline)
 
     def operating_on(self, data):
-        '''Set data object for the algorithm to operate on.
+        """Set data object for the algorithm to operate on.
 
         Parameters
         ----------
@@ -113,7 +113,7 @@ class CollaborativeFiltering:
         >>> algorithm.has_data
         True
 
-        '''
+        """
         self.__data = self.__transactions_type_checked(data)
         self.__baseline = self.__baseline.operating_on(data)
         self.__baseline = self.__data_attribute_checked(self.__baseline)
@@ -128,7 +128,7 @@ class CollaborativeFiltering:
         return self.__has('data')
 
     def __for_one(self, target):
-        '''Make an actual recommendation for the target customer.
+        """Make an actual recommendation for the target customer.
 
         Parameters
         ----------
@@ -147,7 +147,7 @@ class CollaborativeFiltering:
         >>> ratings.for_one(customer)
         array([ 0.16129032,  0.09677419, ...., 0.06451613])
 
-        '''
+        """
         if self.__no_one_else_bought_items_bought_by(target):
             log.info('Uncomparable user with ID {}. Returning baseline'
                      ' recommendation.'.format(self.__data.user.id_of[target]))
@@ -196,7 +196,7 @@ class CollaborativeFiltering:
 
     @staticmethod
     def __base_attribute_checked(baseline):
-        '''Check methods and attributes of baseline before data is attached.'''
+        """Check methods and attributes of baseline before data is attached."""
         if not hasattr(baseline, 'operating_on'):
             log.error('Attempt to set baseline object lacking mandatory'
                       ' "operating_on()" method.')
@@ -213,7 +213,7 @@ class CollaborativeFiltering:
 
     @staticmethod
     def __data_attribute_checked(baseline):
-        '''Check methods and attirbutes of baseline after data is attached.'''
+        """Check methods and attirbutes of baseline after data is attached."""
         if not baseline.has_data:
             log.error("Baseline object's 'has_data' attribute returned False"
                       " after attaching data.")

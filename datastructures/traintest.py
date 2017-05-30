@@ -8,7 +8,7 @@ from .transactions import Transactions
 
 
 class TrainTest(TrainTestBase):
-    '''Transaction data split into training and test sets for benchmarking.
+    """Transaction data split into training and test sets for benchmarking.
 
     Direct instantiation of this class is discouraged and, therefore,
     not documented. Use the classmethods `from_csv()`, `from_postgreSQL()`, ...
@@ -54,7 +54,7 @@ class TrainTest(TrainTestBase):
     >>> data.train.number_of_transactions
     345697
 
-    '''
+    """
 
     def __init__(self, n_trans, n_corr, unique, transactions):
         super().__init__(n_trans, n_corr, unique, transactions)
@@ -62,7 +62,7 @@ class TrainTest(TrainTestBase):
         self.__transactions = self._TrainTestBase__transactions
 
     def split(self, hold_out=5, only_new=True):
-        '''Split transaction data into training and test set for benchmarking.
+        """Split transaction data into training and test set for benchmarking.
 
         Parameters
         ----------
@@ -81,7 +81,7 @@ class TrainTest(TrainTestBase):
 
         >>> data.split(6, False)
 
-        '''
+        """
         self.__check_boolean_type_of(only_new)
         hold_out = self.__checked_for_integer_type_and_range_of(hold_out)
         keep = {user: items
@@ -110,12 +110,12 @@ class TrainTest(TrainTestBase):
 
     @staticmethod
     def __last(unique):
-        '''Sort dict by value time and return list of (item, time) tuples.'''
+        """Sort dict by value time and return list of (item, time) tuples."""
         return sorted(unique.items(), key=itemgetter(1), reverse=True)
 
     @staticmethod
     def __items_from(last_transactions):
-        '''Get set of items from list of (item, timestamp) tuples.'''
+        """Get set of items from list of (item, timestamp) tuples."""
         return set(tuple(zip(*last_transactions))[0])
 
     @staticmethod
@@ -137,7 +137,7 @@ class TrainTest(TrainTestBase):
             hold_out = self.max_hold_out
         return hold_out
 
-    __test_docstring = '''Test data to benchmark algorithms and baselines.
+    __test_docstring = """Test data to benchmark algorithms and baselines.
 
                        Attributes
                        ----------
@@ -154,11 +154,11 @@ class TrainTest(TrainTestBase):
                        number_of_cases : int
                            Number of users in the test data set.
 
-                       '''
-    __train_doctring = '''Training data of type `Transactions`.
+                       """
+    __train_doctring = """Training data of type `Transactions`.
 
                        See also
                        --------
                        Documentation of `bestPy.datastructures.Transactions`
 
-                       '''
+                       """

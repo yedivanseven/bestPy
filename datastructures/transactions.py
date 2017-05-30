@@ -7,7 +7,7 @@ from .help import IndexFrom, MatrixFrom
 
 
 class Transactions:
-    '''Read and hold transaction data from a number of sources.
+    """Read and hold transaction data from a number of sources.
 
     Direct instantiation of this class is discouraged and, therefore,
     not documented. Use the classmethods `from_csv`, `from_postgreSQL`, ...
@@ -52,7 +52,7 @@ class Transactions:
     >>> data.item.id_of[1]
     'second article'
 
-    '''
+    """
     
     def __init__(self, n_trans, n_corr, user_i, item_j, counts):
         self.__number_of_transactions = self.__int_type_value_checked(n_trans)
@@ -65,7 +65,7 @@ class Transactions:
 
     @classmethod
     def from_csv(cls, file, separator=';'):
-        '''Read transaction data from a CSV file.
+        """Read transaction data from a CSV file.
 
         Parameters
         ----------
@@ -86,12 +86,12 @@ class Transactions:
         >>> file = '/path/to/my/file.csv'
         >>> data = Transactions.from_csv(file, '|')
 
-        '''
+        """
         return cls(*read.from_csv(file, separator=separator))
 
     @classmethod
     def from_postgreSQL(cls, database):
-        '''Read transaction data from a PostgreSQL database.
+        """Read transaction data from a PostgreSQL database.
 
         Parameters
         ----------
@@ -106,7 +106,7 @@ class Transactions:
         --------
         >>> data = Transactions.from_postgreSQL(database)
 
-        '''
+        """
         return cls(*read.from_postgreSQL(database))
 
     @property
@@ -123,17 +123,17 @@ class Transactions:
 
     @property
     def user(self):
-        '''Convert between unique customer ID and internal integer index.'''
+        """Convert between unique customer ID and internal integer index."""
         return self.__user
 
     @property
     def item(self):
-        '''Convert between unique article ID and internal integer index.'''
+        """Convert between unique article ID and internal integer index."""
         return self.__item
 
     @property
     def matrix(self):
-        '''Customer-article matrix in various `scipy.sparse` formats.'''
+        """Customer-article matrix in various `scipy.sparse` formats."""
         return self.__matrix
 
     def _users_who_bought(self, items):

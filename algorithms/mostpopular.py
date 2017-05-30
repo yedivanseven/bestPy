@@ -6,7 +6,7 @@ from .baselines import Baseline
 
 
 class MostPopular:
-    '''Recommendation based on a customer's personal preference.
+    """Recommendation based on a customer's personal preference.
 
     If only new articles are to be recommended, this is equivalent to the
     baseline recommendation, i.e., based on general article popularity.
@@ -41,7 +41,7 @@ class MostPopular:
     array([ 0.16129032,  0.09677419,  ...,  0.06451613])
 
 
-    '''
+    """
 
     def __init__(self):
         self.__baseline = Baseline()
@@ -49,7 +49,7 @@ class MostPopular:
 
     @property
     def binarize(self):
-        '''Count number of: times bought (``True``) or buyers (``False``).'''
+        """Count number of: times bought (``True``) or buyers (``False``)."""
         return self.__baseline.binarize
 
     @binarize.setter
@@ -60,7 +60,7 @@ class MostPopular:
         self.__baseline.binarize = binarize
 
     def operating_on(self, data):
-        '''Set data object for the algorithm to operate on.
+        """Set data object for the algorithm to operate on.
 
         Parameters
         ----------
@@ -78,7 +78,7 @@ class MostPopular:
         >>> algorithm.has_data
         True
 
-        '''
+        """
         self.__data = self.__transactions_type_checked(data)
         self.__baseline = self.__baseline.operating_on(data)
         self.__delete_precomputed()
@@ -90,7 +90,7 @@ class MostPopular:
         return self.__has('data')
 
     def __for_one(self, target):
-        '''Make an actual recommendation for the target customer.
+        """Make an actual recommendation for the target customer.
 
         Parameters
         ----------
@@ -109,7 +109,7 @@ class MostPopular:
         >>> ratings.for_one(customer)
         array([ 0.16129032,  0.09677419,  ..., 0.06451613])
 
-        '''
+        """
         target_agnostic = self.__precomputed()
         target_specific = self.__data.matrix.by_row[target]
         target_agnostic[target_specific.indices] = target_specific.data

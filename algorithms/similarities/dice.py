@@ -4,7 +4,7 @@ from numpy import repeat
 
 
 def dice(data):
-    '''Dice similarity among articles.
+    """Dice similarity among articles.
 
     Parameters
     ----------
@@ -17,7 +17,7 @@ def dice(data):
         The matrix of pairwise similarities in scipy compressed sparse
         column (CSC) format.
 
-    '''
+    """
     similarity_matrix = data.matrix.bool_by_col.T.dot(data.matrix.bool_by_col)
     diagonal = similarity_matrix.diagonal()
     cols = repeat(diagonal, similarity_matrix.getnnz(axis=0))

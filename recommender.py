@@ -10,7 +10,7 @@ RETURNING = True
 
 
 class RecommendationBasedOn:
-    '''Merges data and algorithm into an engine to make actual recommendations.
+    """Merges data and algorithm into an engine to make actual recommendations.
 
     Parameters
     ----------
@@ -58,7 +58,7 @@ class RecommendationBasedOn:
     'bestPyHoodieMedium'
     'bestPyBaseCap'
 
-    '''
+    """
 
     def __init__(self, data):
         self.__data = self.__transactions_type_checked(data)
@@ -69,7 +69,7 @@ class RecommendationBasedOn:
                                          RETURNING: self.__calculated}
 
     def using(self, algorithm):
-        '''Sets the algorithm object to compute recommendations.
+        """Sets the algorithm object to compute recommendations.
 
         Parameters
         ----------
@@ -86,7 +86,7 @@ class RecommendationBasedOn:
         >>> recommendation = RecommendationBasedOn(data).pruning_old
         >>> recommendation = recommendation.using(algorithm)
 
-        '''
+        """
         self.__check_base_attributes_of(algorithm)
         self.__recommendation = algorithm.operating_on(self.__data)
         self.__check_data_attributes_of(algorithm)
@@ -121,7 +121,7 @@ class RecommendationBasedOn:
         self.__check_data_attributes_of(baseline)
 
     def for_one(self, target, max_number_of_items=5):
-        '''Provides the actual recommendations.
+        """Provides the actual recommendations.
 
         Parameters
         ----------
@@ -148,7 +148,7 @@ class RecommendationBasedOn:
         'bestPyHoodieMedium'
         'bestPyBaseCap'
 
-        '''
+        """
         head = self.__integer_type_and_range_checked(max_number_of_items)
         type_of = target in self.__data.user.index_of.keys()
         item_scores = self.__recommendation_for[type_of](target)
@@ -177,7 +177,7 @@ class RecommendationBasedOn:
 
     @staticmethod
     def __check_base_attributes_of(algorithm):
-        '''Check methods of algorithm and baseline before they get data.'''
+        """Check methods of algorithm and baseline before they get data."""
         if not hasattr(algorithm, 'operating_on'):
             log.error('Attempt to set object lacking mandatory'
                       ' "operating_on()" method.')
@@ -193,7 +193,7 @@ class RecommendationBasedOn:
 
     @staticmethod
     def __check_data_attributes_of(algorithm):
-        '''Check methods of algorithm and baseline after they got data.'''
+        """Check methods of algorithm and baseline after they got data."""
         if not algorithm.has_data:
             log.error("Object's 'has_data' attribute returned False"
                       " after attaching data.")

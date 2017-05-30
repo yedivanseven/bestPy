@@ -4,7 +4,7 @@ from numpy import repeat
 
 
 def kulsinski(data):
-    '''Kulsinski similarity among articles.
+    """Kulsinski similarity among articles.
 
     Parameters
     ----------
@@ -17,7 +17,7 @@ def kulsinski(data):
         The matrix of pairwise similarities in scipy compressed sparse
         column (CSC) format.
 
-    '''
+    """
     smat = data.matrix.bool_by_col.T.dot(data.matrix.bool_by_col)
     diagonal = smat.diagonal()
     cols = repeat(diagonal, smat.getnnz(axis=0))

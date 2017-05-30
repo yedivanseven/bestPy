@@ -14,7 +14,7 @@ class TrainTestBase:
 
     @classmethod
     def from_csv(cls, file, separator=';', fmt=None):
-        '''Read transaction data from a CSV file.
+        """Read transaction data from a CSV file.
 
         Parameters
         ----------
@@ -48,12 +48,12 @@ class TrainTestBase:
         for the correct formatting of datetime format strings.
 
 
-        '''
+        """
         return cls(*split.from_csv(file, separator=separator, fmt=fmt))
 
     @classmethod
     def from_postgreSQL(cls, database):
-        '''Read transaction data from a PostgreSQL database.
+        """Read transaction data from a PostgreSQL database.
 
         Parameters
         ----------
@@ -68,7 +68,7 @@ class TrainTestBase:
         --------
         >>> data = TrainTest.from_postgreSQL(database)
 
-        '''
+        """
         return cls(*split.from_postgreSQL(database))
 
     @property
@@ -81,7 +81,7 @@ class TrainTestBase:
 
     @property
     def max_hold_out(self):
-        '''Maximum number of articles that can be retained as test set.'''
+        """Maximum number of articles that can be retained as test set."""
         if not self.__has('max_hold_out'):
             self.__max_hold_out = max(len(u) for u in self.__unique.values())
         return self.__max_hold_out

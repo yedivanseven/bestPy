@@ -6,7 +6,7 @@ from .datastructures.help import TestDataFrom
 
 
 class Benchmark:
-    '''Benchmarks a given recommendation engine against held-out test data.
+    """Benchmarks a given recommendation engine against held-out test data.
 
     Parameters
     ----------
@@ -32,13 +32,13 @@ class Benchmark:
     >>> benchmark.score
     0.8934756
 
-    '''
+    """
 
     def __init__(self, recommender):
         self.__recommendation = self.__validated(recommender)
 
     def against(self, test):
-        '''Sets the test data to score the provided recommendation engine.
+        """Sets the test data to score the provided recommendation engine.
 
         Parameters
         ----------
@@ -56,7 +56,7 @@ class Benchmark:
         >>> benchmark = Benchmark(recommender)
         >>> benchmark = benchmark.against(data.test)
 
-        '''
+        """
         self.__test = self.__testdata_type_checked(test)
         if test.only_new and not self.__recommendation.only_new:
             self.__recommendation = self.__recommendation.pruning_old
@@ -70,7 +70,7 @@ class Benchmark:
         return self
 
     def __score(self):
-        '''Returns the average number of correctly predicted buys per user.'''
+        """Returns the average number of correctly predicted buys per user."""
         total = sum(len(set(self.__recommendation.for_one(user,
                             self.__test.hold_out)).intersection(items))
                     for user, items in self.__test.data.items())

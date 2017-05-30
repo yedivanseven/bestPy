@@ -2,7 +2,7 @@
 
 
 def russellrao(data):
-    '''Russell-Rao similarity among articles.
+    """Russell-Rao similarity among articles.
 
     Parameters
     ----------
@@ -15,7 +15,7 @@ def russellrao(data):
         The matrix of pairwise similarities in scipy compressed sparse
         column (CSC) format.
 
-    '''
+    """
     similarity_matrix = data.matrix.bool_by_col.T.dot(data.matrix.bool_by_col)
     similarity_matrix.data /= data.user.count
     return similarity_matrix
