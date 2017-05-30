@@ -137,28 +137,28 @@ class TrainTest(TrainTestBase):
             hold_out = self.max_hold_out
         return hold_out
 
-    test_docstring = '''Test data to benchmark algorithms and baselines.
+    __test_docstring = '''Test data to benchmark algorithms and baselines.
 
-                     Attributes
-                     ----------
-                     data : dict
-                        Test data as dictionary with customer IDs as keys and
-                        set of `hold-out` article IDs as values.
+                       Attributes
+                       ----------
+                       data : dict
+                           Test data as dictionary with customer IDs as keys and
+                           set of `hold-out` article IDs as values.
 
-                     hold_out : int
-                         Number of articles in test set for each customer.
+                       hold_out : int
+                           Number of articles in test set for each customer.
 
-                     only_new : bool
-                         Whether `only_new` articles are recommended.
+                       only_new : bool
+                           Whether `only_new` articles are recommended.
 
-                     number_of_cases : int
-                         Number of users in the test data set.
+                       number_of_cases : int
+                           Number of users in the test data set.
 
-                     '''
-    train_doctring = '''Training data of type `Transactions`.
+                       '''
+    __train_doctring = '''Training data of type `Transactions`.
 
-                     See also
-                     --------
-                     Documentation of `bestPy.datastructures.Transactions`
+                       See also
+                       --------
+                       Documentation of `bestPy.datastructures.Transactions`
 
-                     '''
+                       '''
