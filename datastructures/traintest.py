@@ -103,10 +103,10 @@ class TrainTest(TrainTestBase):
                      and (item, timestamp) not in last_unique_items_of[user])
         self.__test = TestDataFrom(test, hold_out, only_new)
         TrainTest.test = property(lambda obj: obj.__test)
-        TrainTest.test.__doc__ = TrainTest.test_docstring
+        TrainTest.test.__doc__ = TrainTest.__test_docstring
         self.__train = Transactions.from_csv(FileFrom(train))
         TrainTest.train = property(lambda obj: obj.__train)
-        TrainTest.train.__doc__ = TrainTest.train_doctring
+        TrainTest.train.__doc__ = TrainTest.__train_doctring
 
     @staticmethod
     def __last(unique):
