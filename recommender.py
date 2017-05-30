@@ -15,12 +15,13 @@ class RecommendationBasedOn:
     Parameters
     ----------
     data : object
-        A data instance (currently of `bestPy.datastructures.Transactions`).
+        A data instance of type `bestPy.datastructures.Transactions`.
 
     Attributes
     ----------
-    algorithm : str
+    algorithm : str, optional
         The name of the algorithm used to make recommendations.
+        Defaults to `bestPy.algorithms.CollaborativeFiltering`.
 
     pruning_old : `RecommendationBasedOn`
         The instance of `RecommendationBasedOn` it is called on, now set to

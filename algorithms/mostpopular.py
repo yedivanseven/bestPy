@@ -14,7 +14,7 @@ class MostPopular:
     Attributes
     ----------
     binarize : bool, optional
-        Whether article popularity for the baseline is evaluated as number of
+        Whether article popularity for the baseline is evaluated by number of
         unique buyers (``True``) or number of times bought (``False``).
         Defaults to ``True``.
 
@@ -69,7 +69,8 @@ class MostPopular:
 
         Returns
         -------
-        The instance of `MostPopular` it is called on.
+        The instance of `MostPopular` it is called on, now with the
+        previously hidden `for_one()` method enabled.
 
         Examples
         --------

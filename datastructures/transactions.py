@@ -25,14 +25,14 @@ class Transactions:
         Number of times any article has been bought by a unique user.
 
     user : object
-        Provides two dictionary attributes to translate between
-        the unqiue customer ID in the data and the internally used
-        (integer) customer index.
+        Provides dictionary attributes to translate between
+        the unqiue customer ID in the data and the internally
+        used (integer) customer index.
 
     item : object
-        Provides two dictionary attributes to translate between
-        the unique article ID in the data and the internally used
-        (integer) article index.
+        Provides dictionary attributes to translate between
+        the unique article ID in the data and the internally
+        used (integer) article index.
 
     matrix : object
         Holds transaction data as customer-article matrix with the

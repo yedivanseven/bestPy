@@ -63,7 +63,7 @@ class Baseline:
 
         Returns
         -------
-        The instance of `Baseline` it is called on.
+        The instance of `Baseline` it is called on with a `for_one()` method.
 
         Examples
         --------

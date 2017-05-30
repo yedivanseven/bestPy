@@ -29,7 +29,7 @@ class Benchmark:
     Examples
     --------
     >>> benchmark = Benchmark(recommender).against(data.test)
-    >>> score = benchmark.score
+    >>> benchmark.score
     0.8934756
 
     '''
@@ -43,12 +43,13 @@ class Benchmark:
         Parameters
         ----------
         test : object
-            An test-data object, best provided by the `test` attribute 
+            A test-data object, best provided by the `test` attribute
             of a `bestPy.datastructures.TrainTest` instance.
 
         Returns
         -------
-        The instance of `Benchmark` it is called on.
+        The instance of `Benchmark` it is called on, now with the previously
+        hidden attribute `score` enabled.
 
         Examples
         --------

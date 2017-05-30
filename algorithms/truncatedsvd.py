@@ -7,18 +7,22 @@ from ..datastructures import Transactions
 
 
 class TruncatedSVD:
-    '''Recommendation based on a truncated SVD of the cutomer-article matrix.
+    '''Recommendation based on a truncated SVD of the customer-article matrix.
 
     Attributes
     ----------
     binarize : bool, optional
-        Whether the customer-article matrix contains the number of unique
-        buyers (``True``) or number of times bought (``False``) as entries.
-        Defaults to ``True``.
+        Whether the entries in the customer-article matrix should be reduced
+        to the number of unique buyers (``True``) or remain number of times
+        bought (``False``). Defaults to ``True``.
 
     number_of_factors : integer, optional
         Number of latent variables thought to charaterize both the customers
         and the articles. Defaults to 20.
+
+    max_number_of_factors : integer
+        Maximum value that `number_of_factors` can be set to. Depends on the
+        data and is, therefore, not availabel before calling ...
 
     Methods
     -------
@@ -29,7 +33,7 @@ class TruncatedSVD:
     for_one(target) : array
         Returns an array with ratings of all articles for the customer with
         the internal integer index `target`. The higher the rating,
-        the more highly recommended the article is for customer `target`.
+        the more highly recommended the article is for the `target` customer.
 
     Examples
     --------
@@ -40,8 +44,8 @@ class TruncatedSVD:
     >>> ratings.max_number_of_factors
     278
 
-    >>> ratings.binarize = False
     >>> ratings.number_of_factors = 30
+    >>> ratings.binarize = False
     >>> customer = 245
     >>> ratings.for_one(customer)
     array([ 0.16129032,  0.09677419, ...., 0.06451613])
@@ -88,7 +92,8 @@ class TruncatedSVD:
 
         Returns
         -------
-        The instance of `TruncatedSVD` it is called on.
+        The instance of `TruncatedSVD` it is called on, now with the
+        previously hidden `for_one()` method enabled.
 
         Examples
         --------

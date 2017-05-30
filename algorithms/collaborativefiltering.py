@@ -12,9 +12,9 @@ class CollaborativeFiltering:
     Attributes
     ----------
     binarize : bool, optional
-        Whether the customer-article matrix contains the number of unique
-        buyers (``True``) or number of times bought (``False``) as entries.
-        Defaults to ``True``.
+        Whether a customer's purchase history should be reduced to whether or
+        not an article as bought (``True``), or whether the number of times
+        articles were bought should count (``False``). Defaults to ``True``.
 
     similarity : function, optional
         Takes data object of type `bestPy.datastructures.Transactions` as
@@ -104,7 +104,8 @@ class CollaborativeFiltering:
 
         Returns
         -------
-        The instance of `CollaborativeFiltering` it is called on.
+        The instance of `CollaborativeFiltering` it is called on, now with the
+        previously hidden `for_one()` method enabled.
 
         Examples
         --------

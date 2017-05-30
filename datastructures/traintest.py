@@ -11,7 +11,7 @@ class TrainTest(TrainTestBase):
     '''Transaction data split into training and test sets for benchmarking.
 
     Direct instantiation of this class is discouraged and, therefore,
-    not documented. Use the classmethods `from_csv`, `from_postgreSQL`, ...
+    not documented. Use the classmethods `from_csv()`, `from_postgreSQL()`, ...
     instead and refer to the docstrings there!
 
     Attributes
@@ -22,7 +22,7 @@ class TrainTest(TrainTestBase):
 
     test : object
         Object with test data as dictionary in its `data` attribute, revealed
-        only after calling the `split` method.
+        only after calling the `split()` method.
 
     number_of_transactions : int
         Number of transactions in the dataset before splitting.
@@ -67,13 +67,13 @@ class TrainTest(TrainTestBase):
         Parameters
         ----------
         hold_out : int, optional
-            How many unique articles to retain from each
-            customer's purchase history for testing later.
-            Default is 5 and maximum value is attribute `max_hold_out`.
+            How many unique articles to retain from each customer's purchase
+            history for testing later. Default is 5 and maximum value is
+            attribute `max_hold_out`.
 
         only_new : bool
-            Whether only articles that a given customer has not yet
-            bought will be recommended.
+            Whether only articles that a given customer has not yet bought
+            will be recommended.
 
         Examples
         --------
@@ -110,7 +110,7 @@ class TrainTest(TrainTestBase):
 
     @staticmethod
     def __last(unique):
-        '''Sort dict by time and return list of (item, time) tuples.'''
+        '''Sort dict by value time and return list of (item, time) tuples.'''
         return sorted(unique.items(), key=itemgetter(1), reverse=True)
 
     @staticmethod
