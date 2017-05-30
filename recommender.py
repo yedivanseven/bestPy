@@ -43,7 +43,8 @@ class RecommendationBasedOn:
     -------
     using(algorithm) : `RecommendationBasedOn`
         Called with a recommendation-algorithm object as argument, it
-        returns the instance of `RecommendationBasedOn` it is called on.
+        returns the instance of `RecommendationBasedOn` it is called on,
+        with the recommendation algorithm set accordingly.
 
     for_one(target, max_number_of_items) : generator
         Returns a generator of up to `max_number_of_items article` IDs,
@@ -79,7 +80,8 @@ class RecommendationBasedOn:
 
         Returns
         -------
-        The `RecommendationBasedOn` instance it is called on.
+        The `RecommendationBasedOn` instance it is called on with the
+        recommendation algorithm set accordingly.
 
         Examples
         --------

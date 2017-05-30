@@ -105,7 +105,7 @@ class CollaborativeFiltering:
         Returns
         -------
         The instance of `CollaborativeFiltering` it is called on, now with the
-        previously hidden `for_one()` method enabled.
+        previously hidden `for_one()` method enabled ad the data attached.
 
         Examples
         --------

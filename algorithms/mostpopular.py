@@ -70,7 +70,7 @@ class MostPopular:
         Returns
         -------
         The instance of `MostPopular` it is called on, now with the
-        previously hidden `for_one()` method enabled.
+        previously hidden `for_one()` method enabled and the data attached.
 
         Examples
         --------

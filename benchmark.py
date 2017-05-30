@@ -18,8 +18,8 @@ class Benchmark:
     -------
     against(test) : `Benchmark` instance it is invoked on.
         Called with a `TestDataFrom` instance as argument, it returns
-        the `Benchmark` instance it is invoked on and unlocks the
-        otherwise hidden attribute `score`.
+        the `Benchmark` instance it is invoked on with the test data set
+        accordingly and unlocks the otherwise hidden attribute `score`.
 
     Attributes
     ----------
@@ -49,7 +49,7 @@ class Benchmark:
         Returns
         -------
         The instance of `Benchmark` it is called on, now with the previously
-        hidden attribute `score` enabled.
+        hidden attribute `score` enabled and the test data set accordingly.
 
         Examples
         --------

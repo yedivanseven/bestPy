@@ -93,7 +93,7 @@ class TruncatedSVD:
         Returns
         -------
         The instance of `TruncatedSVD` it is called on, now with the
-        previously hidden `for_one()` method enabled.
+        previously hidden `for_one()` method enabled an the data attached.
 
         Examples
         --------
