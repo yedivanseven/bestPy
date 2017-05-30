@@ -20,7 +20,6 @@ In order to recommend articles from your store to your customers, you first need
 ``
 
 Then, importing this data into your project can be as simple as ...
-
 ``python
 from bestpy.datastructures import Transactions
 
