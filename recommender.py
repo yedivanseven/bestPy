@@ -9,7 +9,7 @@ from .datastructures import Transactions
 RETURNING = True
 
 
-class RecommendationBasedOn:
+class RecoBasedOn:
     """Merges data and algorithm into an engine to make actual recommendations.
 
     Parameters
@@ -23,13 +23,13 @@ class RecommendationBasedOn:
         The name of the algorithm used to make recommendations.
         Defaults to `bestPy.algorithms.CollaborativeFiltering`.
 
-    pruning_old : `RecommendationBasedOn`
-        The instance of `RecommendationBasedOn` it is called on, now set to
-        recommend only articles that a given customer has not bought before.
+    pruning_old : `RecoBasedOn`
+        The instance of `RecoBasedOn` it is called on, now set to recommend
+        only articles that a given customer has not bought before.
 
-    keeping_old : `RecommendationBasedOn`
-        The instance of `RecommendationBasedOn` it is called on, now set to
-        recommend also articles that a given customer has bought before.
+    keeping_old : `RecoBasedOn`
+        The instance of `RecoBasedOn` it is called on, now set to recommend
+        also articles that a given customer has bought before.
 
     only_new : bool
         Whether the recommendations include articles that
@@ -41,10 +41,10 @@ class RecommendationBasedOn:
 
     Methods
     -------
-    using(algorithm) : `RecommendationBasedOn`
+    using(algorithm) : `RecoBasedOn`
         Called with a recommendation-algorithm object as argument, it
-        returns the instance of `RecommendationBasedOn` it is called on,
-        with the recommendation algorithm set accordingly.
+        returns the instance of `RecoBasedOn` it is called on, with
+        the recommendation algorithm set accordingly.
 
     for_one(target, max_number_of_items) : generator
         Returns a generator of up to `max_number_of_items article` IDs,
@@ -52,7 +52,7 @@ class RecommendationBasedOn:
 
     Examples
     --------
-    >>> reco = RecommendationBasedOn(data).using(algorithm).pruning_old
+    >>> reco = RecoBasedOn(data).using(algorithm).pruning_old
     >>> top_two = reco.for_one(customer, 2)
     >>> for article in top_two:
     >>>     print(article)
@@ -80,12 +80,12 @@ class RecommendationBasedOn:
 
         Returns
         -------
-        The `RecommendationBasedOn` instance it is called on with the
+        The `RecoBasedOn` instance it is called on with the
         recommendation algorithm set accordingly.
 
         Examples
         --------
-        >>> recommendation = RecommendationBasedOn(data).pruning_old
+        >>> recommendation = RecoBasedOn(data).pruning_old
         >>> recommendation = recommendation.using(algorithm)
 
         """
@@ -143,7 +143,7 @@ class RecommendationBasedOn:
 
         Examples
         --------
-        >>> reco = RecommendationBasedOn(data).using(algorithm).keeping_old
+        >>> reco = RecoBasedOn(data).using(algorithm).keeping_old
         >>> top_two = reco.for_one(customer, 2)
         >>> for article in top_two:
         >>>     print(article)

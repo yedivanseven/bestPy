@@ -5,7 +5,7 @@ import logging
 import unittest as ut
 from ..algorithms import MostPopular, Baseline
 from ..datastructures import Transactions
-from .. import RecommendationBasedOn
+from .. import RecoBasedOn
 
 
 class TestMostPopularOnlyNewIsBaseline(ut.TestCase):
@@ -13,7 +13,7 @@ class TestMostPopularOnlyNewIsBaseline(ut.TestCase):
     def setUp(self):
         file = './bestPy/tests/data/data50.csv'
         data = Transactions.from_csv(file)
-        self.recommender = RecommendationBasedOn(data)
+        self.recommender = RecoBasedOn(data)
 
     def test_most_popular_only_new_returns_baseline(self):
         target = '4'

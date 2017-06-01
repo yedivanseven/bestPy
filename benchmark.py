@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging as log
-from . import RecommendationBasedOn
+from . import RecoBasedOn
 from .datastructures.help import TestDataFrom
 
 
@@ -10,9 +10,8 @@ class Benchmark:
 
     Parameters
     ----------
-    recommender : `RecommendationBasedOn`
-        A configured instance of `bestPy.RecommendationBasedOn`
-        with suitable training data.
+    recommender : `RecoBasedOn`
+        A configured instance of `bestPy.RecoBasedOn` with the training data.
 
     Methods
     -------
@@ -78,11 +77,10 @@ class Benchmark:
 
     @staticmethod
     def __validated(recommender):
-        if not isinstance(recommender, RecommendationBasedOn):
+        if not isinstance(recommender, RecoBasedOn):
             log.error('Attempt to instantiate with incompatible recommender.'
-                      ' Must be of type <RecommendationBasedOn>.')
-            raise TypeError('Recommender must be of type'
-                            ' <RecommendationBasedOn>!')
+                      ' Must be of type <RecoBasedOn>.')
+            raise TypeError('Recommender must be of type <RecoBasedOn>!')
         return recommender
 
     @staticmethod

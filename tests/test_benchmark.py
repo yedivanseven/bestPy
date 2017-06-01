@@ -4,7 +4,7 @@
 import logging
 import unittest as ut
 from ..datastructures import TrainTest
-from .. import RecommendationBasedOn
+from .. import RecoBasedOn
 from .. import Benchmark
 
 
@@ -13,8 +13,8 @@ class TestBenchmarkInitialization(ut.TestCase):
     def test_logs_and_raises_error_with_wrong_recommender(self):
         recommender = 'foo'
         log_msg = ['ERROR:root:Attempt to instantiate with incompatible'
-                   ' recommender. Must be of type <RecommendationBasedOn>.']
-        err_msg = 'Recommender must be of type <RecommendationBasedOn>!'
+                   ' recommender. Must be of type <RecoBasedOn>.']
+        err_msg = 'Recommender must be of type <RecoBasedOn>!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = Benchmark(recommender)
@@ -28,7 +28,7 @@ class TestBenchmark(ut.TestCase):
         file = './bestPy/tests/data/data50.csv'
         self.data = TrainTest.from_csv(file)
         self.data.split(1)
-        self.recommender = RecommendationBasedOn(self.data.train)
+        self.recommender = RecoBasedOn(self.data.train)
         self.benchmark = Benchmark(self.recommender)
 
     def test_has_method_against(self):
@@ -73,7 +73,7 @@ class TestBenchmark(ut.TestCase):
         log_msg = ['INFO:root:Resetting recommender to "keeping_old" because'
                    ' of test-data preference.']
         self.data.split(1, False)
-        recommender = RecommendationBasedOn(self.data.train).pruning_old
+        recommender = RecoBasedOn(self.data.train).pruning_old
         with self.assertLogs(level=logging.INFO) as log:
             benchmark = Benchmark(recommender).against(self.data.test)
         self.assertEqual(log.output, log_msg)

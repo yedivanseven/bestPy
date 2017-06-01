@@ -29,9 +29,9 @@ data = Transactions.from_csv(file)
 
 ... and getting a recommendation for a customer can be as pleasant as:
 ```python
-from bestpy import RecommendationBasedOn
+from bestpy import RecoBasedOn
 
-recommendation = RecommendationBasedOn(data)
+recommendation = RecoBasedOn(data)
 customer = 'customer-A2'
 top_five = recommendation.for_one(customer)
 for article in top_five:

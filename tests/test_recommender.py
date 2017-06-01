@@ -5,7 +5,7 @@ import logging
 import unittest as ut
 from ..algorithms import default_algorithm, default_baseline, TruncatedSVD
 from ..datastructures import Transactions
-from .. import RecommendationBasedOn
+from .. import RecoBasedOn
 
 
 class TestRecommenderInitialization(ut.TestCase):
@@ -17,7 +17,7 @@ class TestRecommenderInitialization(ut.TestCase):
         err_msg = 'Data must be of type <Transactions>!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg) as err:
-                _ = RecommendationBasedOn(data)
+                _ = RecoBasedOn(data)
         self.assertEqual(log.output, log_msg)
         self.assertEqual(err.msg, err_msg)
 
@@ -28,7 +28,7 @@ class TestRecommender(ut.TestCase):
         file = './bestPy/tests/data/data50.csv'
         self.data = Transactions.from_csv(file)
         self.algorithm = default_algorithm()
-        self.recommender = RecommendationBasedOn(self.data)
+        self.recommender = RecoBasedOn(self.data)
 
     def test_has_method_using(self):
         self.assertTrue(hasattr(self.recommender, 'using'))
@@ -173,11 +173,11 @@ class TestRecommender(ut.TestCase):
 
     def test_pruning_old_return_type(self):
         recommendation = self.recommender.pruning_old
-        self.assertIsInstance(recommendation, RecommendationBasedOn)
+        self.assertIsInstance(recommendation, RecoBasedOn)
 
     def test_keeping_old_return_type(self):
         recommendation = self.recommender.keeping_old
-        self.assertIsInstance(recommendation, RecommendationBasedOn)
+        self.assertIsInstance(recommendation, RecoBasedOn)
 
     def test_cannot_set_attribute_pruning_old(self):
         before = self.recommender.only_new
@@ -185,7 +185,7 @@ class TestRecommender(ut.TestCase):
             self.recommender.pruning_old = 'foo'
         recommendation = self.recommender.pruning_old
         after = self.recommender.only_new
-        self.assertIsInstance(recommendation, RecommendationBasedOn)
+        self.assertIsInstance(recommendation, RecoBasedOn)
         self.assertEqual(before, after)
 
     def test_cannot_set_attribute_keeping_old(self):
@@ -194,7 +194,7 @@ class TestRecommender(ut.TestCase):
             self.recommender.keeping_old = 'bar'
         recommendation = self.recommender.keeping_old
         after = self.recommender.only_new
-        self.assertIsInstance(recommendation, RecommendationBasedOn)
+        self.assertIsInstance(recommendation, RecoBasedOn)
         self.assertEqual(before, after)
 
     def test_has_attribute_baseline(self):
