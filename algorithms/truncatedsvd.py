@@ -106,10 +106,9 @@ class TruncatedSVD:
 
         """
         self.__data = self.__transactions_type_checked(data)
-        TruncatedSVD.max_number_of_factors = property(
-            lambda obj: obj.__data.matrix.min_shape - 1
-        )
-        doc = """Maximum number of latent variables suported by the data."""
+        new_property = property(lambda obj: obj.__data.matrix.min_shape - 1)
+        doc = """Maximum number of latent variables supported by the data."""
+        TruncatedSVD.max_number_of_factors = new_property
         TruncatedSVD.max_number_of_factors.__doc__ = doc
         self.__reset(self.number_of_factors)
         self.__delete_USV_matrices()
@@ -167,16 +166,14 @@ class TruncatedSVD:
         else:
             self.__reset(number_of_factors)
 
-    def __reset(self, number_of_factors):
-        if number_of_factors > self.max_number_of_factors:
-            log.warning('Requested {0} latent features, but only {1}'
-                        ' available. Resetting to {1}.'.format(
-                            number_of_factors,
-                            self.max_number_of_factors
-                        ))
+    def __reset(self, n_factors):
+        if n_factors > self.max_number_of_factors:
+            msg = ('Requested {0} latent features, but only {1} available.'
+                   ' Resetting to {1}.')
+            log.warning(msg.format(n_factors, self.max_number_of_factors))
             self.__number_of_factors = self.max_number_of_factors
         else:
-            self.__number_of_factors = number_of_factors
+            self.__number_of_factors = n_factors
 
     def __has(self, attribute):
         return hasattr(self, self.__class_prefix + attribute)
