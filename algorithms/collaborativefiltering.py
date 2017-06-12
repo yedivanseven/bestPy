@@ -213,7 +213,7 @@ class CollaborativeFiltering:
 
     @staticmethod
     def __data_attribute_checked(baseline):
-        """Check methods and attirbutes of baseline after data is attached."""
+        """Check methods and attributes of baseline after data is attached."""
         if not baseline.has_data:
             log.error("Baseline object's 'has_data' attribute returned False"
                       " after attaching data.")
