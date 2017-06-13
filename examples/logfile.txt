@@ -1,0 +1,2 @@
+[33m[WARNING ][0m: Could not interpret transaction on line 1. Skipping. ([34mfrom_csv[0m|[32mfrom_csv[0m)
+[33m[WARNING ][0m: Could not interpret transaction on line 2. Skipping. ([34mfrom_csv[0m|[32mfrom_csv[0m)
