@@ -53,7 +53,7 @@ class Transactions:
     'second article'
 
     """
-    
+
     def __init__(self, n_trans, n_corr, user_i, item_j, counts):
         self.__number_of_transactions = self.__int_type_value_checked(n_trans)
         self.__number_of_corrupted_records = self.__type_range_checked(n_corr)
@@ -137,6 +137,7 @@ class Transactions:
         return self.__matrix
 
     def _users_who_bought(self, items):
+        """Array of customer indices who bought array of article indices"""
         return unique(self.matrix.by_col[:, items].indices)
 
     @staticmethod
