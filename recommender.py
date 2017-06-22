@@ -159,7 +159,14 @@ class RecoBasedOn:
 
     def __cold_start(self, target=None):
         log.info('Unknown target user. Defaulting to baseline recommendation.')
-        return self.__baseline.for_one()
+        try:
+            cold_start_recommendation = self.__baseline.for_one()
+        except TypeError:
+            log.error('Failed to call the "for_one()" method of the'
+                      ' baseline algorithm without argument "target".')
+            raise TypeError('Choose a baseline algorithm whose "for_one()"'
+                            ' method is callable without argument "target"!')
+        return cold_start_recommendation
 
     def __calculated(self, target):
         target_index = self.__data.user.index_of[target]
@@ -205,8 +212,8 @@ class RecoBasedOn:
                       ' "for_one()" method.')
             raise AttributeError('Object lacks "for_one()" method!')
         if not callable(algorithm.for_one):
-            log.error('The "for_one()" method of this object'
-                      ' is not callable.')
+            log.error('Attempt to set object with a "for_one()" method'
+                      ' that is not callable.')
             raise TypeError('"for_one()" method of object not callable!')
 
     def __integer_type_and_range_checked(self, requested):

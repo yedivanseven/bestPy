@@ -151,7 +151,7 @@ class CollaborativeFiltering:
         if self.__no_one_else_bought_items_bought_by(target):
             log.info('Uncomparable user with ID {}. Returning baseline'
                      ' recommendation.'.format(self.__data.user.id_of[target]))
-            return self.__baseline.for_one()
+            return self.__baseline.for_one(target)
         history_vector = self.__depending_on_whether_we[self.binarize][target]
         return history_vector.dot(self.__similarity_matrix()).A[0]
 

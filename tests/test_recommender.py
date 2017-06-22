@@ -118,8 +118,8 @@ class TestRecommender(ut.TestCase):
                 return self
         algorithm = MockUp()
         algorithm.for_one = 'baz'
-        log_msg = ['ERROR:root:The "for_one()" method of this object'
-                   ' is not callable.']
+        log_msg = ['ERROR:root:Attempt to set object with a "for_one()" method'
+                  ' that is not callable.']
         err_msg = '"for_one()" method of object not callable!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg) as err:
@@ -286,8 +286,8 @@ class TestRecommender(ut.TestCase):
                 return self
         baseline = MockUp()
         baseline.for_one = 'baz'
-        log_msg = ['ERROR:root:The "for_one()" method of this object'
-                   ' is not callable.']
+        log_msg = ['ERROR:root:Attempt to set object with a "for_one()" method'
+                  ' that is not callable.']
         err_msg = '"for_one()" method of object not callable!'
         with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg) as err:
@@ -312,6 +312,21 @@ class TestRecommender(ut.TestCase):
         actually_is = len(list(self.recommender.for_one(1, 23)))
         self.assertEqual(should_be, actually_is)
 
+    def test_error_on_baseline_for_one_method_called_without_target(self):
+        target = '324n43mn34lkd'
+        log_msg = ['ERROR:root:Failed to call the "for_one()" method of the'
+                   ' baseline algorithm without argument "target".']
+        err_msg = ('Choose a baseline algorithm whose "for_one()"'
+                   ' method is callable without argument "target"!')
+        baseline = TruncatedSVD()
+        baseline.number_of_factors = 3
+        self.recommender.baseline = baseline
+        with self.assertLogs(level=logging.ERROR) as log:
+            with self.assertRaises(TypeError, msg=err_msg) as err:
+                _ = self.recommender.for_one(target)
+        self.assertEqual(log.output, log_msg)
+        self.assertEqual(err.msg, err_msg)
+
     def test_has_method_for_one(self):
         self.assertTrue(hasattr(self.recommender, 'for_one'))
 
@@ -327,7 +342,7 @@ class TestRecommender(ut.TestCase):
         target = '4'
         log_msg = ['WARNING:root:Requested 25 recommendations but only 23'
                    ' available. Returning all 23.']
-        with self.assertLogs(level = logging.WARNING) as log:
+        with self.assertLogs(level=logging.WARNING) as log:
             top_hits = self.recommender.for_one(target, 25)
         self.assertEqual(len(list(top_hits)), 23)
         self.assertEqual(log.output, log_msg)
@@ -337,7 +352,7 @@ class TestRecommender(ut.TestCase):
         log_msg = ['ERROR:root:Requested number of recommendations < 1.']
         err_msg = ('Requested number of recommendations must be' +
                    ' a positive integer!')
-        with self.assertLogs(level = logging.ERROR) as log:
+        with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(ValueError, msg=err_msg) as err:
                 _ = self.recommender.for_one(target, 0)
         self.assertEqual(log.output, log_msg)
@@ -349,7 +364,7 @@ class TestRecommender(ut.TestCase):
                    ' an integer.']
         err_msg = ('Requested number of recommendations must be' +
                    ' a positive integer!')
-        with self.assertLogs(level = logging.ERROR) as log:
+        with self.assertLogs(level=logging.ERROR) as log:
             with self.assertRaises(TypeError, msg=err_msg) as err:
                 _ = self.recommender.for_one(target, 23.5)
         self.assertEqual(log.output, log_msg)
