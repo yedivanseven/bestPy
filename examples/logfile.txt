@@ -1,3 +1,4 @@
 [33m[WARNING ][0m: Could not interpret transaction on line 1. Skipping. ([34mfrom_csv[0m|[32mfrom_csv[0m)
 [33m[WARNING ][0m: Could not interpret transaction on line 2. Skipping. ([34mfrom_csv[0m|[32mfrom_csv[0m)
-[33m[WARNING ][0m: Requested 8300 latent features, but only 8254 available. Resetting to 8254. ([34mtruncatedsvd[0m|[32m__reset[0m)
+[33m[WARNING ][0m: Requested 8300 recommendations but only 8255 available. Returning all 8255. ([34mrecommender[0m|[32m__integer_type_and_range_checked[0m)
+[33m[INFO    ][0m: Unknown target user. Defaulting to baseline recommendation. ([34mrecommender[0m|[32m__cold_start[0m)
