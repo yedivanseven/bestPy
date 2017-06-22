@@ -45,4 +45,5 @@ for article in top_five:
 'OutdoorSandals-42'
 ```
 
-But there is, of course, much more. With recommendations from the chef.
+But there is, of course, much [more](https://github.com/yedivanseven/bestPy/tree/master/examples).
+With recommendations from the chef.
