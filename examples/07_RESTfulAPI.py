@@ -38,7 +38,7 @@ def root():
                To explore this minimal setup, we recommend you try the
                following.
                <ul>
-                 <li>Check out the URL <code>/user</code> for a few valid
+                 <li>Check out the URL <code>/user/</code> for a few valid
                    user IDs.</li>
                  <li>Pick any one and navigate to <code>/user/ID</code> to
                    get a recommendation for that particular user.</li>
@@ -48,9 +48,9 @@ def root():
                Keep an eye on the "logfile.txt" to stay ahead of things!"""
     return response
 
-@app.route('/user')
+@app.route('/user/')
 def user():
-    """Returns the first 10 customer IDs under the URL /user as JSON."""
+    """Returns the first 10 customer IDs under the URL /user/ as JSON."""
     some_users = {'some user IDs': [data.user.id_of[i] for i in range(10)]}
     response = jsonify(some_users)
     response.status_code = 200
@@ -76,7 +76,8 @@ def userid(userid):
 
 # Now start the service on locahost:5002 by typing "python 07_RESTfulAPI.py"
 # on the command prompt of your terminal. A simple, instructive message is
-# displayed there to tell you what's going on.
+# displayed there to tell you what's going on. Keep an eye on the logfile to
+# keep track of events as you go explore.
 if __name__ == '__main__':
     port = 5002
     print('Serving bestPy on port', port)
