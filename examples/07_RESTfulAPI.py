@@ -21,7 +21,7 @@ from bestPy.datastructures import Transactions
 # minimalistic and powerful web framework flask.
 from flask import Flask, jsonify, request
 
-# Set up logging and a minmal bestPy recommender.
+# Set up logging and a minimal bestPy recommender.
 write_log_to('logfile.txt', 20)
 file = './examples_data.csv'
 data = Transactions.from_csv(file)
