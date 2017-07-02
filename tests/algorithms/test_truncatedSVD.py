@@ -85,6 +85,12 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertTrue(hasattr(self.algorithm, 'max_number_of_factors'))
         self.assertEqual(self.algorithm.max_number_of_factors, 11)
 
+    def test_cannot_set_max_number_of_factors_with_data(self):
+        self.algorithm.number_of_factors = 8
+        self.algorithm = self.algorithm.operating_on(self.data)
+        with self.assertRaises(AttributeError):
+            self.algorithm.max_number_of_factors = 12
+
     def test_logs_warning_and_resets_default_number_of_factors_with_data(self):
         log_msg = ['WARNING:root:Requested 20 latent features, but only 11'
                    ' available. Resetting to 11.']
