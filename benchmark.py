@@ -34,7 +34,23 @@ class Benchmark:
     """
 
     def __init__(self, recommender):
+        super().__setattr__('_Benchmark__has_test_data', False)
         self.__recommendation = self.__validated(recommender)
+
+    def __setattr__(self, name, value):
+        """Makes attribute 'score' read-only once we have test data."""
+        if self.__has_test_data and (name == 'score'):
+            raise AttributeError("can't set attribute")
+        else:
+            super().__setattr__(name, value)
+
+    def __getattribute__(self, name):
+        """Returns computed score only if we have test data."""
+        if (name == 'score') and self.__has_test_data:
+            score = super().__getattribute__('_Benchmark__score')
+            return score()
+        else:
+            return super().__getattribute__(name)
 
     def against(self, test):
         """Sets the test data to score the provided recommendation engine.
@@ -65,7 +81,7 @@ class Benchmark:
             self.__recommendation = self.__recommendation.keeping_old
             log.info('Resetting recommender to "keeping_old" because of'
                      ' test-data preference.')
-        Benchmark.score = property(lambda obj: obj.__score())
+        self.__has_test_data = True
         return self
 
     def __score(self):

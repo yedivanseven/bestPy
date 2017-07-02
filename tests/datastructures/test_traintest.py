@@ -58,6 +58,10 @@ class TestTrainTest(ut.TestCase):
         self.assertListEqual(log.output, log_msg)
         self.assertEqual(err.msg, err_msg)
 
+    def test_no_error_on_multiple_calls_to_split(self):
+        self.data.split(2, only_new=False)
+        self.data.split(1)
+
     def test_has_atrribute_train_after_split(self):
         self.data.split(1)
         self.assertTrue(hasattr(self.data, 'train'))

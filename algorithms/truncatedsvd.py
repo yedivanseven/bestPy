@@ -53,9 +53,17 @@ class TruncatedSVD:
     """
 
     def __init__(self):
+        super().__setattr__('_TruncatedSVD__has_data', False)
         self.__binarize = True
         self.__number_of_factors = 20
         self.__class_prefix = '_' + self.__class__.__name__ + '__'
+
+    def __setattr__(self, name, value):
+        """Make attribute 'max_number_of_factors' read-only if we have data."""
+        if self.__has_data and (name == 'max_number_of_factors'):
+            raise AttributeError("can't set attribute")
+        else:
+            super().__setattr__(name, value)
 
     @property
     def binarize(self):
@@ -105,11 +113,10 @@ class TruncatedSVD:
         278
 
         """
+        self.__has_data = False
         self.__data = self.__transactions_type_checked(data)
-        new_property = property(lambda obj: obj.__data.matrix.min_shape - 1)
-        doc = """Maximum number of latent variables supported by the data."""
-        TruncatedSVD.max_number_of_factors = new_property
-        TruncatedSVD.max_number_of_factors.__doc__ = doc
+        self.max_number_of_factors = self.__data.matrix.min_shape - 1
+        self.__has_data = True
         self.__reset(self.number_of_factors)
         self.__delete_USV_matrices()
         self.for_one = self.__for_one
@@ -117,7 +124,7 @@ class TruncatedSVD:
 
     @property
     def has_data(self):
-        return self.__has('data')
+        return self.__has_data
 
     def __for_one(self, target):
         """Make an actual recommendation for the target customer.

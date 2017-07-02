@@ -57,9 +57,18 @@ class TrainTest(TrainTestBase):
     """
 
     def __init__(self, n_trans, n_corr, unique, transactions):
+        super().__setattr__('_TrainTest__is_split', False)
         super().__init__(n_trans, n_corr, unique, transactions)
         self.__unique = self._TrainTestBase__unique
         self.__transactions = self._TrainTestBase__transactions
+
+    def __setattr__(self, name, value):
+        """Makes attributes 'test' and 'train' read-only once we are split."""
+        read_only_attributes = ('test', 'train')
+        if self.__is_split and (name in read_only_attributes):
+            raise AttributeError("can't set attribute")
+        else:
+            super().__setattr__(name, value)
 
     def split(self, hold_out=5, only_new=True):
         """Split transaction data into training and test set for benchmarking.
@@ -101,12 +110,12 @@ class TrainTest(TrainTestBase):
                      for timestamp, user, item in self.__transactions
                      if user in keep.keys()
                      and (item, timestamp) not in last_unique_items_of[user])
-        self.__test = TestDataFrom(test, hold_out, only_new)
-        TrainTest.test = property(lambda obj: obj.__test)
-        TrainTest.test.__doc__ = TrainTest.__test_docstring
-        self.__train = Transactions.from_csv(FileFrom(train))
-        TrainTest.train = property(lambda obj: obj.__train)
-        TrainTest.train.__doc__ = TrainTest.__train_docstring
+        self.__is_split = False
+        self.test = TestDataFrom(test, hold_out, only_new)
+        self.test.__doc__ = TrainTest.__test_docstring
+        self.train = Transactions.from_csv(FileFrom(train))
+        self.train.__doc__ = TrainTest.__train_docstring
+        self.__is_split = True
 
     @staticmethod
     def __last(unique):

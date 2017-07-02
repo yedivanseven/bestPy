@@ -71,6 +71,14 @@ class TestCollaborativeFiltering(ut.TestCase):
     def test_attribute_operating_on_is_callable(self):
         self.assertTrue(callable(self.algorithm.operating_on))
 
+    def test_no_error_on_multiple_calls_to_operating_on(self):
+        _ = self.algorithm.operating_on(self.data)
+        _ = self.algorithm.operating_on(self.data)
+
+    def test_has_no_attribute_max_number_of_factors_without_data(self):
+        with self.assertRaises(AttributeError):
+            _ = self.algorithm.max_number_of_factors
+
     def test_gets_correct_attribute_max_number_of_factors_with_data(self):
         self.algorithm.number_of_factors = 8
         self.algorithm = self.algorithm.operating_on(self.data)
