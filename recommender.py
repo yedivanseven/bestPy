@@ -2,7 +2,7 @@
 
 import logging as log
 from numpy import argpartition
-from .algorithms import default_algorithm
+from .algorithms import DefaultAlgorithm
 from .algorithms import default_baseline
 from .datastructures import Transactions
 
@@ -65,7 +65,7 @@ class RecoBasedOn:
         self.__data = self.__transactions_type_checked(data)
         self.__only_new = True
         self.__baseline = default_baseline().operating_on(data)
-        self.__recommendation = default_algorithm().operating_on(data)
+        self.__recommendation = DefaultAlgorithm().operating_on(data)
         self.__recommendation_for = {not RETURNING: self.__cold_start,
                                          RETURNING: self.__calculated}
 

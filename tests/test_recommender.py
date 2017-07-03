@@ -3,7 +3,7 @@
 
 import logging
 import unittest as ut
-from ..algorithms import default_algorithm, default_baseline, TruncatedSVD
+from ..algorithms import DefaultAlgorithm, default_baseline, TruncatedSVD
 from ..datastructures import Transactions
 from .. import RecoBasedOn
 
@@ -27,7 +27,7 @@ class TestRecommender(ut.TestCase):
     def setUp(self):
         file = './bestPy/tests/data/data50.csv'
         self.data = Transactions.from_csv(file)
-        self.algorithm = default_algorithm()
+        self.algorithm = DefaultAlgorithm()
         self.recommender = RecoBasedOn(self.data)
 
     def test_has_method_using(self):
@@ -131,11 +131,11 @@ class TestRecommender(ut.TestCase):
         self.assertTrue(hasattr(self.recommender, 'algorithm'))
 
     def test_algorithm_is_default(self):
-        should_be = default_algorithm().__class__.__name__
+        should_be = DefaultAlgorithm().__class__.__name__
         self.assertEqual(self.recommender.algorithm, should_be)
 
     def test_cannot_set_attribute_algorithm(self):
-        should_be = default_algorithm().__class__.__name__
+        should_be = DefaultAlgorithm().__class__.__name__
         with self.assertRaises(AttributeError):
             self.recommender.algorithm = 45.6
         self.assertEqual(self.recommender.algorithm, should_be)
@@ -422,7 +422,7 @@ class TestRecommender(ut.TestCase):
         file = './bestPy/tests/data/data25semicolon.csv'
         with self.assertLogs(level=logging.WARNING):
             data = Transactions.from_csv(file)
-        algorithm = default_algorithm().operating_on(data)
+        algorithm = DefaultAlgorithm().operating_on(data)
         recommender = self.recommender.using(algorithm)
         should_be = self.data.item.count
         actually_is = len(list(recommender.for_one(1, 23)))
