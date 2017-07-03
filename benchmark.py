@@ -41,8 +41,7 @@ class Benchmark:
         """Makes attribute 'score' read-only once we have test data."""
         if self.__has_test_data and (name == 'score'):
             raise AttributeError("can't set attribute")
-        else:
-            super().__setattr__(name, value)
+        super().__setattr__(name, value)
 
     def __getattribute__(self, name):
         """Returns computed score only if we have test data."""

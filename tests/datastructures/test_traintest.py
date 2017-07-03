@@ -62,13 +62,14 @@ class TestTrainTest(ut.TestCase):
         self.data.split(2, only_new=False)
         self.data.split(1)
 
-    def test_has_atrribute_train_after_split(self):
-        self.data.split(1)
-        self.assertTrue(hasattr(self.data, 'train'))
-
     def test_has_atrribute_test_after_split(self):
         self.data.split(1)
         self.assertTrue(hasattr(self.data, 'test'))
+
+    def test_cannot_set_attribute_test_after_split(self):
+        self.data.split(1)
+        with self.assertRaises(AttributeError):
+            self.data.test = 'foo'
 
     def test_test_type(self):
         self.data.split(1)
@@ -106,6 +107,15 @@ class TestTrainTest(ut.TestCase):
         self.assertEqual(self.data.test.number_of_cases, 6)
         self.data.split(1, only_new=False)
         self.assertEqual(self.data.test.number_of_cases, 6)
+
+    def test_has_atrribute_train_after_split(self):
+        self.data.split(1)
+        self.assertTrue(hasattr(self.data, 'train'))
+
+    def test_cannot_set_attribute_train_after_split(self):
+        self.data.split(1)
+        with self.assertRaises(AttributeError):
+            self.data.train = 'bar'
 
     def test_train_type(self):
          self.data.split(1)

@@ -129,7 +129,7 @@ class TestTestDataFrom(ut.TestCase):
     def test_correct_value_of_attribute_number_of_cases(self):
         self.assertEqual(self.test.number_of_cases, 2)
 
-    def test_cannot_set_attribute_set_number_of_cases(self):
+    def test_cannot_set_attribute_number_of_cases(self):
         with self.assertRaises(AttributeError):
             self.test.number_of_cases = 'foz'
         self.assertEqual(self.test.number_of_cases, 2)

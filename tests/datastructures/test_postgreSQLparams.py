@@ -84,6 +84,10 @@ class TestPostGreSqlParams(ut.TestCase):
         should_be = "dbname='foo' host='bar' password='doe' user='john'"
         self.assertEqual(self.database.login, should_be)
 
+    def test_cannot_set_login(self):
+        with self.assertRaises(AttributeError):
+            self.database.login = 45.6
+
     def test_table_right(self):
         self.database.table = 'foo'
         self.assertEqual(self.database.table, 'foo')
@@ -214,6 +218,10 @@ class TestPostGreSqlParams(ut.TestCase):
         self.assertListEqual(log.output, log_msg)
         self.assertEqual(err.msg, err_msg)
 
+    def test_cannot_set_params(self):
+        with self.assertRaises(AttributeError):
+            self.database._params = 78.9
+
     def test_requested_int(self):
         self.database.limit = 123
         self.assertEqual(self.database._requested, 123)
@@ -222,7 +230,7 @@ class TestPostGreSqlParams(ut.TestCase):
         self.database.limit = 'all'
         self.assertEqual(self.database._requested, float('-inf'))
 
-    def test_set_requested(self):
+    def test_cannot_set_requested(self):
         with self.assertRaises(AttributeError):
             self.database._requested = 'foo'
 

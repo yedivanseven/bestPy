@@ -163,7 +163,7 @@ class TestTrainTestBase(ut.TestCase):
     def test_number_of_transactions(self):
         self.assertEqual(self.data.number_of_transactions, 21)
 
-    def test_set_number_of_transactions(self):
+    def test_cannot_set_number_of_transactions(self):
         with self.assertRaises(AttributeError):
             self.data.number_of_transactions = 123
         self.assertEqual(self.data.number_of_transactions, 21)
@@ -171,7 +171,7 @@ class TestTrainTestBase(ut.TestCase):
     def test_number_of_corrupted_records(self):
         self.assertEqual(self.data.number_of_corrupted_records, 4)
 
-    def test_set_number_of_corrupted_records(self):
+    def test_cannot_set_number_of_corrupted_records(self):
         with self.assertRaises(AttributeError):
             self.data.number_of_corrupted_records = 456
         self.assertEqual(self.data.number_of_corrupted_records, 4)
@@ -179,7 +179,7 @@ class TestTrainTestBase(ut.TestCase):
     def test_max_hold_out(self):
         self.assertEqual(self.data.max_hold_out, 2)
 
-    def test_set_max_hold_out(self):
+    def test_cannot_set_max_hold_out(self):
         with self.assertRaises(AttributeError):
             self.data.max_hold_out = 789
         self.assertEqual(self.data.max_hold_out, 2)

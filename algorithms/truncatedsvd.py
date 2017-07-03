@@ -62,8 +62,7 @@ class TruncatedSVD:
         """Make attribute 'max_number_of_factors' read-only if we have data."""
         if self.__has_data and (name == 'max_number_of_factors'):
             raise AttributeError("can't set attribute")
-        else:
-            super().__setattr__(name, value)
+        super().__setattr__(name, value)
 
     @property
     def binarize(self):

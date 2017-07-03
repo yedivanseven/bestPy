@@ -67,8 +67,7 @@ class TrainTest(TrainTestBase):
         read_only_attributes = ('test', 'train')
         if self.__is_split and (name in read_only_attributes):
             raise AttributeError("can't set attribute")
-        else:
-            super().__setattr__(name, value)
+        super().__setattr__(name, value)
 
     def split(self, hold_out=5, only_new=True):
         """Split transaction data into training and test set for benchmarking.
