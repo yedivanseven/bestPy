@@ -3,7 +3,7 @@
 
 import unittest as ut
 import logging
-from ....datastructures.help import FileFrom
+from ....datastructures.auxiliary import FileFrom
 
 
 class TestFileFrom(ut.TestCase):

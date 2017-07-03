@@ -3,7 +3,7 @@
 import logging as log
 from numpy import unique
 from . import read
-from .help import IndexFrom, MatrixFrom
+from ..auxiliary import IndexFrom, MatrixFrom
 
 
 class Transactions:

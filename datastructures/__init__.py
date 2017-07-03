@@ -2,4 +2,4 @@
 
 from .transactions import Transactions
 from .traintest import TrainTest
-from .postgreSQLparams import PostgreSQLparams
+from .auxiliary import PostgreSQLparams

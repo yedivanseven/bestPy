@@ -2,7 +2,7 @@
 
 import logging as log
 from . import RecoBasedOn
-from .datastructures.help import TestDataFrom
+from .datastructures.auxiliary import TestDataFrom
 
 
 class Benchmark:

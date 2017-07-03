@@ -4,7 +4,7 @@ import logging as log
 import datetime as dt
 from collections import defaultdict
 from psycopg2 import connect, OperationalError, ProgrammingError
-from ..postgreSQLparams import PostgreSQLparams
+from ...auxiliary import PostgreSQLparams
 
 
 def from_postgreSQL(database):

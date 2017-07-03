@@ -2,9 +2,9 @@
 
 import logging as log
 from operator import itemgetter
-from .help import TestDataFrom, FileFrom
+from ..auxiliary import TestDataFrom, FileFrom
 from .traintestbase import TrainTestBase
-from .transactions import Transactions
+from ..transactions import Transactions
 
 
 class TrainTest(TrainTestBase):

@@ -4,7 +4,7 @@
 import unittest as ut
 import logging
 from psycopg2.extensions import AsIs
-from ...datastructures import PostgreSQLparams
+from ....datastructures import PostgreSQLparams
 
 
 class TestPostGreSqlParams(ut.TestCase):

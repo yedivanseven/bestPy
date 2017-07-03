@@ -3,7 +3,7 @@
 
 import unittest as ut
 import logging
-from ....datastructures.split import from_csv
+from .....datastructures.traintest.read import from_csv
 
 
 class BaseTests():

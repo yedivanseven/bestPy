@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging as log
-from . import split
+from . import read
 
 
 class TrainTestBase:
@@ -49,7 +49,7 @@ class TrainTestBase:
 
 
         """
-        return cls(*split.from_csv(file, separator=separator, fmt=fmt))
+        return cls(*read.from_csv(file, separator=separator, fmt=fmt))
 
     @classmethod
     def from_postgreSQL(cls, database):
@@ -69,7 +69,7 @@ class TrainTestBase:
         >>> data = TrainTest.from_postgreSQL(database)
 
         """
-        return cls(*split.from_postgreSQL(database))
+        return cls(*read.from_postgreSQL(database))
 
     @property
     def number_of_transactions(self):

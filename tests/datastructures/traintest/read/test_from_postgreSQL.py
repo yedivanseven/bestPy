@@ -4,8 +4,8 @@
 import unittest as ut
 import logging
 from psycopg2 import connect, OperationalError, ProgrammingError
-from ....datastructures import PostgreSQLparams
-from ....datastructures.split import from_postgreSQL
+from .....datastructures import PostgreSQLparams
+from .....datastructures.traintest.read import from_postgreSQL
 
 def database():
     database = PostgreSQLparams()

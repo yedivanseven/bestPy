@@ -3,8 +3,8 @@
 
 import logging
 import unittest as ut
-from ...datastructures.help import TestDataFrom
-from ...datastructures import TrainTest, Transactions
+from ....datastructures.auxiliary import TestDataFrom
+from ....datastructures import TrainTest, Transactions
 
 
 class TestTrainTest(ut.TestCase):

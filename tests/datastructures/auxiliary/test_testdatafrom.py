@@ -3,7 +3,7 @@
 
 import logging
 import unittest as ut
-from ....datastructures.help import TestDataFrom
+from ....datastructures.auxiliary import TestDataFrom
 
 
 class TestInstantiationOfTestDataFrom(ut.TestCase):

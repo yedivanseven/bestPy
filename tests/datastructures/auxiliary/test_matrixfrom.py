@@ -4,7 +4,7 @@
 import unittest as ut
 import logging
 import scipy.sparse as scpsp
-from ....datastructures.help import MatrixFrom
+from ....datastructures.auxiliary import MatrixFrom
 
 
 class TestInstatiateMatrix(ut.TestCase):

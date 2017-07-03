@@ -3,9 +3,9 @@
 
 import unittest as ut
 import logging
-from ...datastructures import Transactions
-from ...datastructures.help import IndexFrom, MatrixFrom
-from ...datastructures.read import from_csv
+from ....datastructures import Transactions
+from ....datastructures.auxiliary import IndexFrom, MatrixFrom
+from ....datastructures.transactions.read import from_csv
 
 
 class TestInstantiateTransactions(ut.TestCase):

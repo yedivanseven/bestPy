@@ -3,7 +3,7 @@
 
 import unittest as ut
 import logging
-from ....datastructures.help import IndexFrom
+from ....datastructures.auxiliary import IndexFrom
 
 
 class TestInstatiateIndex(ut.TestCase):

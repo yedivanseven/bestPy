@@ -4,7 +4,7 @@
 import unittest as ut
 import datetime as dt
 import logging
-from ....datastructures.split import from_csv
+from .....datastructures.traintest.read import from_csv
 
 
 class TestTrainTestFromCsvFileTimestampFmt(ut.TestCase):

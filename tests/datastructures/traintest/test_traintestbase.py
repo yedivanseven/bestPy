@@ -3,7 +3,7 @@
 
 import unittest as ut
 import logging
-from ...datastructures.traintestbase import TrainTestBase
+from ....datastructures.traintest.traintestbase import TrainTestBase
 
 
 class TestInstantiateTrainTestBase(ut.TestCase):
