@@ -92,6 +92,24 @@ class TestCollaborativeFiltering(ut.TestCase):
         with self.assertRaises(AttributeError):
             self.algorithm.max_number_of_factors = 12
 
+    def test_other_instances_do_not_have_maximum_number_of_factors(self):
+        other = TruncatedSVD()
+        other.number_of_factors = 7
+        self.algorithm.number_of_factors = 8
+        self.algorithm = self.algorithm.operating_on(self.data)
+        self.assertFalse(hasattr(other, 'max_number_of_factors'))
+
+    def test_other_instances_have_other_max_number_of_factors(self):
+        file = './bestPy/tests/data/data25sequential.csv'
+        data = Transactions.from_csv(file)
+        other = TruncatedSVD()
+        other.number_of_factors = 3
+        other = other.operating_on(data)
+        self.algorithm.number_of_factors = 7
+        self.algorithm = self.algorithm.operating_on(self.data)
+        self.assertNotEqual(other.max_number_of_factors,
+                            self.algorithm.max_number_of_factors)
+
     def test_logs_warning_and_resets_default_number_of_factors_with_data(self):
         log_msg = ['WARNING:root:Requested 20 latent features, but only 11'
                    ' available. Resetting to 11.']

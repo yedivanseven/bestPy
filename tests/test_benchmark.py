@@ -61,6 +61,11 @@ class TestBenchmark(ut.TestCase):
         with self.assertRaises(AttributeError):
             benchmark.score = 12.3
 
+    def test_other_instances_do_not_get_score_without_own_test_data(self):
+        other = Benchmark(self.recommender)
+        benchmark = self.benchmark.against(self.data.test)
+        self.assertFalse(hasattr(other, 'score'))
+
     def test_resets_recommender_only_new_to_true(self):
         log_msg = ['INFO:root:Resetting recommender to "pruning_old" because'
                    ' of test-data preference.']

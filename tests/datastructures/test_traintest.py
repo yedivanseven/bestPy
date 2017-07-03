@@ -71,6 +71,22 @@ class TestTrainTest(ut.TestCase):
         with self.assertRaises(AttributeError):
             self.data.test = 'foo'
 
+    def test_other_instances_do_not_have_test_after_split(self):
+        file = './bestPy/tests/data/data25sequential.csv'
+        fmt = '%Y-%m-%d %H:%M:%S'
+        other = TrainTest.from_csv(file, ';', fmt)
+        self.data.split(1)
+        self.assertFalse(hasattr(other, 'test'))
+
+    def test_other_instances_have_different_test_after_split(self):
+        file = './bestPy/tests/data/data25sequential.csv'
+        fmt = '%Y-%m-%d %H:%M:%S'
+        other = TrainTest.from_csv(file, ';', fmt)
+        other.split(2, only_new=False)
+        self.data.split(1)
+        self.assertNotEqual(other.test.number_of_cases,
+                            self.data.test.number_of_cases)
+
     def test_test_type(self):
         self.data.split(1)
         self.assertIsInstance(self.data.test, TestDataFrom)
@@ -116,6 +132,22 @@ class TestTrainTest(ut.TestCase):
         self.data.split(1)
         with self.assertRaises(AttributeError):
             self.data.train = 'bar'
+
+    def test_other_instances_do_not_have_train_after_split(self):
+        file = './bestPy/tests/data/data25sequential.csv'
+        fmt = '%Y-%m-%d %H:%M:%S'
+        other = TrainTest.from_csv(file, ';', fmt)
+        self.data.split(1)
+        self.assertFalse(hasattr(other, 'train'))
+
+    def test_other_instances_have_different_train_after_split(self):
+        file = './bestPy/tests/data/data25sequential.csv'
+        fmt = '%Y-%m-%d %H:%M:%S'
+        other = TrainTest.from_csv(file, ';', fmt)
+        other.split(2, only_new=False)
+        self.data.split(1)
+        self.assertNotEqual(other.train.number_of_transactions,
+                            self.data.train.number_of_transactions)
 
     def test_train_type(self):
          self.data.split(1)
