@@ -3,7 +3,6 @@
 
 import unittest as ut
 import logging
-import scipy
 from ...datastructures import Transactions
 from ...datastructures.help import IndexFrom, MatrixFrom
 from ...datastructures.read import from_csv
