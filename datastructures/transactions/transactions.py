@@ -181,4 +181,4 @@ class Transactions:
             log.error('Attempt to instantiate data object with number of'
                       ' user/item pairs incompatible with matrix values.')
             raise ValueError('Number of user/item pairs incompatible with'
-                             'values in matrix!')
+                             'number of non-zero entries in matrix!')
