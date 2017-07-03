@@ -407,6 +407,17 @@ class TestRecommender(ut.TestCase):
         actually_is = list(self.recommender.for_one(target, 4))
         self.assertListEqual(actually_is, should_be)
 
+    def test_changing_algorithm_settings_propagates_to_recommender(self):
+        target = '7'
+        algorithm = TruncatedSVD()
+        algorithm.number_of_factors = 2
+        algorithm.binarize = True
+        recommendation = self.recommender.using(algorithm)
+        before = list(recommendation.for_one(target, 4))
+        algorithm.binarize = False
+        after = list(recommendation.for_one(target, 4))
+        self.assertFalse(before == after)
+
     def test_data_is_passed_on_to_algorithm(self):
         file = './bestPy/tests/data/data25semicolon.csv'
         with self.assertLogs(level=logging.WARNING):

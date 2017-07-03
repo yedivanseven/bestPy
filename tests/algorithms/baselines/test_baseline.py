@@ -100,6 +100,19 @@ class TestBaseline(ut.TestCase):
         actually_is = self.baseline.for_one().tolist()
         self.assertListEqual(should_be, actually_is)
 
+    def test_setting_binarized_updates_recommendation(self):
+        before = [1., 1., 5., 3., 2., 1., 2., 1., 1., 1., 1., 1., 1., 1.,
+                  1., 1., 1., 1., 1., 1., 1., 1., 1.]
+        after = [1., 1., 6., 3., 2., 1., 2., 10., 10., 1., 1., 1., 1.,
+                     1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]
+        self.baseline.binarize = True
+        self.baseline = self.baseline.operating_on(self.data)
+        actual = self.baseline.for_one().tolist()
+        self.assertListEqual(actual, before)
+        self.baseline.binarize = False
+        actual = self.baseline.for_one().tolist()
+        self.assertListEqual(actual, after)
+
     def test_recommendation_for_explicit_target(self):
         target = 123
         self.baseline = self.baseline.operating_on(self.data)

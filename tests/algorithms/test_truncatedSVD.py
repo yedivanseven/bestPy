@@ -72,6 +72,7 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.assertTrue(callable(self.algorithm.operating_on))
 
     def test_no_error_on_multiple_calls_to_operating_on(self):
+        self.algorithm.number_of_factors = 10
         _ = self.algorithm.operating_on(self.data)
         _ = self.algorithm.operating_on(self.data)
 
@@ -258,6 +259,24 @@ class TestCollaborativeFiltering(ut.TestCase):
         self.algorithm = self.algorithm.operating_on(self.data)
         actually_is = self.algorithm.for_one(target)
         self.assertTrue(allclose(should_be, actually_is))
+
+    def test_changing_binarized_changes_recommendation(self):
+        target = 1
+        self.algorithm.number_of_factors = 2
+        self.algorithm = self.algorithm.operating_on(self.data)
+        before = self.algorithm.for_one(target)
+        self.algorithm.binarize = False
+        after = self.algorithm.for_one(target)
+        self.assertFalse(allclose(before, after))
+
+    def test_changing_number_of_factors_changes_recommendation(self):
+        target = 1
+        self.algorithm.number_of_factors = 2
+        self.algorithm = self.algorithm.operating_on(self.data)
+        before = self.algorithm.for_one(target)
+        self.algorithm.number_of_factors = 3
+        after = self.algorithm.for_one(target)
+        self.assertFalse(allclose(before, after))
 
     def test_length_of_recommendation_equals_number_of_items(self):
         target = 5

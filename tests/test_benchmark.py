@@ -3,6 +3,7 @@
 
 import logging
 import unittest as ut
+from ..algorithms import TruncatedSVD
 from ..datastructures import TrainTest
 from .. import RecoBasedOn
 from .. import Benchmark
@@ -82,6 +83,19 @@ class TestBenchmark(ut.TestCase):
     def test_score(self):
         benchmark = self.benchmark.against(self.data.test)
         self.assertAlmostEqual(benchmark.score, 0.08333333333333333)
+
+    def test_changes_to_algorithm_settings_propagate_through_benchmark(self):
+        data = self.data
+        data.split(3)
+        algorithm = TruncatedSVD()
+        algorithm.number_of_factors = 2
+        algorithm.binarize = True
+        recommender = RecoBasedOn(data.train).using(algorithm)
+        benchmark = Benchmark(recommender).against(data.test)
+        before = benchmark.score
+        algorithm.binarize = False
+        after = benchmark.score
+        self.assertNotEqual(before, after)
 
 
 if __name__ == '__main__':

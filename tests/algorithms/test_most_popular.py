@@ -5,6 +5,7 @@ import logging
 import unittest as ut
 from ...algorithms import MostPopular
 from ...datastructures import Transactions
+from numpy import allclose
 
 
 class TestMostPopular(ut.TestCase):
@@ -111,6 +112,15 @@ class TestMostPopular(ut.TestCase):
         self.algorithm = self.algorithm.operating_on(self.data)
         actually_is = self.algorithm.for_one(target).tolist()
         self.assertListEqual(should_be, actually_is)
+
+    def test_changing_binarize_changes_recommendation(self):
+        target = 5
+        self.algorithm = self.algorithm.operating_on(self.data)
+        self.algorithm.binarize = True
+        before = self.algorithm.for_one(target)
+        self.algorithm.binarize = False
+        after = self.algorithm.for_one(target)
+        self.assertFalse(allclose(before, after))
 
     def test_binarized_recommendation_does_not_change(self):
         target = 1

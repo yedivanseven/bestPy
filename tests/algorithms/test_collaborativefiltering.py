@@ -316,6 +316,44 @@ class TestCollaborativeFiltering(ut.TestCase):
         actually_is = self.algorithm.for_one(target).tolist()
         self.assertListEqual(should_be, actually_is)
 
+    def test_changing_binarized_changes_recommendation(self):
+        target = 5
+        before = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9.0, 24.333333333333336,
+                  24.333333333333336, 0.0, 0.0, 0.3333333333333333, 0.0,
+                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 24.333333333333336,
+                  24.333333333333336, 24.333333333333336,
+                  24.333333333333336]
+        after = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 6.333333333333333,
+                 6.333333333333333, 0.0, 0.0, 0.3333333333333333, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6.333333333333333,
+                 6.333333333333333, 6.333333333333333, 6.333333333333333]
+        self.algorithm = self.algorithm.operating_on(self.data)
+        self.algorithm.similarity = sokalsneath
+        self.algorithm.binarize = False
+        actual = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(before, actual)
+        self.algorithm.binarize = True
+        actual = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(after, actual)
+
+    def test_changing_similarity_changes_recommendation(self):
+        target = 5
+        before = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.6282051282051282,
+                  0.5769230769230769, 0.5769230769230769, 0.0, 0.0,
+                  0.07692307692307693, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                  0.5769230769230769, 0.5769230769230769, 0.5769230769230769,
+                  0.5769230769230769]
+        after = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 6.333333333333333,
+                 6.333333333333333, 0.0, 0.0, 0.3333333333333333, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6.333333333333333,
+                 6.333333333333333, 6.333333333333333, 6.333333333333333]
+        self.algorithm = self.algorithm.operating_on(self.data)
+        actual = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(before, actual)
+        self.algorithm.similarity = sokalsneath
+        actual = self.algorithm.for_one(target).tolist()
+        self.assertListEqual(after, actual)
+
     def test_logs_uncomparable_user_and_returns_default_baseline(self):
         target = 6
         file = './bestPy/tests/data/data50.csv'
