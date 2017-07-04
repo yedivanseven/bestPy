@@ -154,6 +154,10 @@ class PostgreSQLparams:
                       'limit': self.__limit}
         return params
 
+    @property
+    def _requested(self):
+        return self.limit if isinstance(self.limit, int) else float('-inf')
+
     @staticmethod
     def __prepend(parameter, prefix):
         if not isinstance(parameter, str):
@@ -165,7 +169,3 @@ class PostgreSQLparams:
         if not isinstance(parameter, str):
             log.warning(prefix + ' should be a string. Trying nevertheless!')
         return str(parameter)
-
-    @property
-    def _requested(self):
-        return self.limit if isinstance(self.limit, int) else float('-inf')
