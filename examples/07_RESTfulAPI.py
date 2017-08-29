@@ -48,6 +48,7 @@ def root():
                Keep an eye on the "logfile.txt" to stay ahead of things!"""
     return response
 
+
 @app.route('/user/')
 def user():
     """Returns the first 10 customer IDs under the URL /user/ as JSON."""
@@ -55,6 +56,7 @@ def user():
     response = jsonify(some_users)
     response.status_code = 200
     return response
+
 
 @app.route('/user/<userid>')
 def userid(userid):
